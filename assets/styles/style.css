@@ -14,12 +14,9 @@ html {
 .content-container {
   position: fixed;
   top: 10rem;
-  left: 2rem;
-  right: 2rem;
+  left: calc(var(--page-padding) + var(--menu-item-height) + var(--container-gap));
   width: calc(100vw - 4rem);
   height: calc(100vh - 10rem);
-  display: grid;
-  grid-template-columns: 2rem 1fr;
 }
 
 .start-menu .start-menu-item {
@@ -138,6 +135,7 @@ html {
   height: var(--menu-item-height);
   width: var(--menu-item-height);
   background-color: grey;
+  border-radius: var(--border-radius);
 }
 
 #number-1 {

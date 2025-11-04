@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const pageTitleSize = parseFloat(rootStyles.getPropertyValue('--page-title-size')) * rootFontSize;
         const menuItemHeight = parseFloat(rootStyles.getPropertyValue('--menu-item-height')) * rootFontSize;
         const menuItemSpacing = parseFloat(rootStyles.getPropertyValue('--container-gap')) * rootFontSize;
+        const borderRadius = parseFloat(rootStyles.getPropertyValue('--border-radius')) * rootFontSize;
         
         innerScrollers.forEach((innerScroller, index) => {
             const number = numbers[index];
@@ -43,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Get the inner-scroller's position in the viewport
             const innerScrollerRect = innerScroller.getBoundingClientRect();
             const innerScrollerTop = innerScrollerRect.top;
+            const innerScrollerBottom = innerScrollerRect.bottom;
             
             // Calculate new position for the number
             let newTop = initialTop;
@@ -60,6 +62,51 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Update the number's top position
             number.style.top = `${newTop}px`;
+            
+            // Calculate border-radius based on inner-scroller position relative to number
+            const numberRect = number.getBoundingClientRect();
+            const numberTop = numberRect.top;
+            const numberBottom = numberRect.bottom;
+            const numberHeight = numberRect.height;
+            
+            // Check if number is at its final clamped position
+            const isAtMinPosition = Math.abs(newTop - minTop) < 1;
+            
+            let progress = 0;
+            
+            // Phase 1: Inner-scroller approaching and overlapping (number still moving)
+            if (!isAtMinPosition) {
+                if (innerScrollerBottom >= numberBottom && innerScrollerTop <= numberBottom) {
+                    // Inner-scroller is entering from below
+                    const overlap = numberBottom - innerScrollerTop;
+                    progress = Math.min(overlap / numberHeight, 1);
+                } else if (innerScrollerTop <= numberTop) {
+                    // Fully overlapped
+                    progress = 1;
+                }
+            }
+            // Phase 2: Number is stuck at final position, inner-scroller continues past it
+            else {
+                // Number is at minimum position
+                if (innerScrollerTop > numberTop) {
+                    // Inner-scroller hasn't reached the number yet or has passed
+                    progress = 0;
+                } else if (innerScrollerTop <= numberTop && innerScrollerBottom >= numberBottom) {
+                    // Inner-scroller is passing through - keep radius at 0
+                    progress = 1;
+                } else if (innerScrollerBottom < numberBottom && innerScrollerBottom > numberTop) {
+                    // Inner-scroller is exiting - animate back to full radius
+                    const exitProgress = (numberBottom - innerScrollerBottom) / numberHeight;
+                    progress = 1 - exitProgress;
+                }
+            }
+            
+            // Interpolate border-radius from full value to 0
+            const currentRadius = borderRadius * (1 - progress);
+            
+            // Apply border-radius to both elements
+            number.style.borderRadius = `${currentRadius}px`;
+            innerScroller.style.borderRadius = `${currentRadius}px`;
         });
     }
     
