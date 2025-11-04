@@ -15,7 +15,7 @@ html {
   position: fixed;
   top: 10rem;
   left: calc(var(--page-padding) + var(--menu-item-height) + var(--container-gap));
-  width: calc(100vw - 4rem);
+  width: calc(100vw - 2 * var(--page-padding) - var(--menu-item-height) - var(--container-gap));
   height: calc(100vh - 10rem);
 }
 
@@ -125,7 +125,7 @@ html {
   width: 100%;
   min-height: 200vh;
   flex-shrink: 0;
-  background: linear-gradient(to bottom, #ff0000, #66ff00);
+  background-color: grey;
   border-radius: 1rem;
 }
 

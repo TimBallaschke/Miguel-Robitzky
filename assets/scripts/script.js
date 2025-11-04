@@ -104,8 +104,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Interpolate border-radius from full value to 0
             const currentRadius = borderRadius * (1 - progress);
             
-            // Apply border-radius to both elements
+            // Interpolate width from --menu-item-height to (--menu-item-height + --container-gap)
+            const currentWidth = menuItemHeight + (progress * menuItemSpacing);
+            
+            // Apply border-radius and width to both elements
             number.style.borderRadius = `${currentRadius}px`;
+            number.style.width = `${currentWidth}px`;
             innerScroller.style.borderRadius = `${currentRadius}px`;
         });
     }
