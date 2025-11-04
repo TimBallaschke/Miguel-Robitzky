@@ -131,10 +131,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 scrollerTopLeftRadius = borderRadius * topLeftProgress;
             }
             
-            // Apply border-radius to inner-scroller (only top-left animates, others stay full)
+            // Calculate border-radius for inner-scroller bottom-left corner
+            let scrollerBottomLeftRadius = borderRadius;
+            
+            // When number is stuck and scroller is exiting below
+            if (isAtMinPosition) {
+                const distanceFromDisconnect = innerScrollerBottom - numberBottom;
+                
+                // Phase 1: Approaching disconnect - animate from full to 0
+                if (distanceFromDisconnect <= menuItemHeight && distanceFromDisconnect > 0) {
+                    // exitProgress: 0 when far away, 1 when at disconnect point
+                    const exitProgress = 1 - (distanceFromDisconnect / menuItemHeight);
+                    
+                    // Animate from full border-radius to 0
+                    scrollerBottomLeftRadius = borderRadius * (1 - exitProgress);
+                }
+                // Phase 2: After disconnect - animate from 0 back to full
+                else if (distanceFromDisconnect < 0) {
+                    // Calculate how far past the disconnect point
+                    const passedDistance = Math.abs(distanceFromDisconnect);
+                    
+                    // Animate from 0 back to full over menuItemHeight distance
+                    const recoveryProgress = Math.min(passedDistance / menuItemHeight, 1);
+                    
+                    scrollerBottomLeftRadius = borderRadius * recoveryProgress;
+                }
+            }
+            
+            // Apply border-radius to inner-scroller
             innerScroller.style.borderTopLeftRadius = `${scrollerTopLeftRadius}px`;
             innerScroller.style.borderTopRightRadius = `${borderRadius}px`;
-            innerScroller.style.borderBottomLeftRadius = `${borderRadius}px`;
+            innerScroller.style.borderBottomLeftRadius = `${scrollerBottomLeftRadius}px`;
             innerScroller.style.borderBottomRightRadius = `${borderRadius}px`;
             
             // Animate number-after-cut-out based on connection state
