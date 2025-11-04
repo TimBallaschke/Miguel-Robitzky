@@ -178,10 +178,20 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log(`  -> Connected-middle (passedDistance): passedDistance=${passedDistance.toFixed(2)}, progress=${clampedProgress.toFixed(3)}, radius=${beforeCutOutBottomRadius.toFixed(2)}`);
                     }
                     // Scenario 2: Animate based on distanceFromBottom (when approaching from below)
-                    else if (distanceFromBottom > (3 * menuItemSpacing) && distanceFromBottom <= ((3 * menuItemSpacing) + menuItemHeight)) {
-                        // Within animation range based on distance from bottom (longer distance than scenario 1)
-                        // Animation starts at 3 * --container-gap, not 2 * --container-gap
-                        const bottomProgress = (distanceFromBottom - (3 * menuItemSpacing)) / menuItemHeight;
+                    // Connected-middle is added at 2 * --container-gap
+                    // But animation should only start at 3 * --container-gap
+                    // So expand range to catch the transition
+                    else if (distanceFromBottom > (2 * menuItemSpacing) && distanceFromBottom <= ((3 * menuItemSpacing) + menuItemHeight)) {
+                        // Within animation range based on distance from bottom
+                        let bottomProgress;
+                        if (distanceFromBottom <= (3 * menuItemSpacing)) {
+                            // Before animation start point, stay at 0
+                            bottomProgress = 0;
+                        } else {
+                            // After delay point, animate from 0 to 1 over menuItemHeight distance
+                            const adjustedDistance = distanceFromBottom - (3 * menuItemSpacing);
+                            bottomProgress = adjustedDistance / menuItemHeight;
+                        }
                         const clampedProgress = Math.max(0, Math.min(1, bottomProgress));
                         
                         beforeCutOutBottomRadius = menuItemSpacing * clampedProgress;
@@ -216,8 +226,16 @@ document.addEventListener('DOMContentLoaded', function() {
                     innerScroller.style.borderTopLeftRadius = `${scrollerTopLeftRadius}px`;
                 }
                 // Scenario 2: Animate based on distanceFromBottom (when approaching from below, longer distance)
-                else if (distanceFromBottom > (3 * menuItemSpacing) && distanceFromBottom <= ((3 * menuItemSpacing) + menuItemHeight)) {
-                    const bottomProgress = (distanceFromBottom - (3 * menuItemSpacing)) / menuItemHeight;
+                else if (distanceFromBottom > (2 * menuItemSpacing) && distanceFromBottom <= ((3 * menuItemSpacing) + menuItemHeight)) {
+                    let bottomProgress;
+                    if (distanceFromBottom <= (3 * menuItemSpacing)) {
+                        // Before animation start point, stay at 0
+                        bottomProgress = 0;
+                    } else {
+                        // After delay point, animate from 0 to 1
+                        const adjustedDistance = distanceFromBottom - (3 * menuItemSpacing);
+                        bottomProgress = adjustedDistance / menuItemHeight;
+                    }
                     const clampedProgress = Math.max(0, Math.min(1, bottomProgress));
                     
                     const scrollerTopLeftRadius = borderRadius * clampedProgress;
