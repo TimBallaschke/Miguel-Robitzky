@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!numberContainer) return;
             
             const numberAfterCutOut = numberContainer.querySelector('.number-after-cut-out');
+            const numberBeforeCutOut = numberContainer.querySelector('.number-before-cut-out');
             
             const initialTop = initialPositions[index];
             
@@ -118,8 +119,20 @@ document.addEventListener('DOMContentLoaded', function() {
             numberContainer.style.borderBottomLeftRadius = `${borderRadius}px`;
             numberContainer.style.borderBottomRightRadius = `${currentRadius}px`;
             
+            // Calculate border-radius for inner-scroller top-left corner
+            let scrollerTopLeftRadius = currentRadius;
+            
+            // When number is stuck and scroller passes above, animate from 0 to full border-radius
+            if (isAtMinPosition && innerScrollerTop < numberTop) {
+                const passedDistance = numberTop - innerScrollerTop;
+                const topLeftProgress = Math.min(passedDistance / menuItemHeight, 1);
+                
+                // Animate from 0 to full border-radius
+                scrollerTopLeftRadius = borderRadius * topLeftProgress;
+            }
+            
             // Apply border-radius to inner-scroller (only top-left animates, others stay full)
-            innerScroller.style.borderTopLeftRadius = `${currentRadius}px`;
+            innerScroller.style.borderTopLeftRadius = `${scrollerTopLeftRadius}px`;
             innerScroller.style.borderTopRightRadius = `${borderRadius}px`;
             innerScroller.style.borderBottomLeftRadius = `${borderRadius}px`;
             innerScroller.style.borderBottomRightRadius = `${borderRadius}px`;
@@ -159,6 +172,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 
                 numberAfterCutOut.style.borderTopRightRadius = `${afterCutOutRadius}px`;
+            }
+            
+            // Animate number-before-cut-out when scroller passes above the number
+            if (numberBeforeCutOut) {
+                let beforeCutOutRadius = 0;
+                
+                // Only animate when number is at final position
+                if (isAtMinPosition && innerScrollerTop < numberTop) {
+                    // Calculate how far the scroller has passed above the number
+                    const passedDistance = numberTop - innerScrollerTop;
+                    
+                    // Animate from 0 to full over menuItemHeight distance
+                    const beforeCutOutProgress = Math.min(passedDistance / menuItemHeight, 1);
+                    
+                    // Interpolate border-radius from 0 to --container-gap
+                    beforeCutOutRadius = menuItemSpacing * beforeCutOutProgress;
+                }
+                
+                numberBeforeCutOut.style.borderBottomRightRadius = `${beforeCutOutRadius}px`;
             }
         });
     }
