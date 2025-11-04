@@ -157,7 +157,20 @@ html {
     flex-shrink: 0;
     // background: linear-gradient(to bottom, #ff0000, #66ff00);
     background-color: grey;
-    border-radius: 1rem;
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    transition: border-radius 75ms ease-in-out;
+
+    &.connected-top {
+        border-top-left-radius: 0;
+    }
+
+    &.connected-middle {
+        border-top-left-radius: 0;
+        transition: border-radius 0ms ease-in-out;
+    }
 }
 
 
@@ -167,7 +180,23 @@ html {
     height: var(--menu-item-height);
     width: var(--menu-item-height);
     background-color: grey;
-    border-radius: var(--border-radius);
+    border-top-left-radius: var(--border-radius);
+    border-top-right-radius: var(--border-radius);
+    border-bottom-left-radius: var(--border-radius);
+    border-bottom-right-radius: var(--border-radius);
+    transition: border-radius 75ms ease-in-out, width 75ms ease-in-out;
+
+    &.connected-top {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        width: calc(var(--menu-item-height) + var(--container-gap));
+    }
+
+    &.connected-middle {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        width: calc(var(--menu-item-height) + var(--container-gap));
+    }
 }
 
 .number {
@@ -192,8 +221,7 @@ html {
     width: var(--container-gap);
     height: var(--container-gap);
     background-color: var(--background-color);
-    border-bottom-right-radius: var(--container-gap);
-
+    border-bottom-right-radius: 0;
 }
 
 .number-after {
@@ -203,6 +231,7 @@ html {
     width: var(--container-gap);
     height: var(--container-gap);
     background-color: grey;
+
 }
 
 .number-after-cut-out {
@@ -212,7 +241,19 @@ html {
     width: var(--container-gap);
     height: var(--container-gap);
     background-color: var(--background-color);
-    border-top-right-radius: var(--container-gap);
+    border-top-right-radius: 0;
+    transition: border-radius 75ms ease-in-out;
+
+    .connected-top & {
+        border-top-right-radius: var(--container-gap);
+        transition-delay: 75ms;
+    }
+
+    .connected-middle & {
+        border-top-right-radius: var(--container-gap);
+        transition: border-radius 75ms ease-in-out;
+        transition-delay: 75ms;
+    }
 }
 
 #number-1-container {

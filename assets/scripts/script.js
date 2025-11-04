@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const numberContainer = numberContainers[index];
             if (!numberContainer) return;
             
-            const numberAfterCutOut = numberContainer.querySelector('.number-after-cut-out');
             const numberBeforeCutOut = numberContainer.querySelector('.number-before-cut-out');
             
             const initialTop = initialPositions[index];
@@ -47,14 +46,16 @@ document.addEventListener('DOMContentLoaded', function() {
             // Get the inner-scroller's position in the viewport
             const innerScrollerRect = innerScroller.getBoundingClientRect();
             const innerScrollerTop = innerScrollerRect.top;
-            const innerScrollerBottom = innerScrollerRect.bottom;
             
             // Calculate new position for the number container
             let newTop = initialTop;
             
+            // Check if number is moving with scroller
+            const isMovingWithScroller = innerScrollerTop <= initialTop;
+            
             // If the inner-scroller has moved up past the number's initial position,
             // move the number with it
-            if (innerScrollerTop <= initialTop) {
+            if (isMovingWithScroller) {
                 newTop = innerScrollerTop;
             }
             
@@ -63,161 +64,157 @@ document.addEventListener('DOMContentLoaded', function() {
             const minTop = pageTitleSize + (index * (menuItemHeight + menuItemSpacing));
             newTop = Math.max(minTop, newTop);
             
-            // Update the number container's top position
+            // Check if number has reached its final clamped position
+            const isAtMinPosition = Math.abs(newTop - minTop) < 1;
+            
+            // Update the number container's top position first so we can get accurate measurements
             numberContainer.style.top = `${newTop}px`;
             
-            // Calculate border-radius based on inner-scroller position relative to number container
+            // Get updated positions after setting top
             const numberRect = numberContainer.getBoundingClientRect();
             const numberTop = numberRect.top;
             const numberBottom = numberRect.bottom;
-            const numberHeight = numberRect.height;
+            const innerScrollerBottom = innerScrollerRect.bottom;
             
-            // Check if number is at its final clamped position
-            const isAtMinPosition = Math.abs(newTop - minTop) < 1;
+            // Check if scroller is still overlapping the number at all
+            const isScrollerOverlapping = innerScrollerBottom > numberTop;
             
-            let progress = 0;
+            // Check if scroller bottom has reached or passed the disconnect threshold
+            const distanceFromBottom = innerScrollerBottom - numberBottom;
+            const shouldStayConnected = distanceFromBottom > (2 * menuItemSpacing);
             
-            // Phase 1: Inner-scroller approaching and overlapping (number still moving)
-            if (!isAtMinPosition) {
-                if (innerScrollerBottom >= numberBottom && innerScrollerTop <= numberBottom) {
-                    // Inner-scroller is entering from below
-                    const overlap = numberBottom - innerScrollerTop;
-                    progress = Math.min(overlap / numberHeight, 1);
-                } else if (innerScrollerTop <= numberTop) {
-                    // Fully overlapped
-                    progress = 1;
-                }
-            }
-            // Phase 2: Number is stuck at final position, inner-scroller continues past it
-            else {
-                // Number is at minimum position
-                if (innerScrollerTop > numberTop) {
-                    // Inner-scroller hasn't reached the number yet or has passed
-                    progress = 0;
-                } else if (innerScrollerTop <= numberTop && innerScrollerBottom >= numberBottom) {
-                    // Inner-scroller is passing through - keep radius at 0
-                    progress = 1;
-                } else if (innerScrollerBottom < numberBottom && innerScrollerBottom > numberTop) {
-                    // Inner-scroller is exiting - animate back to full radius
-                    const exitProgress = (numberBottom - innerScrollerBottom) / numberHeight;
-                    progress = 1 - exitProgress;
-                }
-            }
+            // Check if scroller top has passed above the number top
+            const distancePassedTop = numberTop - innerScrollerTop;
+            const hasPassedTopThreshold = innerScrollerTop < numberTop;
             
-            // Interpolate border-radius from full value to 0
-            const currentRadius = borderRadius * (1 - progress);
+            // Console logs for debugging
+            console.log(`Number ${index + 1}:`, {
+                isMovingWithScroller,
+                isAtMinPosition,
+                isScrollerOverlapping,
+                distanceFromBottom: distanceFromBottom.toFixed(2),
+                distancePassedTop: distancePassedTop.toFixed(2),
+                menuItemSpacing: menuItemSpacing.toFixed(2),
+                shouldStayConnected,
+                hasPassedTopThreshold,
+                innerScrollerTop: innerScrollerTop.toFixed(2),
+                innerScrollerBottom: innerScrollerBottom.toFixed(2),
+                numberTop: numberTop.toFixed(2),
+                numberBottom: numberBottom.toFixed(2)
+            });
             
-            // Interpolate width from --menu-item-height to (--menu-item-height + --container-gap)
-            const currentWidth = menuItemHeight + (progress * menuItemSpacing);
-            
-            // Apply width to number container
-            numberContainer.style.width = `${currentWidth}px`;
-            
-            // Apply border-radius to number container (only right corners animate, left corners stay full)
-            numberContainer.style.borderTopLeftRadius = `${borderRadius}px`;
-            numberContainer.style.borderTopRightRadius = `${currentRadius}px`;
-            numberContainer.style.borderBottomLeftRadius = `${borderRadius}px`;
-            numberContainer.style.borderBottomRightRadius = `${currentRadius}px`;
-            
-            // Calculate border-radius for inner-scroller top-left corner
-            let scrollerTopLeftRadius = currentRadius;
-            
-            // When number is stuck and scroller passes above, animate from 0 to full border-radius
-            if (isAtMinPosition && innerScrollerTop < numberTop) {
-                const passedDistance = numberTop - innerScrollerTop;
-                const topLeftProgress = Math.min(passedDistance / menuItemHeight, 1);
-                
-                // Animate from 0 to full border-radius
-                scrollerTopLeftRadius = borderRadius * topLeftProgress;
+            // Update classes based on state
+            if (isMovingWithScroller && !isAtMinPosition) {
+                // Number is moving with scroller but hasn't reached final position
+                console.log(`Number ${index + 1}: Adding connected-top`);
+                numberContainer.classList.add('connected-top');
+                numberContainer.classList.remove('connected-middle');
+                innerScroller.classList.add('connected-top');
+                innerScroller.classList.remove('connected-middle');
+            } else if (isAtMinPosition && isScrollerOverlapping && shouldStayConnected && !hasPassedTopThreshold) {
+                // Number at final position, still connected, but hasn't passed top threshold yet - keep connected-top
+                console.log(`Number ${index + 1}: Keeping connected-top`);
+                numberContainer.classList.add('connected-top');
+                numberContainer.classList.remove('connected-middle');
+                innerScroller.classList.add('connected-top');
+                innerScroller.classList.remove('connected-middle');
+            } else if (isAtMinPosition && isScrollerOverlapping && shouldStayConnected && hasPassedTopThreshold) {
+                // Number has reached final position, scroller has passed top threshold, and bottom is still far enough
+                console.log(`Number ${index + 1}: Adding connected-middle, removing connected-top`);
+                numberContainer.classList.remove('connected-top');
+                numberContainer.classList.add('connected-middle');
+                innerScroller.classList.remove('connected-top');
+                innerScroller.classList.add('connected-middle');
+            } else {
+                // Number is at initial position, scroller has reached disconnect threshold
+                console.log(`Number ${index + 1}: Removing all classes`);
+                numberContainer.classList.remove('connected-top', 'connected-middle');
+                innerScroller.classList.remove('connected-top', 'connected-middle');
             }
             
-            // Calculate border-radius for inner-scroller bottom-left corner
-            let scrollerBottomLeftRadius = borderRadius;
-            
-            // When number is stuck and scroller is exiting below
-            if (isAtMinPosition) {
-                const distanceFromDisconnect = innerScrollerBottom - numberBottom;
-                
-                // Phase 1: Approaching disconnect - animate from full to 0
-                if (distanceFromDisconnect <= menuItemHeight && distanceFromDisconnect > 0) {
-                    // exitProgress: 0 when far away, 1 when at disconnect point
-                    const exitProgress = 1 - (distanceFromDisconnect / menuItemHeight);
-                    
-                    // Animate from full border-radius to 0
-                    scrollerBottomLeftRadius = borderRadius * (1 - exitProgress);
-                }
-                // Phase 2: After disconnect - animate from 0 back to full
-                else if (distanceFromDisconnect < 0) {
-                    // Calculate how far past the disconnect point
-                    const passedDistance = Math.abs(distanceFromDisconnect);
-                    
-                    // Animate from 0 back to full over menuItemHeight distance
-                    const recoveryProgress = Math.min(passedDistance / menuItemHeight, 1);
-                    
-                    scrollerBottomLeftRadius = borderRadius * recoveryProgress;
-                }
-            }
-            
-            // Apply border-radius to inner-scroller
-            innerScroller.style.borderTopLeftRadius = `${scrollerTopLeftRadius}px`;
-            innerScroller.style.borderTopRightRadius = `${borderRadius}px`;
-            innerScroller.style.borderBottomLeftRadius = `${scrollerBottomLeftRadius}px`;
-            innerScroller.style.borderBottomRightRadius = `${borderRadius}px`;
-            
-            // Animate number-after-cut-out based on connection state
-            if (numberAfterCutOut) {
-                let afterCutOutRadius = 0;
-                
-                // Phase 1: Number moving with scroller, animate in
-                if (!isAtMinPosition && progress === 1) {
-                    // Calculate how far the number has moved from its initial position
-                    const scrolledDistance = initialTop - newTop;
-                    
-                    // Animate over menuItemHeight distance
-                    const afterCutOutProgress = Math.min(Math.max(scrolledDistance / menuItemHeight, 0), 1);
-                    
-                    // Interpolate border-radius from 0 to --container-gap
-                    afterCutOutRadius = menuItemSpacing * afterCutOutProgress;
-                }
-                // Phase 2: Number at final position, scroller approaching disconnect - animate out
-                else if (isAtMinPosition) {
-                    // Calculate distance from disconnect point
-                    const distanceFromDisconnect = innerScrollerBottom - numberBottom;
-                    
-                    // Start shrinking when scroller bottom is within menuItemHeight of number bottom
-                    if (distanceFromDisconnect <= menuItemHeight && distanceFromDisconnect > 0) {
-                        // exitProgress: 0 when far away (menuItemHeight), 1 when at disconnect point (0)
-                        const exitProgress = 1 - (distanceFromDisconnect / menuItemHeight);
-                        
-                        // Reverse: goes from full value to 0
-                        afterCutOutRadius = menuItemSpacing * (1 - exitProgress);
-                    } else if (distanceFromDisconnect > menuItemHeight) {
-                        // Still far from disconnect, keep at full radius
-                        afterCutOutRadius = menuItemSpacing;
-                    }
-                    // If distanceFromDisconnect <= 0, already disconnected, radius stays at 0
-                }
-                
-                numberAfterCutOut.style.borderTopRightRadius = `${afterCutOutRadius}px`;
-            }
-            
-            // Animate number-before-cut-out when scroller passes above the number
+            // Animate number-before-cut-out border-radius based on scroll position
             if (numberBeforeCutOut) {
-                let beforeCutOutRadius = 0;
+                let beforeCutOutBottomRadius = 0;
                 
-                // Only animate when number is at final position
-                if (isAtMinPosition && innerScrollerTop < numberTop) {
-                    // Calculate how far the scroller has passed above the number
+                const hasConnectedMiddle = numberContainer.classList.contains('connected-middle');
+                
+                console.log(`Number ${index + 1} border-radius calc:`, {
+                    hasConnectedMiddle,
+                    isAtMinPosition,
+                    distanceFromBottom: distanceFromBottom.toFixed(2),
+                    initialRadius: beforeCutOutBottomRadius
+                });
+                
+                // Only animate when connected-middle class is present
+                if (hasConnectedMiddle) {
+                    // Two animation scenarios:
+                    // 1. Scrolling up normally (passedDistance animation)
+                    // 2. Scrolling up from disconnected state below (distanceFromBottom animation)
+                    
                     const passedDistance = numberTop - innerScrollerTop;
                     
-                    // Animate from 0 to full over menuItemHeight distance
-                    const beforeCutOutProgress = Math.min(passedDistance / menuItemHeight, 1);
-                    
-                    // Interpolate border-radius from 0 to --container-gap
-                    beforeCutOutRadius = menuItemSpacing * beforeCutOutProgress;
+                    // Scenario 1: Animate based on passedDistance (when scroller just passed above)
+                    if (passedDistance >= 0 && passedDistance <= borderRadius) {
+                        // Within animation range based on how far scroller passed above
+                        const passedProgress = passedDistance / borderRadius;
+                        const clampedProgress = Math.max(0, Math.min(1, passedProgress));
+                        
+                        beforeCutOutBottomRadius = menuItemSpacing * clampedProgress;
+                        
+                        console.log(`  -> Connected-middle (passedDistance): passedDistance=${passedDistance.toFixed(2)}, progress=${clampedProgress.toFixed(3)}, radius=${beforeCutOutBottomRadius.toFixed(2)}`);
+                    }
+                    // Scenario 2: Animate based on distanceFromBottom (when approaching from below)
+                    else if (distanceFromBottom > (2 * menuItemSpacing) && distanceFromBottom <= ((2 * menuItemSpacing) + menuItemHeight)) {
+                        // Within animation range based on distance from bottom (longer distance than scenario 1)
+                        const bottomProgress = (distanceFromBottom - (2 * menuItemSpacing)) / menuItemHeight;
+                        const clampedProgress = Math.max(0, Math.min(1, bottomProgress));
+                        
+                        beforeCutOutBottomRadius = menuItemSpacing * clampedProgress;
+                        
+                        console.log(`  -> Connected-middle (distanceFromBottom): distanceFromBottom=${distanceFromBottom.toFixed(2)}, progress=${clampedProgress.toFixed(3)}, radius=${beforeCutOutBottomRadius.toFixed(2)}`);
+                    }
+                    // Otherwise, stay at full value
+                    else {
+                        beforeCutOutBottomRadius = menuItemSpacing;
+                        console.log(`  -> Connected-middle (full): passedDistance=${passedDistance.toFixed(2)}, distanceFromBottom=${distanceFromBottom.toFixed(2)}, radius at max`);
+                    }
+                }
+                else {
+                    console.log(`  -> No animation condition met, radius stays at 0`);
                 }
                 
-                numberBeforeCutOut.style.borderBottomRightRadius = `${beforeCutOutRadius}px`;
+                // Always apply the calculated value (including 0 when neither condition is met)
+                console.log(`  -> Final applied radius: ${beforeCutOutBottomRadius.toFixed(2)}px`);
+                numberBeforeCutOut.style.borderBottomRightRadius = `${beforeCutOutBottomRadius}px`;
+            }
+            
+            // Animate inner-scroller border-top-left-radius (same logic as number-before-cut-out)
+            if (innerScroller.classList.contains('connected-middle')) {
+                const passedDistance = numberTop - innerScrollerTop;
+                
+                // Scenario 1: Animate based on passedDistance (when scroller just passed above)
+                if (passedDistance >= 0 && passedDistance <= borderRadius) {
+                    const passedProgress = passedDistance / borderRadius;
+                    const clampedProgress = Math.max(0, Math.min(1, passedProgress));
+                    
+                    const scrollerTopLeftRadius = borderRadius * clampedProgress;
+                    innerScroller.style.borderTopLeftRadius = `${scrollerTopLeftRadius}px`;
+                }
+                // Scenario 2: Animate based on distanceFromBottom (when approaching from below, longer distance)
+                else if (distanceFromBottom > (2 * menuItemSpacing) && distanceFromBottom <= ((2 * menuItemSpacing) + menuItemHeight)) {
+                    const bottomProgress = (distanceFromBottom - (2 * menuItemSpacing)) / menuItemHeight;
+                    const clampedProgress = Math.max(0, Math.min(1, bottomProgress));
+                    
+                    const scrollerTopLeftRadius = borderRadius * clampedProgress;
+                    innerScroller.style.borderTopLeftRadius = `${scrollerTopLeftRadius}px`;
+                }
+                // Otherwise, stay at full value
+                else {
+                    innerScroller.style.borderTopLeftRadius = `${borderRadius}px`;
+                }
+            } else {
+                // Remove inline style to let CSS take over
+                innerScroller.style.borderTopLeftRadius = '';
             }
         });
     }
