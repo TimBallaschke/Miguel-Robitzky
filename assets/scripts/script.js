@@ -154,9 +154,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     const passedDistance = numberTop - innerScrollerTop;
                     
                     // Scenario 1: Animate based on passedDistance (when scroller just passed above)
-                    if (passedDistance >= 0 && passedDistance <= borderRadius) {
-                        // Within animation range based on how far scroller passed above
-                        const passedProgress = passedDistance / borderRadius;
+                    // Start animation immediately when connected-middle is added
+                    // Animate over a distance of --container-gap, but delay the start by --container-gap
+                    // So: animation happens from passedDistance = --container-gap to 2 * --container-gap
+                    // But to catch the transition reliably, start at 0 with a scaled progress
+                    if (passedDistance >= 0 && passedDistance <= (2 * menuItemSpacing)) {
+                        // Within animation range
+                        // Progress starts at 0 when passedDistance = menuItemSpacing
+                        // Progress reaches 1 when passedDistance = 2 * menuItemSpacing
+                        let passedProgress;
+                        if (passedDistance < menuItemSpacing) {
+                            // Before delay point, stay at 0
+                            passedProgress = 0;
+                        } else {
+                            // After delay point, animate from 0 to 1
+                            const adjustedDistance = passedDistance - menuItemSpacing;
+                            passedProgress = adjustedDistance / menuItemSpacing;
+                        }
                         const clampedProgress = Math.max(0, Math.min(1, passedProgress));
                         
                         beforeCutOutBottomRadius = menuItemSpacing * clampedProgress;
@@ -164,9 +178,10 @@ document.addEventListener('DOMContentLoaded', function() {
                         console.log(`  -> Connected-middle (passedDistance): passedDistance=${passedDistance.toFixed(2)}, progress=${clampedProgress.toFixed(3)}, radius=${beforeCutOutBottomRadius.toFixed(2)}`);
                     }
                     // Scenario 2: Animate based on distanceFromBottom (when approaching from below)
-                    else if (distanceFromBottom > (2 * menuItemSpacing) && distanceFromBottom <= ((2 * menuItemSpacing) + menuItemHeight)) {
+                    else if (distanceFromBottom > (3 * menuItemSpacing) && distanceFromBottom <= ((3 * menuItemSpacing) + menuItemHeight)) {
                         // Within animation range based on distance from bottom (longer distance than scenario 1)
-                        const bottomProgress = (distanceFromBottom - (2 * menuItemSpacing)) / menuItemHeight;
+                        // Animation starts at 3 * --container-gap, not 2 * --container-gap
+                        const bottomProgress = (distanceFromBottom - (3 * menuItemSpacing)) / menuItemHeight;
                         const clampedProgress = Math.max(0, Math.min(1, bottomProgress));
                         
                         beforeCutOutBottomRadius = menuItemSpacing * clampedProgress;
@@ -201,8 +216,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     innerScroller.style.borderTopLeftRadius = `${scrollerTopLeftRadius}px`;
                 }
                 // Scenario 2: Animate based on distanceFromBottom (when approaching from below, longer distance)
-                else if (distanceFromBottom > (2 * menuItemSpacing) && distanceFromBottom <= ((2 * menuItemSpacing) + menuItemHeight)) {
-                    const bottomProgress = (distanceFromBottom - (2 * menuItemSpacing)) / menuItemHeight;
+                else if (distanceFromBottom > (3 * menuItemSpacing) && distanceFromBottom <= ((3 * menuItemSpacing) + menuItemHeight)) {
+                    const bottomProgress = (distanceFromBottom - (3 * menuItemSpacing)) / menuItemHeight;
                     const clampedProgress = Math.max(0, Math.min(1, bottomProgress));
                     
                     const scrollerTopLeftRadius = borderRadius * clampedProgress;
