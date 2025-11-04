@@ -47,10 +47,42 @@
             <div id="inner-scroller-4" class="inner-scroller"></div>
         </div>
         <div class="numbers">
-            <div id="number-1" class="number" data-scroller="inner-scroller-1"></div>
-            <div id="number-2" class="number" data-scroller="inner-scroller-2"></div>
-            <div id="number-3" class="number" data-scroller="inner-scroller-3"></div>
-            <div id="number-4" class="number" data-scroller="inner-scroller-4"></div>
+            <div id="number-1-container" class="number-container" data-scroller="inner-scroller-1">
+                <div class="number">
+                    <div class="number-before"></div>
+                    <div class="number-before-cut-out"></div>
+                    <div class="number-content"></div>
+                    <div class="number-after"></div>
+                    <div class="number-after-cut-out"></div>
+                </div>
+            </div>
+            <div id="number-2-container" class="number-container" data-scroller="inner-scroller-2">
+                <div class="number">
+                    <div class="number-before"></div>
+                    <div class="number-before-cut-out"></div>
+                    <div class="number-content"></div>
+                    <div class="number-after"></div>
+                    <div class="number-after-cut-out"></div>
+                </div>
+            </div>
+            <div id="number-3-container" class="number-container" data-scroller="inner-scroller-3">
+                <div class="number">
+                    <div class="number-before"></div>
+                    <div class="number-before-cut-out"></div>
+                    <div class="number-content"></div>
+                    <div class="number-after"></div>
+                    <div class="number-after-cut-out"></div>
+                </div>
+            </div>
+            <div id="number-4-container" class="number-container" data-scroller="inner-scroller-4">
+                <div class="number">
+                    <div class="number-before"></div>
+                    <div class="number-before-cut-out"></div>
+                    <div class="number-content"></div>
+                    <div class="number-after"></div>
+                    <div class="number-after-cut-out"></div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="numbers-container"></div>

@@ -2,22 +2,22 @@
 document.addEventListener('DOMContentLoaded', function() {
     const scroller = document.querySelector('.scroller');
     const innerScrollers = document.querySelectorAll('.inner-scroller');
-    const numbers = document.querySelectorAll('.number');
+    const numberContainers = document.querySelectorAll('.number-container');
     
-    if (!scroller || innerScrollers.length === 0 || numbers.length === 0) return;
+    if (!scroller || innerScrollers.length === 0 || numberContainers.length === 0) return;
     
     let initialPositions = [];
     
     // Function to capture initial top positions from CSS
     function captureInitialPositions() {
         // Temporarily remove inline styles to get CSS values
-        numbers.forEach(number => {
-            number.style.top = '';
+        numberContainers.forEach(container => {
+            container.style.top = '';
         });
         
         // Capture the CSS-defined positions
-        initialPositions = Array.from(numbers).map(number => {
-            const computedStyle = window.getComputedStyle(number);
+        initialPositions = Array.from(numberContainers).map(container => {
+            const computedStyle = window.getComputedStyle(container);
             return parseFloat(computedStyle.top);
         });
     }
@@ -36,8 +36,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const borderRadius = parseFloat(rootStyles.getPropertyValue('--border-radius')) * rootFontSize;
         
         innerScrollers.forEach((innerScroller, index) => {
-            const number = numbers[index];
-            if (!number) return;
+            const numberContainer = numberContainers[index];
+            if (!numberContainer) return;
+            
+            const numberAfterCutOut = numberContainer.querySelector('.number-after-cut-out');
             
             const initialTop = initialPositions[index];
             
@@ -46,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const innerScrollerTop = innerScrollerRect.top;
             const innerScrollerBottom = innerScrollerRect.bottom;
             
-            // Calculate new position for the number
+            // Calculate new position for the number container
             let newTop = initialTop;
             
             // If the inner-scroller has moved up past the number's initial position,
@@ -60,11 +62,11 @@ document.addEventListener('DOMContentLoaded', function() {
             const minTop = pageTitleSize + (index * (menuItemHeight + menuItemSpacing));
             newTop = Math.max(minTop, newTop);
             
-            // Update the number's top position
-            number.style.top = `${newTop}px`;
+            // Update the number container's top position
+            numberContainer.style.top = `${newTop}px`;
             
-            // Calculate border-radius based on inner-scroller position relative to number
-            const numberRect = number.getBoundingClientRect();
+            // Calculate border-radius based on inner-scroller position relative to number container
+            const numberRect = numberContainer.getBoundingClientRect();
             const numberTop = numberRect.top;
             const numberBottom = numberRect.bottom;
             const numberHeight = numberRect.height;
@@ -107,10 +109,57 @@ document.addEventListener('DOMContentLoaded', function() {
             // Interpolate width from --menu-item-height to (--menu-item-height + --container-gap)
             const currentWidth = menuItemHeight + (progress * menuItemSpacing);
             
-            // Apply border-radius and width to both elements
-            number.style.borderRadius = `${currentRadius}px`;
-            number.style.width = `${currentWidth}px`;
-            innerScroller.style.borderRadius = `${currentRadius}px`;
+            // Apply width to number container
+            numberContainer.style.width = `${currentWidth}px`;
+            
+            // Apply border-radius to number container (only right corners animate, left corners stay full)
+            numberContainer.style.borderTopLeftRadius = `${borderRadius}px`;
+            numberContainer.style.borderTopRightRadius = `${currentRadius}px`;
+            numberContainer.style.borderBottomLeftRadius = `${borderRadius}px`;
+            numberContainer.style.borderBottomRightRadius = `${currentRadius}px`;
+            
+            // Apply border-radius to inner-scroller (only top-left animates, others stay full)
+            innerScroller.style.borderTopLeftRadius = `${currentRadius}px`;
+            innerScroller.style.borderTopRightRadius = `${borderRadius}px`;
+            innerScroller.style.borderBottomLeftRadius = `${borderRadius}px`;
+            innerScroller.style.borderBottomRightRadius = `${borderRadius}px`;
+            
+            // Animate number-after-cut-out based on connection state
+            if (numberAfterCutOut) {
+                let afterCutOutRadius = 0;
+                
+                // Phase 1: Number moving with scroller, animate in
+                if (!isAtMinPosition && progress === 1) {
+                    // Calculate how far the number has moved from its initial position
+                    const scrolledDistance = initialTop - newTop;
+                    
+                    // Animate over menuItemHeight distance
+                    const afterCutOutProgress = Math.min(Math.max(scrolledDistance / menuItemHeight, 0), 1);
+                    
+                    // Interpolate border-radius from 0 to --container-gap
+                    afterCutOutRadius = menuItemSpacing * afterCutOutProgress;
+                }
+                // Phase 2: Number at final position, scroller approaching disconnect - animate out
+                else if (isAtMinPosition) {
+                    // Calculate distance from disconnect point
+                    const distanceFromDisconnect = innerScrollerBottom - numberBottom;
+                    
+                    // Start shrinking when scroller bottom is within menuItemHeight of number bottom
+                    if (distanceFromDisconnect <= menuItemHeight && distanceFromDisconnect > 0) {
+                        // exitProgress: 0 when far away (menuItemHeight), 1 when at disconnect point (0)
+                        const exitProgress = 1 - (distanceFromDisconnect / menuItemHeight);
+                        
+                        // Reverse: goes from full value to 0
+                        afterCutOutRadius = menuItemSpacing * (1 - exitProgress);
+                    } else if (distanceFromDisconnect > menuItemHeight) {
+                        // Still far from disconnect, keep at full radius
+                        afterCutOutRadius = menuItemSpacing;
+                    }
+                    // If distanceFromDisconnect <= 0, already disconnected, radius stays at 0
+                }
+                
+                numberAfterCutOut.style.borderTopRightRadius = `${afterCutOutRadius}px`;
+            }
         });
     }
     

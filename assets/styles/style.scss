@@ -161,7 +161,7 @@ html {
 }
 
 
-.number {
+.number-container {
     position: fixed;
     left: var(--page-padding);
     height: var(--menu-item-height);
@@ -170,18 +170,65 @@ html {
     border-radius: var(--border-radius);
 }
 
-#number-1 {
+.number {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.number-before {
+    position: absolute;
+    top: calc(-1 * var(--container-gap));
+    right: 0;
+    width: var(--container-gap);
+    height: var(--container-gap);
+    background-color: grey;
+    display: none;
+}
+
+.number-before-cut-out {
+    position: absolute;
+    top: calc(-1 * var(--container-gap));
+    right: 0;
+    width: var(--container-gap);
+    height: var(--container-gap);
+    background-color: var(--background-color);
+    border-bottom-right-radius: var(--container-gap);
+    display: none;
+
+}
+
+.number-after {
+    position: absolute;
+    bottom: calc(-1 * var(--container-gap));
+    right: 0;
+    width: var(--container-gap);
+    height: var(--container-gap);
+    background-color: grey;
+}
+
+.number-after-cut-out {
+    position: absolute;
+    bottom: calc(-1 * var(--container-gap));
+    right: 0;
+    width: var(--container-gap);
+    height: var(--container-gap);
+    background-color: var(--background-color);
+    border-top-right-radius: var(--container-gap);
+}
+
+#number-1-container {
     top: 10rem;
 }
 
-#number-2 {
+#number-2-container {
     top: calc(100dvh - var(--page-padding) - 3 * var(--menu-item-height) - 2 * var(--container-gap));
 }
 
-#number-3 {
+#number-3-container {
     top: calc(100dvh - var(--page-padding) - 2 * var(--menu-item-height) - var(--container-gap));
 }
 
-#number-4 {
+#number-4-container {
     top: calc(100dvh - var(--page-padding) - var(--menu-item-height));
 }
