@@ -42,7 +42,11 @@
         </div> -->
         <div class="scroller">
             <div id="inner-scroller-1" class="inner-scroller"></div>
-            <div id="inner-scroller-2" class="inner-scroller"></div>
+            <div id="inner-scroller-2" class="inner-scroller">
+                <div class="images">
+                    <img src="/assets/images/Bildschirmfoto2025-09-12um11.00.03.png" alt="Image 1">
+                </div>
+            </div>
             <div id="inner-scroller-3" class="inner-scroller"></div>
             <div id="inner-scroller-4" class="inner-scroller"></div>
         </div>

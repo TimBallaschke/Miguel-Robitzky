@@ -2,7 +2,10 @@
 
 html {
     font-size: 1vw;
+    background-color: var(--background-color);
 }
+
+
 
 .content-container {
     position: fixed;
@@ -156,12 +159,14 @@ html {
     min-height: 200vh;
     flex-shrink: 0;
     // background: linear-gradient(to bottom, #ff0000, #66ff00);
-    background-color: grey;
+    background-color: #FAFAFA;
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
     transition: border-radius 75ms ease-in-out;
+    position: relative;
+    overflow: visible;
 
     &.connected-top {
         border-top-left-radius: 0;
@@ -179,7 +184,7 @@ html {
     left: var(--page-padding);
     height: var(--menu-item-height);
     width: var(--menu-item-height);
-    background-color: grey;
+    background-color: #FAFAFA;
     border-top-left-radius: var(--border-radius);
     border-top-right-radius: var(--border-radius);
     border-bottom-left-radius: var(--border-radius);
@@ -203,6 +208,7 @@ html {
     position: relative;
     width: 100%;
     height: 100%;
+    overflow: visible;
 }
 
 .number-before {
@@ -211,7 +217,7 @@ html {
     right: 0;
     width: var(--container-gap);
     height: var(--container-gap);
-    background-color: grey;
+    background-color: #FAFAFA;
 }
 
 .number-before-cut-out {
@@ -230,7 +236,7 @@ html {
     right: 0;
     width: var(--container-gap);
     height: var(--container-gap);
-    background-color: grey;
+    background-color: #FAFAFA;
 
 }
 
@@ -271,3 +277,18 @@ html {
 #number-4-container {
     top: calc(100dvh - var(--page-padding) - var(--menu-item-height));
 }
+
+.images {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: calc(100vw - 2 * var(--page-padding));
+    height: auto;
+    background-color: red;
+    overflow: hidden;
+
+    img {
+        width: 100%;
+    }
+}
+

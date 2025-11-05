@@ -6,6 +6,27 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!scroller || innerScrollers.length === 0 || numberContainers.length === 0) return;
     
+    // Create SVG overlay for visualizing shapes
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.style.position = 'fixed';
+    svg.style.top = '0';
+    svg.style.left = '0';
+    svg.style.width = '100%';
+    svg.style.height = '100%';
+    svg.style.pointerEvents = 'none';
+    svg.style.zIndex = '9999';
+    document.body.appendChild(svg);
+    
+    // Create a group for each number-scroller pair
+    const svgGroups = [];
+    numberContainers.forEach((container, index) => {
+        const group = document.createElementNS(svgNS, 'g');
+        group.setAttribute('id', `shape-group-${index + 1}`);
+        svg.appendChild(group);
+        svgGroups.push(group);
+    });
+    
     let initialPositions = [];
     
     // Function to capture initial top positions from CSS
@@ -252,13 +273,98 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
+    // Helper function to create an SVG path for a rounded rectangle with individual corner radii
+    function createRoundedRectPath(x, y, width, height, topLeft, topRight, bottomRight, bottomLeft) {
+        return `
+            M ${x + topLeft} ${y}
+            L ${x + width - topRight} ${y}
+            Q ${x + width} ${y} ${x + width} ${y + topRight}
+            L ${x + width} ${y + height - bottomRight}
+            Q ${x + width} ${y + height} ${x + width - bottomRight} ${y + height}
+            L ${x + bottomLeft} ${y + height}
+            Q ${x} ${y + height} ${x} ${y + height - bottomLeft}
+            L ${x} ${y + topLeft}
+            Q ${x} ${y} ${x + topLeft} ${y}
+            Z
+        `.trim();
+    }
+    
+    // Function to update SVG shapes based on current element positions
+    function updateSVGShapes() {
+        numberContainers.forEach((numberContainer, index) => {
+            const innerScroller = innerScrollers[index];
+            const group = svgGroups[index];
+            
+            if (!innerScroller || !group) return;
+            
+            // Clear previous shapes
+            group.innerHTML = '';
+            
+            // Get element positions and dimensions
+            const numberRect = numberContainer.getBoundingClientRect();
+            const scrollerRect = innerScroller.getBoundingClientRect();
+            
+            // Get computed styles
+            const numberStyle = window.getComputedStyle(numberContainer);
+            const scrollerStyle = window.getComputedStyle(innerScroller);
+            
+            // Check if elements are connected
+            const hasConnectedTop = numberContainer.classList.contains('connected-top');
+            const hasConnectedMiddle = numberContainer.classList.contains('connected-middle');
+            
+            if (hasConnectedTop || hasConnectedMiddle) {
+                // Create combined path for number + scroller
+                const path = document.createElementNS(svgNS, 'path');
+                
+                // For now, create simple rectangles - we'll add corner radii next
+                const numberPath = createRoundedRectPath(
+                    numberRect.left,
+                    numberRect.top,
+                    numberRect.width,
+                    numberRect.height,
+                    parseFloat(numberStyle.borderTopLeftRadius) || 0,
+                    parseFloat(numberStyle.borderTopRightRadius) || 0,
+                    parseFloat(numberStyle.borderBottomRightRadius) || 0,
+                    parseFloat(numberStyle.borderBottomLeftRadius) || 0
+                );
+                
+                path.setAttribute('d', numberPath);
+                path.setAttribute('fill', 'red');
+                path.setAttribute('opacity', '0.5');
+                group.appendChild(path);
+                
+                // Add inner-scroller shape
+                const scrollerPath = document.createElementNS(svgNS, 'path');
+                const scrollerPathData = createRoundedRectPath(
+                    scrollerRect.left,
+                    scrollerRect.top,
+                    scrollerRect.width,
+                    scrollerRect.height,
+                    parseFloat(scrollerStyle.borderTopLeftRadius) || 0,
+                    parseFloat(scrollerStyle.borderTopRightRadius) || 0,
+                    parseFloat(scrollerStyle.borderBottomRightRadius) || 0,
+                    parseFloat(scrollerStyle.borderBottomLeftRadius) || 0
+                );
+                
+                scrollerPath.setAttribute('d', scrollerPathData);
+                scrollerPath.setAttribute('fill', 'red');
+                scrollerPath.setAttribute('opacity', '0.5');
+                group.appendChild(scrollerPath);
+            }
+        });
+    }
+    
     function handleResize() {
         captureInitialPositions();
         updateNumberPositions();
+        updateSVGShapes();
     }
     
     // Update on scroll
-    scroller.addEventListener('scroll', updateNumberPositions);
+    scroller.addEventListener('scroll', function() {
+        updateNumberPositions();
+        updateSVGShapes();
+    });
     
     // Update on resize
     window.addEventListener('resize', handleResize);
@@ -266,5 +372,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial setup
     captureInitialPositions();
     updateNumberPositions();
+    updateSVGShapes();
 });
 
