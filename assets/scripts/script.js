@@ -313,10 +313,42 @@ document.addEventListener('DOMContentLoaded', function() {
             const hasConnectedMiddle = numberContainer.classList.contains('connected-middle');
             
             if (hasConnectedTop || hasConnectedMiddle) {
-                // Create combined path for number + scroller
-                const path = document.createElementNS(svgNS, 'path');
+                // Get connector elements
+                const numberBefore = numberContainer.querySelector('.number-before');
+                const numberBeforeCutOut = numberContainer.querySelector('.number-before-cut-out');
+                const numberAfter = numberContainer.querySelector('.number-after');
+                const numberAfterCutOut = numberContainer.querySelector('.number-after-cut-out');
                 
-                // For now, create simple rectangles - we'll add corner radii next
+                // Draw number-before connector (if visible and has cutout)
+                if (numberBefore && numberBeforeCutOut) {
+                    const beforeRect = numberBefore.getBoundingClientRect();
+                    const beforeCutOutStyle = window.getComputedStyle(numberBeforeCutOut);
+                    const cutOutRadius = parseFloat(beforeCutOutStyle.borderBottomRightRadius) || 0;
+                    
+                    if (beforeRect.width > 0 && beforeRect.height > 0 && cutOutRadius > 0) {
+                        // The number-before-cut-out with border-radius reveals the grey square underneath
+                        // We need to draw the revealed corner area (the grey part that shows through)
+                        const connectorPath = document.createElementNS(svgNS, 'path');
+                        
+                        // This is the area between the straight corner and the rounded cutout
+                        // It's a convex shape bulging inward toward the bottom-right corner
+                        const pathData = `
+                            M ${beforeRect.right - cutOutRadius} ${beforeRect.bottom}
+                            L ${beforeRect.right} ${beforeRect.bottom}
+                            L ${beforeRect.right} ${beforeRect.bottom - cutOutRadius}
+                            Q ${beforeRect.right} ${beforeRect.bottom} ${beforeRect.right - cutOutRadius} ${beforeRect.bottom}
+                            Z
+                        `.trim();
+                        
+                        connectorPath.setAttribute('d', pathData);
+                        connectorPath.setAttribute('fill', 'red');
+                        connectorPath.setAttribute('opacity', '0.5');
+                        group.appendChild(connectorPath);
+                    }
+                }
+                
+                // Draw number container
+                const path = document.createElementNS(svgNS, 'path');
                 const numberPath = createRoundedRectPath(
                     numberRect.left,
                     numberRect.top,
@@ -332,6 +364,34 @@ document.addEventListener('DOMContentLoaded', function() {
                 path.setAttribute('fill', 'red');
                 path.setAttribute('opacity', '0.5');
                 group.appendChild(path);
+                
+                // Draw number-after connector (if visible and has cutout)
+                if (numberAfter && numberAfterCutOut) {
+                    const afterRect = numberAfter.getBoundingClientRect();
+                    const afterCutOutStyle = window.getComputedStyle(numberAfterCutOut);
+                    const cutOutRadius = parseFloat(afterCutOutStyle.borderTopRightRadius) || 0;
+                    
+                    if (afterRect.width > 0 && afterRect.height > 0 && cutOutRadius > 0) {
+                        // The number-after-cut-out with border-radius reveals the grey square underneath
+                        // We need to draw the revealed corner area (the grey part that shows through)
+                        const connectorPath = document.createElementNS(svgNS, 'path');
+                        
+                        // This is the area between the straight corner and the rounded cutout
+                        // It's a convex shape bulging inward toward the top-right corner
+                        const pathData = `
+                            M ${afterRect.right - cutOutRadius} ${afterRect.top}
+                            L ${afterRect.right} ${afterRect.top}
+                            L ${afterRect.right} ${afterRect.top + cutOutRadius}
+                            Q ${afterRect.right} ${afterRect.top} ${afterRect.right - cutOutRadius} ${afterRect.top}
+                            Z
+                        `.trim();
+                        
+                        connectorPath.setAttribute('d', pathData);
+                        connectorPath.setAttribute('fill', 'red');
+                        connectorPath.setAttribute('opacity', '0.5');
+                        group.appendChild(connectorPath);
+                    }
+                }
                 
                 // Add inner-scroller shape
                 const scrollerPath = document.createElementNS(svgNS, 'path');
