@@ -279,16 +279,36 @@ html {
 }
 
 .images {
-    position: absolute;
-    top: 0;
-    right: 0;
+    position: relative;
     width: calc(100vw - 2 * var(--page-padding));
     height: auto;
     background-color: red;
     overflow: hidden;
+    
 
     img {
         width: 100%;
+    }
+}
+
+.images-test {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: red;
+    overflow: hidden;
+    pointer-events: none;
+    
+    // Apply SVG mask for inner-scroller-2
+    mask: url(#combined-mask-2);
+    -webkit-mask: url(#combined-mask-2);
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
     }
 }
 

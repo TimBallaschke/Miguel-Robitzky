@@ -6,26 +6,46 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (!scroller || innerScrollers.length === 0 || numberContainers.length === 0) return;
     
-    // Create SVG overlay for visualizing shapes
-    const svgNS = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(svgNS, 'svg');
-    svg.style.position = 'fixed';
-    svg.style.top = '0';
-    svg.style.left = '0';
-    svg.style.width = '100%';
-    svg.style.height = '100%';
-    svg.style.pointerEvents = 'none';
-    svg.style.zIndex = '9999';
-    document.body.appendChild(svg);
-    
-    // Create a group for each number-scroller pair
-    const svgGroups = [];
-    numberContainers.forEach((container, index) => {
-        const group = document.createElementNS(svgNS, 'g');
-        group.setAttribute('id', `shape-group-${index + 1}`);
-        svg.appendChild(group);
-        svgGroups.push(group);
-    });
+            // Create SVG overlay for visualizing shapes and masks
+            const svgNS = 'http://www.w3.org/2000/svg';
+            const svg = document.createElementNS(svgNS, 'svg');
+            svg.style.position = 'fixed';
+            svg.style.top = '0';
+            svg.style.left = '0';
+            svg.style.width = '100%';
+            svg.style.height = '100%';
+            svg.style.pointerEvents = 'none';
+            svg.style.zIndex = '9999';
+            svg.setAttribute('width', '100%');
+            svg.setAttribute('height', '100%');
+            document.body.appendChild(svg);
+            
+            // Create a defs section for masks
+            const defs = document.createElementNS(svgNS, 'defs');
+            svg.appendChild(defs);
+            
+            // Create a mask for each number-scroller pair
+            const svgMasks = [];
+            numberContainers.forEach((container, index) => {
+                const mask = document.createElementNS(svgNS, 'mask');
+                mask.setAttribute('id', `combined-mask-${index + 1}`);
+                mask.setAttribute('maskUnits', 'userSpaceOnUse');
+                mask.setAttribute('x', '0');
+                mask.setAttribute('y', '0');
+                mask.setAttribute('width', window.innerWidth);
+                mask.setAttribute('height', window.innerHeight);
+                defs.appendChild(mask);
+                svgMasks.push(mask);
+            });
+            
+            // Create a group for visualization (combined red shape)
+            const svgGroups = [];
+            numberContainers.forEach((container, index) => {
+                const group = document.createElementNS(svgNS, 'g');
+                group.setAttribute('id', `shape-group-${index + 1}`);
+                svg.appendChild(group);
+                svgGroups.push(group);
+            });
     
     let initialPositions = [];
     
@@ -289,132 +309,134 @@ document.addEventListener('DOMContentLoaded', function() {
         `.trim();
     }
     
-    // Function to update SVG shapes based on current element positions
-    function updateSVGShapes() {
-        numberContainers.forEach((numberContainer, index) => {
-            const innerScroller = innerScrollers[index];
-            const group = svgGroups[index];
-            
-            if (!innerScroller || !group) return;
-            
-            // Clear previous shapes
-            group.innerHTML = '';
-            
-            // Get element positions and dimensions
-            const numberRect = numberContainer.getBoundingClientRect();
-            const scrollerRect = innerScroller.getBoundingClientRect();
-            
-            // Get computed styles
-            const numberStyle = window.getComputedStyle(numberContainer);
-            const scrollerStyle = window.getComputedStyle(innerScroller);
-            
-            // Check if elements are connected
-            const hasConnectedTop = numberContainer.classList.contains('connected-top');
-            const hasConnectedMiddle = numberContainer.classList.contains('connected-middle');
-            
-            if (hasConnectedTop || hasConnectedMiddle) {
-                // Get connector elements
-                const numberBefore = numberContainer.querySelector('.number-before');
-                const numberBeforeCutOut = numberContainer.querySelector('.number-before-cut-out');
-                const numberAfter = numberContainer.querySelector('.number-after');
-                const numberAfterCutOut = numberContainer.querySelector('.number-after-cut-out');
-                
-                // Draw number-before connector (if visible and has cutout)
-                if (numberBefore && numberBeforeCutOut) {
-                    const beforeRect = numberBefore.getBoundingClientRect();
-                    const beforeCutOutStyle = window.getComputedStyle(numberBeforeCutOut);
-                    const cutOutRadius = parseFloat(beforeCutOutStyle.borderBottomRightRadius) || 0;
+            // Function to update SVG shapes based on current element positions
+            function updateSVGShapes() {
+                numberContainers.forEach((numberContainer, index) => {
+                    const innerScroller = innerScrollers[index];
+                    const group = svgGroups[index];
+                    const mask = svgMasks[index];
                     
-                    if (beforeRect.width > 0 && beforeRect.height > 0 && cutOutRadius > 0) {
-                        // The number-before-cut-out with border-radius reveals the grey square underneath
-                        // We need to draw the revealed corner area (the grey part that shows through)
-                        const connectorPath = document.createElementNS(svgNS, 'path');
-                        
-                        // This is the area between the straight corner and the rounded cutout
-                        // It's a convex shape bulging inward toward the bottom-right corner
-                        const pathData = `
-                            M ${beforeRect.right - cutOutRadius} ${beforeRect.bottom}
-                            L ${beforeRect.right} ${beforeRect.bottom}
-                            L ${beforeRect.right} ${beforeRect.bottom - cutOutRadius}
-                            Q ${beforeRect.right} ${beforeRect.bottom} ${beforeRect.right - cutOutRadius} ${beforeRect.bottom}
-                            Z
-                        `.trim();
-                        
-                        connectorPath.setAttribute('d', pathData);
-                        connectorPath.setAttribute('fill', 'red');
-                        connectorPath.setAttribute('opacity', '0.5');
-                        group.appendChild(connectorPath);
-                    }
-                }
-                
-                // Draw number container
-                const path = document.createElementNS(svgNS, 'path');
-                const numberPath = createRoundedRectPath(
-                    numberRect.left,
-                    numberRect.top,
-                    numberRect.width,
-                    numberRect.height,
-                    parseFloat(numberStyle.borderTopLeftRadius) || 0,
-                    parseFloat(numberStyle.borderTopRightRadius) || 0,
-                    parseFloat(numberStyle.borderBottomRightRadius) || 0,
-                    parseFloat(numberStyle.borderBottomLeftRadius) || 0
-                );
-                
-                path.setAttribute('d', numberPath);
-                path.setAttribute('fill', 'red');
-                path.setAttribute('opacity', '0.5');
-                group.appendChild(path);
-                
-                // Draw number-after connector (if visible and has cutout)
-                if (numberAfter && numberAfterCutOut) {
-                    const afterRect = numberAfter.getBoundingClientRect();
-                    const afterCutOutStyle = window.getComputedStyle(numberAfterCutOut);
-                    const cutOutRadius = parseFloat(afterCutOutStyle.borderTopRightRadius) || 0;
+                    if (!innerScroller || !group || !mask) return;
                     
-                    if (afterRect.width > 0 && afterRect.height > 0 && cutOutRadius > 0) {
-                        // The number-after-cut-out with border-radius reveals the grey square underneath
-                        // We need to draw the revealed corner area (the grey part that shows through)
-                        const connectorPath = document.createElementNS(svgNS, 'path');
+                    // Clear previous shapes
+                    group.innerHTML = '';
+                    mask.innerHTML = '';
+                    
+                    // Get element positions and dimensions
+                    const numberRect = numberContainer.getBoundingClientRect();
+                    const scrollerRect = innerScroller.getBoundingClientRect();
+                    
+                    // Get computed styles
+                    const numberStyle = window.getComputedStyle(numberContainer);
+                    const scrollerStyle = window.getComputedStyle(innerScroller);
+                    
+                    // Check if elements are connected
+                    const hasConnectedTop = numberContainer.classList.contains('connected-top');
+                    const hasConnectedMiddle = numberContainer.classList.contains('connected-middle');
+                    
+                    if (hasConnectedTop || hasConnectedMiddle) {
+                        // Helper function to add shape to both mask (white) and group (red)
+                        const addShape = (pathData) => {
+                            // Add white shape to mask
+                            const maskPath = document.createElementNS(svgNS, 'path');
+                            maskPath.setAttribute('d', pathData);
+                            maskPath.setAttribute('fill', 'white');
+                            mask.appendChild(maskPath);
+                            
+                            // Add red shape to visualization group
+                            const visPath = document.createElementNS(svgNS, 'path');
+                            visPath.setAttribute('d', pathData);
+                            visPath.setAttribute('fill', 'red');
+                            visPath.setAttribute('opacity', '0.5');
+                            group.appendChild(visPath);
+                        };
                         
-                        // This is the area between the straight corner and the rounded cutout
-                        // It's a convex shape bulging inward toward the top-right corner
-                        const pathData = `
-                            M ${afterRect.right - cutOutRadius} ${afterRect.top}
-                            L ${afterRect.right} ${afterRect.top}
-                            L ${afterRect.right} ${afterRect.top + cutOutRadius}
-                            Q ${afterRect.right} ${afterRect.top} ${afterRect.right - cutOutRadius} ${afterRect.top}
-                            Z
-                        `.trim();
+                        // Get connector elements
+                        const numberBefore = numberContainer.querySelector('.number-before');
+                        const numberBeforeCutOut = numberContainer.querySelector('.number-before-cut-out');
+                        const numberAfter = numberContainer.querySelector('.number-after');
+                        const numberAfterCutOut = numberContainer.querySelector('.number-after-cut-out');
                         
-                        connectorPath.setAttribute('d', pathData);
-                        connectorPath.setAttribute('fill', 'red');
-                        connectorPath.setAttribute('opacity', '0.5');
-                        group.appendChild(connectorPath);
+                        // Draw number-before connector (if visible and has cutout)
+                        if (numberBefore && numberBeforeCutOut) {
+                            const beforeRect = numberBefore.getBoundingClientRect();
+                            const beforeCutOutStyle = window.getComputedStyle(numberBeforeCutOut);
+                            const cutOutRadius = parseFloat(beforeCutOutStyle.borderBottomRightRadius) || 0;
+                            
+                            if (beforeRect.width > 0 && beforeRect.height > 0 && cutOutRadius > 0) {
+                                // This is the area between the straight corner and the rounded cutout
+                                // It's a convex shape bulging inward toward the bottom-right corner
+                                const pathData = `
+                                    M ${beforeRect.right - cutOutRadius} ${beforeRect.bottom}
+                                    L ${beforeRect.right} ${beforeRect.bottom}
+                                    L ${beforeRect.right} ${beforeRect.bottom - cutOutRadius}
+                                    Q ${beforeRect.right} ${beforeRect.bottom} ${beforeRect.right - cutOutRadius} ${beforeRect.bottom}
+                                    Z
+                                `.trim();
+                                
+                                addShape(pathData);
+                            }
+                        }
+                
+                        // Draw number container
+                        const numberPath = createRoundedRectPath(
+                            numberRect.left,
+                            numberRect.top,
+                            numberRect.width,
+                            numberRect.height,
+                            parseFloat(numberStyle.borderTopLeftRadius) || 0,
+                            parseFloat(numberStyle.borderTopRightRadius) || 0,
+                            parseFloat(numberStyle.borderBottomRightRadius) || 0,
+                            parseFloat(numberStyle.borderBottomLeftRadius) || 0
+                        );
+                        
+                        addShape(numberPath);
+                
+                        // Draw number-after connector (if visible and has cutout)
+                        if (numberAfter && numberAfterCutOut) {
+                            const afterRect = numberAfter.getBoundingClientRect();
+                            const afterCutOutStyle = window.getComputedStyle(numberAfterCutOut);
+                            const cutOutRadius = parseFloat(afterCutOutStyle.borderTopRightRadius) || 0;
+                            
+                            if (afterRect.width > 0 && afterRect.height > 0 && cutOutRadius > 0) {
+                                // This is the area between the straight corner and the rounded cutout
+                                // It's a convex shape bulging inward toward the top-right corner
+                                const pathData = `
+                                    M ${afterRect.right - cutOutRadius} ${afterRect.top}
+                                    L ${afterRect.right} ${afterRect.top}
+                                    L ${afterRect.right} ${afterRect.top + cutOutRadius}
+                                    Q ${afterRect.right} ${afterRect.top} ${afterRect.right - cutOutRadius} ${afterRect.top}
+                                    Z
+                                `.trim();
+                                
+                                addShape(pathData);
+                            }
+                        }
+                        
+                        // Add inner-scroller shape
+                        const scrollerPathData = createRoundedRectPath(
+                            scrollerRect.left,
+                            scrollerRect.top,
+                            scrollerRect.width,
+                            scrollerRect.height,
+                            parseFloat(scrollerStyle.borderTopLeftRadius) || 0,
+                            parseFloat(scrollerStyle.borderTopRightRadius) || 0,
+                            parseFloat(scrollerStyle.borderBottomRightRadius) || 0,
+                            parseFloat(scrollerStyle.borderBottomLeftRadius) || 0
+                        );
+                        
+                        addShape(scrollerPathData);
                     }
-                }
-                
-                // Add inner-scroller shape
-                const scrollerPath = document.createElementNS(svgNS, 'path');
-                const scrollerPathData = createRoundedRectPath(
-                    scrollerRect.left,
-                    scrollerRect.top,
-                    scrollerRect.width,
-                    scrollerRect.height,
-                    parseFloat(scrollerStyle.borderTopLeftRadius) || 0,
-                    parseFloat(scrollerStyle.borderTopRightRadius) || 0,
-                    parseFloat(scrollerStyle.borderBottomRightRadius) || 0,
-                    parseFloat(scrollerStyle.borderBottomLeftRadius) || 0
-                );
-                
-                scrollerPath.setAttribute('d', scrollerPathData);
-                scrollerPath.setAttribute('fill', 'red');
-                scrollerPath.setAttribute('opacity', '0.5');
-                group.appendChild(scrollerPath);
+                });
             }
-        });
-    }
     
     function handleResize() {
+        // Update mask dimensions on resize
+        svgMasks.forEach(mask => {
+            mask.setAttribute('width', window.innerWidth);
+            mask.setAttribute('height', window.innerHeight);
+        });
+        
         captureInitialPositions();
         updateNumberPositions();
         updateSVGShapes();
