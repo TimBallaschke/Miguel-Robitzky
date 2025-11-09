@@ -255,11 +255,8 @@ html {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: red;
   overflow: hidden;
   pointer-events: none;
-  mask: url(#combined-mask-2);
-  -webkit-mask: url(#combined-mask-2);
 }
 .images-test img {
   width: 100%;

@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const scroller = document.querySelector('.scroller');
     const innerScrollers = document.querySelectorAll('.inner-scroller');
     const numberContainers = document.querySelectorAll('.number-container');
-    
+
     if (!scroller || innerScrollers.length === 0 || numberContainers.length === 0) return;
     
             // Create SVG overlay for visualizing shapes and masks
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
             svg.style.zIndex = '9999';
             svg.setAttribute('width', '100%');
             svg.setAttribute('height', '100%');
-            document.body.appendChild(svg);
+            // document.body.appendChild(svg);
             
             // Create a defs section for masks
             const defs = document.createElementNS(svgNS, 'defs');
