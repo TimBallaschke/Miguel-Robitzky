@@ -444,8 +444,23 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     // Only draw the number container when it's connected
                     if (hasConnectedTop || hasConnectedMiddle) {
+                        // Define offset to shift number container + connectors right to cover edge
+                        const maskOffset = 2; // pixels to shift right
+                        
                         const numberPath = createRoundedRectPath(
                             numberRect.left,
+                            numberRect.top,
+                            numberRect.width,
+                            numberRect.height,
+                            parseFloat(numberStyle.borderTopLeftRadius) || 0,
+                            parseFloat(numberStyle.borderTopRightRadius) || 0,
+                            parseFloat(numberStyle.borderBottomRightRadius) || 0,
+                            parseFloat(numberStyle.borderBottomLeftRadius) || 0
+                        );
+                        
+                        // Create shifted version for mask
+                        const numberPathShifted = createRoundedRectPath(
+                            numberRect.left + maskOffset,
                             numberRect.top,
                             numberRect.width,
                             numberRect.height,
@@ -465,7 +480,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Helper functions that mirror the red visualization structure
                         
                         // Add to red 'group' (clipped) AND white maskClippedGroup (clipped)
-                        const addShape = (pathData) => {
+                        // pathDataShifted is optional for mask (shifted right)
+                        const addShape = (pathData, pathDataShifted = null) => {
                             // Red visualization - clipped by scroller boundary (TRANSPARENT)
                             const visPath = document.createElementNS(svgNS, 'path');
                             visPath.setAttribute('d', pathData);
@@ -473,18 +489,21 @@ document.addEventListener('DOMContentLoaded', function() {
                             visPath.setAttribute('opacity', '0');
                             group.appendChild(visPath);
                             
-                            // White mask - clipped by scroller boundary
+                            // White mask - clipped by scroller boundary (use shifted version if provided)
                             const maskPath = document.createElementNS(svgNS, 'path');
-                            maskPath.setAttribute('d', pathData);
+                            maskPath.setAttribute('d', pathDataShifted || pathData);
                             maskPath.setAttribute('fill', 'white');
                             maskPath.setAttribute('stroke', 'white');
-                            maskPath.setAttribute('stroke-width', '2');
-                            maskPath.setAttribute('shape-rendering', 'crispEdges');
+                            maskPath.setAttribute('stroke-width', '0');
+                            maskPath.setAttribute('shape-rendering', 'geometricPrecision'); // Better quality rendering
+                            maskPath.setAttribute('stroke-linejoin', 'round'); // Smooth joins
+                            maskPath.setAttribute('stroke-linecap', 'round'); // Smooth caps
                             maskClippedGroup.appendChild(maskPath);
                         };
                         
                         // Add to red 'numberGroup' (NOT clipped) AND white mask root (NOT clipped)
-                        const addUnclippedShape = (pathData) => {
+                        // pathData is for red vis, pathDataShifted is optional for mask (shifted right)
+                        const addUnclippedShape = (pathData, pathDataShifted = null) => {
                             // Red visualization - NOT clipped (TRANSPARENT)
                             const visPath = document.createElementNS(svgNS, 'path');
                             visPath.setAttribute('d', pathData);
@@ -492,18 +511,21 @@ document.addEventListener('DOMContentLoaded', function() {
                             visPath.setAttribute('opacity', '0');
                             numberGroup.appendChild(visPath);
                             
-                            // White mask - NOT clipped
+                            // White mask - NOT clipped (use shifted version if provided)
                             const maskPath = document.createElementNS(svgNS, 'path');
-                            maskPath.setAttribute('d', pathData);
+                            maskPath.setAttribute('d', pathDataShifted || pathData);
                             maskPath.setAttribute('fill', 'white');
                             maskPath.setAttribute('stroke', 'white');
-                            maskPath.setAttribute('stroke-width', '2');
-                            maskPath.setAttribute('shape-rendering', 'crispEdges');
+                            maskPath.setAttribute('stroke-width', '4'); // Increased stroke for better connectivity
+                            maskPath.setAttribute('shape-rendering', 'geometricPrecision'); // Better quality rendering
+                            maskPath.setAttribute('stroke-linejoin', 'round'); // Smooth joins
+                            maskPath.setAttribute('stroke-linecap', 'round'); // Smooth caps
                             mask.appendChild(maskPath);
                         };
                         
                         // Add number container to both red numberGroup and white mask (NOT clipped)
-                        addUnclippedShape(numberPath);
+                        // Use shifted version for mask
+                        addUnclippedShape(numberPath, numberPathShifted);
                         
                         // Get connector elements
                         const numberBefore = numberContainer.querySelector('.number-before');
@@ -522,7 +544,14 @@ document.addEventListener('DOMContentLoaded', function() {
                                     L ${beforeRect.left} ${beforeRect.bottom}
                                     Z
                                 `.trim();
-                                addShape(beforePath);
+                                const beforePathShifted = `
+                                    M ${beforeRect.left + maskOffset} ${beforeRect.top}
+                                    L ${beforeRect.right + maskOffset} ${beforeRect.top}
+                                    L ${beforeRect.right + maskOffset} ${beforeRect.bottom}
+                                    L ${beforeRect.left + maskOffset} ${beforeRect.bottom}
+                                    Z
+                                `.trim();
+                                addShape(beforePath, beforePathShifted);
                                 // Don't add to numberGroup - only the curved corner should be visible
                             }
                         }
@@ -534,13 +563,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             const cutOutRadius = parseFloat(cutOutStyle.borderBottomRightRadius) || 0;
                             
                             if (cutOutRect.width > 0 && cutOutRect.height > 0) {
-                                // Create the cut-out shape with rounded corner
+                                // Create the cut-out shape with rounded corner (shifted)
                                 const cutOutPath = `
-                                    M ${cutOutRect.left} ${cutOutRect.top}
-                                    L ${cutOutRect.right} ${cutOutRect.top}
-                                    L ${cutOutRect.right} ${cutOutRect.bottom - cutOutRadius}
-                                    Q ${cutOutRect.right} ${cutOutRect.bottom} ${cutOutRect.right - cutOutRadius} ${cutOutRect.bottom}
-                                    L ${cutOutRect.left} ${cutOutRect.bottom}
+                                    M ${cutOutRect.left + maskOffset} ${cutOutRect.top}
+                                    L ${cutOutRect.right + maskOffset} ${cutOutRect.top}
+                                    L ${cutOutRect.right + maskOffset} ${cutOutRect.bottom - cutOutRadius}
+                                    Q ${cutOutRect.right + maskOffset} ${cutOutRect.bottom} ${cutOutRect.right + maskOffset - cutOutRadius} ${cutOutRect.bottom}
+                                    L ${cutOutRect.left + maskOffset} ${cutOutRect.bottom}
                                     Z
                                 `.trim();
                                 
@@ -568,10 +597,18 @@ document.addEventListener('DOMContentLoaded', function() {
                                     Z
                                 `.trim();
                                 
-                                addShape(pathData);
+                                const pathDataShifted = `
+                                    M ${beforeRect.right + maskOffset - cutOutRadius} ${beforeRect.bottom}
+                                    L ${beforeRect.right + maskOffset} ${beforeRect.bottom}
+                                    L ${beforeRect.right + maskOffset} ${beforeRect.bottom - cutOutRadius}
+                                    Q ${beforeRect.right + maskOffset} ${beforeRect.bottom} ${beforeRect.right + maskOffset - cutOutRadius} ${beforeRect.bottom}
+                                    Z
+                                `.trim();
+                                
+                                addShape(pathData, pathDataShifted);
                                 
                                 // Also add corner to numberGroup and mask (NOT clipped - visible outside scroller)
-                                addUnclippedShape(pathData);
+                                addUnclippedShape(pathData, pathDataShifted);
                             }
                         }
                 
@@ -586,7 +623,14 @@ document.addEventListener('DOMContentLoaded', function() {
                                     L ${afterRect.left} ${afterRect.bottom}
                                     Z
                                 `.trim();
-                                addShape(afterPath);
+                                const afterPathShifted = `
+                                    M ${afterRect.left + maskOffset} ${afterRect.top}
+                                    L ${afterRect.right + maskOffset} ${afterRect.top}
+                                    L ${afterRect.right + maskOffset} ${afterRect.bottom}
+                                    L ${afterRect.left + maskOffset} ${afterRect.bottom}
+                                    Z
+                                `.trim();
+                                addShape(afterPath, afterPathShifted);
                                 // Don't add to numberGroup - only the curved corner should be visible
                             }
                         }
@@ -598,13 +642,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             const cutOutRadius = parseFloat(cutOutStyle.borderTopRightRadius) || 0;
                             
                             if (cutOutRect.width > 0 && cutOutRect.height > 0) {
-                                // Create the cut-out shape with rounded corner
+                                // Create the cut-out shape with rounded corner (shifted)
                                 const cutOutPath = `
-                                    M ${cutOutRect.left} ${cutOutRect.top}
-                                    L ${cutOutRect.right - cutOutRadius} ${cutOutRect.top}
-                                    Q ${cutOutRect.right} ${cutOutRect.top} ${cutOutRect.right} ${cutOutRect.top + cutOutRadius}
-                                    L ${cutOutRect.right} ${cutOutRect.bottom}
-                                    L ${cutOutRect.left} ${cutOutRect.bottom}
+                                    M ${cutOutRect.left + maskOffset} ${cutOutRect.top}
+                                    L ${cutOutRect.right + maskOffset - cutOutRadius} ${cutOutRect.top}
+                                    Q ${cutOutRect.right + maskOffset} ${cutOutRect.top} ${cutOutRect.right + maskOffset} ${cutOutRect.top + cutOutRadius}
+                                    L ${cutOutRect.right + maskOffset} ${cutOutRect.bottom}
+                                    L ${cutOutRect.left + maskOffset} ${cutOutRect.bottom}
                                     Z
                                 `.trim();
                                 
@@ -632,10 +676,18 @@ document.addEventListener('DOMContentLoaded', function() {
                                     Z
                                 `.trim();
                                 
-                                addShape(pathData);
+                                const pathDataShifted = `
+                                    M ${afterRect.right + maskOffset - cutOutRadius} ${afterRect.top}
+                                    L ${afterRect.right + maskOffset} ${afterRect.top}
+                                    L ${afterRect.right + maskOffset} ${afterRect.top + cutOutRadius}
+                                    Q ${afterRect.right + maskOffset} ${afterRect.top} ${afterRect.right + maskOffset - cutOutRadius} ${afterRect.top}
+                                    Z
+                                `.trim();
+                                
+                                addShape(pathData, pathDataShifted);
                                 
                                 // Also add corner to numberGroup and mask (NOT clipped - visible outside scroller)
-                                addUnclippedShape(pathData);
+                                addUnclippedShape(pathData, pathDataShifted);
                             }
                         }
                         
