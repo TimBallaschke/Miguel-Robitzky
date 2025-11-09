@@ -399,38 +399,44 @@ document.addEventListener('DOMContentLoaded', function() {
                     const hasConnectedTop = numberContainer.classList.contains('connected-top');
                     const hasConnectedMiddle = numberContainer.classList.contains('connected-middle');
                     
-                    // Always draw the number container to the unmasked group (always visible)
-                    const numberPath = createRoundedRectPath(
-                        numberRect.left,
-                        numberRect.top,
-                        numberRect.width,
-                        numberRect.height,
-                        parseFloat(numberStyle.borderTopLeftRadius) || 0,
-                        parseFloat(numberStyle.borderTopRightRadius) || 0,
-                        parseFloat(numberStyle.borderBottomRightRadius) || 0,
-                        parseFloat(numberStyle.borderBottomLeftRadius) || 0
-                    );
-                    
-                    // Add number to unmasked group (always visible, not clipped by scroller)
-                    const numberVisPath = document.createElementNS(svgNS, 'path');
-                    numberVisPath.setAttribute('d', numberPath);
-                    numberVisPath.setAttribute('fill', 'red');
-                    numberVisPath.setAttribute('opacity', '0.5');
-                    numberGroup.appendChild(numberVisPath);
-                    
-                    // Also add to mask for the images
-                    const numberMaskPath = document.createElementNS(svgNS, 'path');
-                    numberMaskPath.setAttribute('d', numberPath);
-                    numberMaskPath.setAttribute('fill', 'white');
-                    mask.appendChild(numberMaskPath);
-                    
+                    // Only draw the number container when it's connected
                     if (hasConnectedTop || hasConnectedMiddle) {
+                        const numberPath = createRoundedRectPath(
+                            numberRect.left,
+                            numberRect.top,
+                            numberRect.width,
+                            numberRect.height,
+                            parseFloat(numberStyle.borderTopLeftRadius) || 0,
+                            parseFloat(numberStyle.borderTopRightRadius) || 0,
+                            parseFloat(numberStyle.borderBottomRightRadius) || 0,
+                            parseFloat(numberStyle.borderBottomLeftRadius) || 0
+                        );
+                        
+                        // Add number to unmasked group (visible outside scroller boundaries)
+                        const numberVisPath = document.createElementNS(svgNS, 'path');
+                        numberVisPath.setAttribute('d', numberPath);
+                        numberVisPath.setAttribute('fill', 'red');
+                        numberVisPath.setAttribute('opacity', '0.5');
+                        numberGroup.appendChild(numberVisPath);
+                        
+                        // Also add to mask for the images with stroke to ensure connectivity
+                        const numberMaskPath = document.createElementNS(svgNS, 'path');
+                        numberMaskPath.setAttribute('d', numberPath);
+                        numberMaskPath.setAttribute('fill', 'white');
+                        numberMaskPath.setAttribute('stroke', 'white');
+                        numberMaskPath.setAttribute('stroke-width', '1');
+                        numberMaskPath.setAttribute('shape-rendering', 'crispEdges');
+                        mask.appendChild(numberMaskPath);
+                        
                         // Helper function to add shape to both mask (white) and group (red)
                         const addShape = (pathData) => {
-                            // Add white shape to mask
+                            // Add white shape to mask with thicker stroke to ensure connectivity
                             const maskPath = document.createElementNS(svgNS, 'path');
                             maskPath.setAttribute('d', pathData);
                             maskPath.setAttribute('fill', 'white');
+                            maskPath.setAttribute('stroke', 'white');
+                            maskPath.setAttribute('stroke-width', '2');
+                            maskPath.setAttribute('shape-rendering', 'crispEdges');
                             mask.appendChild(maskPath);
                             
                             // Add red shape to visualization group (masked by scroller)
@@ -447,15 +453,55 @@ document.addEventListener('DOMContentLoaded', function() {
                         const numberAfter = numberContainer.querySelector('.number-after');
                         const numberAfterCutOut = numberContainer.querySelector('.number-after-cut-out');
                         
-                        // Draw number-before connector (if visible and has cutout)
+                        // Draw number-before (full rectangle) - only for mask
+                        if (numberBefore) {
+                            const beforeRect = numberBefore.getBoundingClientRect();
+                            if (beforeRect.width > 0 && beforeRect.height > 0) {
+                                const beforePath = `
+                                    M ${beforeRect.left} ${beforeRect.top}
+                                    L ${beforeRect.right} ${beforeRect.top}
+                                    L ${beforeRect.right} ${beforeRect.bottom}
+                                    L ${beforeRect.left} ${beforeRect.bottom}
+                                    Z
+                                `.trim();
+                                addShape(beforePath);
+                                // Don't add to numberGroup - only the curved corner should be visible
+                            }
+                        }
+                        
+                        // Subtract number-before-cut-out from mask (add as black)
+                        if (numberBeforeCutOut) {
+                            const cutOutRect = numberBeforeCutOut.getBoundingClientRect();
+                            const cutOutStyle = window.getComputedStyle(numberBeforeCutOut);
+                            const cutOutRadius = parseFloat(cutOutStyle.borderBottomRightRadius) || 0;
+                            
+                            if (cutOutRect.width > 0 && cutOutRect.height > 0) {
+                                // Create the cut-out shape with rounded corner
+                                const cutOutPath = `
+                                    M ${cutOutRect.left} ${cutOutRect.top}
+                                    L ${cutOutRect.right} ${cutOutRect.top}
+                                    L ${cutOutRect.right} ${cutOutRect.bottom - cutOutRadius}
+                                    Q ${cutOutRect.right} ${cutOutRect.bottom} ${cutOutRect.right - cutOutRadius} ${cutOutRect.bottom}
+                                    L ${cutOutRect.left} ${cutOutRect.bottom}
+                                    Z
+                                `.trim();
+                                
+                                // Add as BLACK to mask to subtract it
+                                const maskCutOut = document.createElementNS(svgNS, 'path');
+                                maskCutOut.setAttribute('d', cutOutPath);
+                                maskCutOut.setAttribute('fill', 'black');
+                                mask.appendChild(maskCutOut);
+                            }
+                        }
+                        
+                        // Draw number-before-cut-out curved corner piece (for visualization)
                         if (numberBefore && numberBeforeCutOut) {
                             const beforeRect = numberBefore.getBoundingClientRect();
                             const beforeCutOutStyle = window.getComputedStyle(numberBeforeCutOut);
                             const cutOutRadius = parseFloat(beforeCutOutStyle.borderBottomRightRadius) || 0;
                             
                             if (beforeRect.width > 0 && beforeRect.height > 0 && cutOutRadius > 0) {
-                                // This is the area between the straight corner and the rounded cutout
-                                // It's a convex shape bulging inward toward the bottom-right corner
+                                // This is the small curved piece that connects to the scroller
                                 const pathData = `
                                     M ${beforeRect.right - cutOutRadius} ${beforeRect.bottom}
                                     L ${beforeRect.right} ${beforeRect.bottom}
@@ -465,18 +511,65 @@ document.addEventListener('DOMContentLoaded', function() {
                                 `.trim();
                                 
                                 addShape(pathData);
+                                
+                                // Also add to unmasked group (visible outside scroller boundaries)
+                                const cornerVisPath = document.createElementNS(svgNS, 'path');
+                                cornerVisPath.setAttribute('d', pathData);
+                                cornerVisPath.setAttribute('fill', 'red');
+                                cornerVisPath.setAttribute('opacity', '0.5');
+                                numberGroup.appendChild(cornerVisPath);
                             }
                         }
                 
-                        // Draw number-after connector (if visible and has cutout)
+                        // Draw number-after (full rectangle) - only for mask
+                        if (numberAfter) {
+                            const afterRect = numberAfter.getBoundingClientRect();
+                            if (afterRect.width > 0 && afterRect.height > 0) {
+                                const afterPath = `
+                                    M ${afterRect.left} ${afterRect.top}
+                                    L ${afterRect.right} ${afterRect.top}
+                                    L ${afterRect.right} ${afterRect.bottom}
+                                    L ${afterRect.left} ${afterRect.bottom}
+                                    Z
+                                `.trim();
+                                addShape(afterPath);
+                                // Don't add to numberGroup - only the curved corner should be visible
+                            }
+                        }
+                        
+                        // Subtract number-after-cut-out from mask (add as black)
+                        if (numberAfterCutOut) {
+                            const cutOutRect = numberAfterCutOut.getBoundingClientRect();
+                            const cutOutStyle = window.getComputedStyle(numberAfterCutOut);
+                            const cutOutRadius = parseFloat(cutOutStyle.borderTopRightRadius) || 0;
+                            
+                            if (cutOutRect.width > 0 && cutOutRect.height > 0) {
+                                // Create the cut-out shape with rounded corner
+                                const cutOutPath = `
+                                    M ${cutOutRect.left} ${cutOutRect.top}
+                                    L ${cutOutRect.right - cutOutRadius} ${cutOutRect.top}
+                                    Q ${cutOutRect.right} ${cutOutRect.top} ${cutOutRect.right} ${cutOutRect.top + cutOutRadius}
+                                    L ${cutOutRect.right} ${cutOutRect.bottom}
+                                    L ${cutOutRect.left} ${cutOutRect.bottom}
+                                    Z
+                                `.trim();
+                                
+                                // Add as BLACK to mask to subtract it
+                                const maskCutOut = document.createElementNS(svgNS, 'path');
+                                maskCutOut.setAttribute('d', cutOutPath);
+                                maskCutOut.setAttribute('fill', 'black');
+                                mask.appendChild(maskCutOut);
+                            }
+                        }
+                        
+                        // Draw number-after-cut-out curved corner piece (for visualization)
                         if (numberAfter && numberAfterCutOut) {
                             const afterRect = numberAfter.getBoundingClientRect();
                             const afterCutOutStyle = window.getComputedStyle(numberAfterCutOut);
                             const cutOutRadius = parseFloat(afterCutOutStyle.borderTopRightRadius) || 0;
                             
                             if (afterRect.width > 0 && afterRect.height > 0 && cutOutRadius > 0) {
-                                // This is the area between the straight corner and the rounded cutout
-                                // It's a convex shape bulging inward toward the top-right corner
+                                // This is the small curved piece that connects to the scroller
                                 const pathData = `
                                     M ${afterRect.right - cutOutRadius} ${afterRect.top}
                                     L ${afterRect.right} ${afterRect.top}
@@ -486,6 +579,13 @@ document.addEventListener('DOMContentLoaded', function() {
                                 `.trim();
                                 
                                 addShape(pathData);
+                                
+                                // Also add to unmasked group (visible outside scroller boundaries)
+                                const cornerVisPath = document.createElementNS(svgNS, 'path');
+                                cornerVisPath.setAttribute('d', pathData);
+                                cornerVisPath.setAttribute('fill', 'red');
+                                cornerVisPath.setAttribute('opacity', '0.5');
+                                numberGroup.appendChild(cornerVisPath);
                             }
                         }
                         
