@@ -445,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Only draw the number container when it's connected
                     if (hasConnectedTop || hasConnectedMiddle) {
                         // Define offset to shift number container + connectors right to cover edge
-                        const maskOffset = 2; // pixels to shift right
+                        const maskOffset = 0; // No offset needed with stroke-width: 0
                         
                         const numberPath = createRoundedRectPath(
                             numberRect.left,
@@ -516,7 +516,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             maskPath.setAttribute('d', pathDataShifted || pathData);
                             maskPath.setAttribute('fill', 'white');
                             maskPath.setAttribute('stroke', 'white');
-                            maskPath.setAttribute('stroke-width', '4'); // Increased stroke for better connectivity
+                            maskPath.setAttribute('stroke-width', '0'); // Reduced stroke to prevent top cutoff
                             maskPath.setAttribute('shape-rendering', 'geometricPrecision'); // Better quality rendering
                             maskPath.setAttribute('stroke-linejoin', 'round'); // Smooth joins
                             maskPath.setAttribute('stroke-linecap', 'round'); // Smooth caps
