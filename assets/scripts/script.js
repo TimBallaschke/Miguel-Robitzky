@@ -35,10 +35,22 @@ document.addEventListener('DOMContentLoaded', function() {
             masterMaskPath.setAttribute('fill', 'white');
             masterMask.appendChild(masterMaskPath);
             
+            // Create a clipPath for the scroller boundary (to constrain image masks)
+            const scrollerClipPath = document.createElementNS(svgNS, 'clipPath');
+            scrollerClipPath.setAttribute('id', 'scroller-boundary-clip');
+            scrollerClipPath.setAttribute('clipPathUnits', 'userSpaceOnUse');
+            defs.appendChild(scrollerClipPath);
+            
+            const scrollerClipPathElement = document.createElementNS(svgNS, 'path');
+            scrollerClipPathElement.setAttribute('id', 'scroller-boundary-clip-path');
+            scrollerClipPath.appendChild(scrollerClipPathElement);
+            
             // Note: Master mask will be applied to individual groups, not the entire SVG
             
             // Create a mask for each number-scroller pair
+            // These will be filled with white copies of the red visualization shapes
             const svgMasks = [];
+            const maskClippedGroups = []; // Groups for shapes that should be clipped by scroller boundary
             numberContainers.forEach((container, index) => {
                 const mask = document.createElementNS(svgNS, 'mask');
                 mask.setAttribute('id', `combined-mask-${index + 1}`);
@@ -49,6 +61,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 mask.setAttribute('height', window.innerHeight);
                 defs.appendChild(mask);
                 svgMasks.push(mask);
+                
+                // Create a group inside the mask that will be clipped (like the red 'group')
+                const clippedGroup = document.createElementNS(svgNS, 'g');
+                clippedGroup.setAttribute('id', `mask-clipped-${index + 1}`);
+                clippedGroup.setAttribute('clip-path', 'url(#scroller-boundary-clip)');
+                mask.appendChild(clippedGroup);
+                maskClippedGroups.push(clippedGroup);
             });
             
             // Create a group for visualization (combined red shape) - masked by scroller boundary
@@ -374,18 +393,42 @@ document.addEventListener('DOMContentLoaded', function() {
                     masterMaskPath.setAttribute('d', scrollerMaskPath);
                 }
                 
+                // Also update the clipPath with the same scroller boundary
+                const scrollerClipPathElement = document.getElementById('scroller-boundary-clip-path');
+                if (scrollerClipPathElement) {
+                    const scrollerClipPath = createRoundedRectPath(
+                        scrollerRect.left,
+                        scrollerRect.top,
+                        scrollerRect.width,
+                        scrollerRect.height,
+                        topLeftRadius,
+                        topRightRadius,
+                        bottomRightRadius,
+                        bottomLeftRadius
+                    );
+                    scrollerClipPathElement.setAttribute('d', scrollerClipPath);
+                }
+                
                 numberContainers.forEach((numberContainer, index) => {
                     const innerScroller = innerScrollers[index];
                     const group = svgGroups[index];
                     const mask = svgMasks[index];
+                    const maskClippedGroup = maskClippedGroups[index];
                     const numberGroup = numberGroups[index];
                     
-                    if (!innerScroller || !group || !mask || !numberGroup) return;
+                    if (!innerScroller || !group || !mask || !maskClippedGroup || !numberGroup) return;
                     
                     // Clear previous shapes
                     group.innerHTML = '';
-                    mask.innerHTML = '';
+                    maskClippedGroup.innerHTML = ''; // Clear the clipped group inside the mask
                     numberGroup.innerHTML = '';
+                    
+                    // Also clear any direct children of mask (unclipped shapes)
+                    Array.from(mask.children).forEach(child => {
+                        if (child.id !== `mask-clipped-${index + 1}`) {
+                            child.remove();
+                        }
+                    });
                     
                     // Get element positions and dimensions
                     const numberRect = numberContainer.getBoundingClientRect();
@@ -412,25 +455,44 @@ document.addEventListener('DOMContentLoaded', function() {
                             parseFloat(numberStyle.borderBottomLeftRadius) || 0
                         );
                         
-                        // Add number to unmasked group (visible outside scroller boundaries)
+                        // Add number to unmasked group (visible outside scroller boundaries) - TRANSPARENT
                         const numberVisPath = document.createElementNS(svgNS, 'path');
                         numberVisPath.setAttribute('d', numberPath);
                         numberVisPath.setAttribute('fill', 'red');
-                        numberVisPath.setAttribute('opacity', '0.5');
+                        numberVisPath.setAttribute('opacity', '0');
                         numberGroup.appendChild(numberVisPath);
                         
-                        // Also add to mask for the images with stroke to ensure connectivity
-                        const numberMaskPath = document.createElementNS(svgNS, 'path');
-                        numberMaskPath.setAttribute('d', numberPath);
-                        numberMaskPath.setAttribute('fill', 'white');
-                        numberMaskPath.setAttribute('stroke', 'white');
-                        numberMaskPath.setAttribute('stroke-width', '1');
-                        numberMaskPath.setAttribute('shape-rendering', 'crispEdges');
-                        mask.appendChild(numberMaskPath);
+                        // Helper functions that mirror the red visualization structure
                         
-                        // Helper function to add shape to both mask (white) and group (red)
+                        // Add to red 'group' (clipped) AND white maskClippedGroup (clipped)
                         const addShape = (pathData) => {
-                            // Add white shape to mask with thicker stroke to ensure connectivity
+                            // Red visualization - clipped by scroller boundary (TRANSPARENT)
+                            const visPath = document.createElementNS(svgNS, 'path');
+                            visPath.setAttribute('d', pathData);
+                            visPath.setAttribute('fill', 'red');
+                            visPath.setAttribute('opacity', '0');
+                            group.appendChild(visPath);
+                            
+                            // White mask - clipped by scroller boundary
+                            const maskPath = document.createElementNS(svgNS, 'path');
+                            maskPath.setAttribute('d', pathData);
+                            maskPath.setAttribute('fill', 'white');
+                            maskPath.setAttribute('stroke', 'white');
+                            maskPath.setAttribute('stroke-width', '2');
+                            maskPath.setAttribute('shape-rendering', 'crispEdges');
+                            maskClippedGroup.appendChild(maskPath);
+                        };
+                        
+                        // Add to red 'numberGroup' (NOT clipped) AND white mask root (NOT clipped)
+                        const addUnclippedShape = (pathData) => {
+                            // Red visualization - NOT clipped (TRANSPARENT)
+                            const visPath = document.createElementNS(svgNS, 'path');
+                            visPath.setAttribute('d', pathData);
+                            visPath.setAttribute('fill', 'red');
+                            visPath.setAttribute('opacity', '0');
+                            numberGroup.appendChild(visPath);
+                            
+                            // White mask - NOT clipped
                             const maskPath = document.createElementNS(svgNS, 'path');
                             maskPath.setAttribute('d', pathData);
                             maskPath.setAttribute('fill', 'white');
@@ -438,14 +500,10 @@ document.addEventListener('DOMContentLoaded', function() {
                             maskPath.setAttribute('stroke-width', '2');
                             maskPath.setAttribute('shape-rendering', 'crispEdges');
                             mask.appendChild(maskPath);
-                            
-                            // Add red shape to visualization group (masked by scroller)
-                            const visPath = document.createElementNS(svgNS, 'path');
-                            visPath.setAttribute('d', pathData);
-                            visPath.setAttribute('fill', 'red');
-                            visPath.setAttribute('opacity', '0.5');
-                            group.appendChild(visPath);
                         };
+                        
+                        // Add number container to both red numberGroup and white mask (NOT clipped)
+                        addUnclippedShape(numberPath);
                         
                         // Get connector elements
                         const numberBefore = numberContainer.querySelector('.number-before');
@@ -486,11 +544,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                     Z
                                 `.trim();
                                 
-                                // Add as BLACK to mask to subtract it
+                                // Add as BLACK to maskClippedGroup to subtract it
                                 const maskCutOut = document.createElementNS(svgNS, 'path');
                                 maskCutOut.setAttribute('d', cutOutPath);
                                 maskCutOut.setAttribute('fill', 'black');
-                                mask.appendChild(maskCutOut);
+                                maskClippedGroup.appendChild(maskCutOut);
                             }
                         }
                         
@@ -512,12 +570,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                 
                                 addShape(pathData);
                                 
-                                // Also add to unmasked group (visible outside scroller boundaries)
-                                const cornerVisPath = document.createElementNS(svgNS, 'path');
-                                cornerVisPath.setAttribute('d', pathData);
-                                cornerVisPath.setAttribute('fill', 'red');
-                                cornerVisPath.setAttribute('opacity', '0.5');
-                                numberGroup.appendChild(cornerVisPath);
+                                // Also add corner to numberGroup and mask (NOT clipped - visible outside scroller)
+                                addUnclippedShape(pathData);
                             }
                         }
                 
@@ -554,11 +608,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                     Z
                                 `.trim();
                                 
-                                // Add as BLACK to mask to subtract it
+                                // Add as BLACK to maskClippedGroup to subtract it
                                 const maskCutOut = document.createElementNS(svgNS, 'path');
                                 maskCutOut.setAttribute('d', cutOutPath);
                                 maskCutOut.setAttribute('fill', 'black');
-                                mask.appendChild(maskCutOut);
+                                maskClippedGroup.appendChild(maskCutOut);
                             }
                         }
                         
@@ -580,12 +634,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                 
                                 addShape(pathData);
                                 
-                                // Also add to unmasked group (visible outside scroller boundaries)
-                                const cornerVisPath = document.createElementNS(svgNS, 'path');
-                                cornerVisPath.setAttribute('d', pathData);
-                                cornerVisPath.setAttribute('fill', 'red');
-                                cornerVisPath.setAttribute('opacity', '0.5');
-                                numberGroup.appendChild(cornerVisPath);
+                                // Also add corner to numberGroup and mask (NOT clipped - visible outside scroller)
+                                addUnclippedShape(pathData);
                             }
                         }
                         
