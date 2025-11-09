@@ -18,11 +18,24 @@ document.addEventListener('DOMContentLoaded', function() {
             svg.style.zIndex = '9999';
             svg.setAttribute('width', '100%');
             svg.setAttribute('height', '100%');
-            // document.body.appendChild(svg);
+            document.body.appendChild(svg);
             
             // Create a defs section for masks
             const defs = document.createElementNS(svgNS, 'defs');
             svg.appendChild(defs);
+            
+            // Create a master mask for the entire SVG to limit it to the scroller shape
+            const masterMask = document.createElementNS(svgNS, 'mask');
+            masterMask.setAttribute('id', 'scroller-boundary-mask');
+            masterMask.setAttribute('maskUnits', 'userSpaceOnUse');
+            defs.appendChild(masterMask);
+            
+            const masterMaskPath = document.createElementNS(svgNS, 'path');
+            masterMaskPath.setAttribute('id', 'scroller-boundary-path');
+            masterMaskPath.setAttribute('fill', 'white');
+            masterMask.appendChild(masterMaskPath);
+            
+            // Note: Master mask will be applied to individual groups, not the entire SVG
             
             // Create a mask for each number-scroller pair
             const svgMasks = [];
@@ -38,13 +51,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 svgMasks.push(mask);
             });
             
-            // Create a group for visualization (combined red shape)
+            // Create a group for visualization (combined red shape) - masked by scroller boundary
             const svgGroups = [];
             numberContainers.forEach((container, index) => {
                 const group = document.createElementNS(svgNS, 'g');
                 group.setAttribute('id', `shape-group-${index + 1}`);
+                group.style.mask = 'url(#scroller-boundary-mask)';
+                group.style.webkitMask = 'url(#scroller-boundary-mask)';
                 svg.appendChild(group);
                 svgGroups.push(group);
+            });
+            
+            // Create separate groups for number containers (NOT masked by scroller boundary)
+            const numberGroups = [];
+            numberContainers.forEach((container, index) => {
+                const group = document.createElementNS(svgNS, 'g');
+                group.setAttribute('id', `number-group-${index + 1}`);
+                // No mask applied - these will be visible outside scroller boundaries
+                svg.appendChild(group);
+                numberGroups.push(group);
             });
     
     let initialPositions = [];
@@ -326,16 +351,41 @@ document.addEventListener('DOMContentLoaded', function() {
     
             // Function to update SVG shapes based on current element positions
             function updateSVGShapes() {
+                // Update the master mask to match scroller's shape and position
+                const scrollerRect = scroller.getBoundingClientRect();
+                const scrollerStyle = window.getComputedStyle(scroller);
+                const topLeftRadius = parseFloat(scrollerStyle.borderTopLeftRadius) || 0;
+                const topRightRadius = parseFloat(scrollerStyle.borderTopRightRadius) || 0;
+                const bottomLeftRadius = parseFloat(scrollerStyle.borderBottomLeftRadius) || 0;
+                const bottomRightRadius = parseFloat(scrollerStyle.borderBottomRightRadius) || 0;
+                
+                const masterMaskPath = document.getElementById('scroller-boundary-path');
+                if (masterMaskPath) {
+                    const scrollerMaskPath = createRoundedRectPath(
+                        scrollerRect.left,
+                        scrollerRect.top,
+                        scrollerRect.width,
+                        scrollerRect.height,
+                        topLeftRadius,
+                        topRightRadius,
+                        bottomRightRadius,
+                        bottomLeftRadius
+                    );
+                    masterMaskPath.setAttribute('d', scrollerMaskPath);
+                }
+                
                 numberContainers.forEach((numberContainer, index) => {
                     const innerScroller = innerScrollers[index];
                     const group = svgGroups[index];
                     const mask = svgMasks[index];
+                    const numberGroup = numberGroups[index];
                     
-                    if (!innerScroller || !group || !mask) return;
+                    if (!innerScroller || !group || !mask || !numberGroup) return;
                     
                     // Clear previous shapes
                     group.innerHTML = '';
                     mask.innerHTML = '';
+                    numberGroup.innerHTML = '';
                     
                     // Get element positions and dimensions
                     const numberRect = numberContainer.getBoundingClientRect();
@@ -349,6 +399,31 @@ document.addEventListener('DOMContentLoaded', function() {
                     const hasConnectedTop = numberContainer.classList.contains('connected-top');
                     const hasConnectedMiddle = numberContainer.classList.contains('connected-middle');
                     
+                    // Always draw the number container to the unmasked group (always visible)
+                    const numberPath = createRoundedRectPath(
+                        numberRect.left,
+                        numberRect.top,
+                        numberRect.width,
+                        numberRect.height,
+                        parseFloat(numberStyle.borderTopLeftRadius) || 0,
+                        parseFloat(numberStyle.borderTopRightRadius) || 0,
+                        parseFloat(numberStyle.borderBottomRightRadius) || 0,
+                        parseFloat(numberStyle.borderBottomLeftRadius) || 0
+                    );
+                    
+                    // Add number to unmasked group (always visible, not clipped by scroller)
+                    const numberVisPath = document.createElementNS(svgNS, 'path');
+                    numberVisPath.setAttribute('d', numberPath);
+                    numberVisPath.setAttribute('fill', 'red');
+                    numberVisPath.setAttribute('opacity', '0.5');
+                    numberGroup.appendChild(numberVisPath);
+                    
+                    // Also add to mask for the images
+                    const numberMaskPath = document.createElementNS(svgNS, 'path');
+                    numberMaskPath.setAttribute('d', numberPath);
+                    numberMaskPath.setAttribute('fill', 'white');
+                    mask.appendChild(numberMaskPath);
+                    
                     if (hasConnectedTop || hasConnectedMiddle) {
                         // Helper function to add shape to both mask (white) and group (red)
                         const addShape = (pathData) => {
@@ -358,7 +433,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             maskPath.setAttribute('fill', 'white');
                             mask.appendChild(maskPath);
                             
-                            // Add red shape to visualization group
+                            // Add red shape to visualization group (masked by scroller)
                             const visPath = document.createElementNS(svgNS, 'path');
                             visPath.setAttribute('d', pathData);
                             visPath.setAttribute('fill', 'red');
@@ -392,20 +467,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                 addShape(pathData);
                             }
                         }
-                
-                        // Draw number container
-                        const numberPath = createRoundedRectPath(
-                            numberRect.left,
-                            numberRect.top,
-                            numberRect.width,
-                            numberRect.height,
-                            parseFloat(numberStyle.borderTopLeftRadius) || 0,
-                            parseFloat(numberStyle.borderTopRightRadius) || 0,
-                            parseFloat(numberStyle.borderBottomRightRadius) || 0,
-                            parseFloat(numberStyle.borderBottomLeftRadius) || 0
-                        );
-                        
-                        addShape(numberPath);
                 
                         // Draw number-after connector (if visible and has cutout)
                         if (numberAfter && numberAfterCutOut) {
