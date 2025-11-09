@@ -152,6 +152,7 @@ html {
     height: 100%;
     width: 100%;
     overflow: scroll;
+    transition: border-radius 75ms ease-in-out;
 }
 
 .inner-scroller {

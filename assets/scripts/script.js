@@ -291,6 +291,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 innerScroller.style.borderTopLeftRadius = '';
             }
         });
+        
+        // Check if number-1-container has connected classes and update scroller accordingly
+        // This needs to happen AFTER the classes are applied in the forEach loop above
+        const number1Container = document.querySelector('#number-1-container');
+        if (number1Container) {
+            const hasConnectedClass = number1Container.classList.contains('connected-middle') || 
+                                     number1Container.classList.contains('connected-top');
+            
+            if (hasConnectedClass) {
+                scroller.style.borderTopLeftRadius = '0';
+            } else {
+                // Remove inline style to let CSS take over
+                scroller.style.borderTopLeftRadius = '';
+            }
+        }
     }
     
     // Helper function to create an SVG path for a rounded rectangle with individual corner radii

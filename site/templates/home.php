@@ -49,8 +49,6 @@
         <div class="numbers">
             <div id="number-1-container" class="number-container" data-scroller="inner-scroller-1">
                 <div class="number">
-                    <div class="number-before"></div>
-                    <div class="number-before-cut-out"></div>
                     <div class="number-content"></div>
                     <div class="number-after"></div>
                     <div class="number-after-cut-out"></div>
@@ -87,7 +85,7 @@
     </div>
     <div class="numbers-container"></div>
     <div class="images-test">
-        <img src="/assets/images/Bildschirmfoto2025-09-12um11.00.03.png" alt="Image 1">
+        <!-- <img src="/assets/images/Bildschirmfoto2025-09-12um11.00.03.png" alt="Image 1"> -->
     </div>
     </body>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
