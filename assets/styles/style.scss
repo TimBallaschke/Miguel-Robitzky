@@ -301,9 +301,9 @@ html {
     overflow: hidden;
     pointer-events: none;
     
-    // // Apply SVG mask for inner-scroller-2
-    // mask: url(#combined-mask-2);
-    // -webkit-mask: url(#combined-mask-2);
+    // Apply SVG mask for inner-scroller-2
+    mask: url(#combined-mask-2);
+    -webkit-mask: url(#combined-mask-2);
 
     img {
         width: 100%;
