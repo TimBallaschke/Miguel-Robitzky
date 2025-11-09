@@ -11,8 +11,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Get the position of inner-scroller-2 relative to the viewport
         const scrollerRect = innerScroller2.getBoundingClientRect();
         
-        // Update the image container's top position to match inner-scroller-2
-        imagesTest.style.top = `${scrollerRect.top}px`;
+        // Use transform for better performance (GPU accelerated, no layout recalc)
+        imagesTest.style.transform = `translateY(${scrollerRect.top}px)`;
     }
 
     // Update on scroll
