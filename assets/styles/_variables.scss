@@ -1,3 +1,22 @@
+// Responsive Mixins
+@mixin mobile {
+    @media (max-width: 768px) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media (min-width: 769px) and (max-width: 1024px) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: 1025px) {
+        @content;
+    }
+}
+
 :root {
 
     --background-color: #B5FF87;
@@ -9,4 +28,12 @@
     --border-radius: 1rem;
     --container-gap: 0.8rem;
     --page-title-size: 10rem;
+
+    @include mobile {
+        --border-radius: 3rem;
+        --container-gap: 2rem;
+        --page-title-size: 40rem;
+        --menu-item-height: 12rem;
+        --menu-item-spacing: 3rem;
+    }
 }

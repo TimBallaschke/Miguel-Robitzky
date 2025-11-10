@@ -1,5 +1,8 @@
 // Wait for DOM to be ready
 document.addEventListener('DOMContentLoaded', function() {
+    // Skip all functionality on mobile devices
+    if (isMobile()) return;
+    
     const scroller = document.querySelector('.scroller');
     const innerScrollers = document.querySelectorAll('.inner-scroller');
     const numberContainers = document.querySelectorAll('.number-container');
