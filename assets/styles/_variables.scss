@@ -29,6 +29,8 @@
     --container-gap: 0.8rem;
     --page-title-size: 10rem;
 
+    --transition-duration-1: 250ms;
+
     @include mobile {
         --border-radius: 3rem;
         --container-gap: 2rem;

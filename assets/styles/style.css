@@ -6,6 +6,7 @@
   --border-radius: 1rem;
   --container-gap: 0.8rem;
   --page-title-size: 10rem;
+  --transition-duration-1: 250ms;
 }
 @media (max-width: 768px) {
   :root {
@@ -90,11 +91,14 @@ html {
   border-bottom-right-radius: 0;
   width: calc(var(--menu-item-height) + var(--container-gap));
 }
+.number-container.connected {
+  height: calc(var(--menu-item-height) + var(--container-gap));
+}
 @media (max-width: 768px) {
   .number-container {
     top: calc(var(--page-title-size) - var(--container-gap) - var(--menu-item-height));
     left: unset;
-    transition: border-radius 75ms ease-in-out, width 75ms ease-in-out, left 300ms ease-in-out;
+    transition: border-radius 75ms ease-in-out, width 75ms ease-in-out, left var(--transition-duration-1) ease-in-out, height 75ms ease-in-out;
   }
 }
 
@@ -161,6 +165,9 @@ html {
     top: calc(var(--page-title-size) - var(--container-gap) - var(--menu-item-height));
     left: var(--page-padding);
   }
+}
+#number-1-container.connected {
+  height: calc(var(--menu-item-height) + var(--container-gap));
 }
 
 #number-2-container {

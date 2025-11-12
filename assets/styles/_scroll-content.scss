@@ -72,10 +72,14 @@
         width: calc(var(--menu-item-height) + var(--container-gap));
     }
 
+    &.connected {
+        height: calc(var(--menu-item-height) + var(--container-gap));
+    }
+
     @include mobile {
         top: calc(var(--page-title-size) - var(--container-gap) - var(--menu-item-height));
         left: unset;
-        transition: border-radius 75ms ease-in-out, width 75ms ease-in-out, left 300ms ease-in-out;
+        transition: border-radius 75ms ease-in-out, width 75ms ease-in-out, left var(--transition-duration-1) ease-in-out, height 75ms ease-in-out;
     }
 }
 
@@ -143,6 +147,10 @@
     @include mobile {
         top: calc(var(--page-title-size) - var(--container-gap) - var(--menu-item-height));
         left: var(--page-padding);
+    }
+
+    &.connected {
+        height: calc(var(--menu-item-height) + var(--container-gap));
     }
 }
 

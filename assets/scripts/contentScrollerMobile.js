@@ -10,6 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!scroller || innerScrollers.length === 0 || numberContainers.length === 0) return;
     
     let initialPositions = [];
+    let connectionTimeouts = {}; // Track timeouts for each number container
+    let reachedTopStates = {}; // Track whether each scroller has reached top to detect state changes
     
     // Function to capture initial left positions from CSS
     function captureInitialPositions() {
@@ -37,6 +39,28 @@ document.addEventListener('DOMContentLoaded', function() {
         const menuItemHeight = parseFloat(rootStyles.getPropertyValue('--menu-item-height')) * rootFontSize;
         const containerGap = parseFloat(rootStyles.getPropertyValue('--container-gap')) * rootFontSize;
         
+        // Get transition duration in milliseconds
+        const transitionDurationValue = rootStyles.getPropertyValue('--transition-duration-1').trim();
+        let transitionDuration;
+        
+        if (transitionDurationValue.endsWith('ms')) {
+            // Already in milliseconds, just parse the number
+            transitionDuration = parseFloat(transitionDurationValue);
+        } else if (transitionDurationValue.endsWith('s')) {
+            // In seconds, convert to milliseconds
+            transitionDuration = parseFloat(transitionDurationValue) * 1000;
+        } else {
+            // No unit or invalid, default to 300ms
+            transitionDuration = 300;
+        }
+        
+        // If transition duration is 0 or NaN, default to 300ms
+        if (!transitionDuration || transitionDuration === 0) {
+            transitionDuration = 300;
+        }
+        
+        console.log('Transition duration:', transitionDuration, 'ms');
+        
         // Get the scroller's position
         const scrollerRect = scroller.getBoundingClientRect();
         const scrollerTop = scrollerRect.top;
@@ -59,6 +83,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Check if inner-scroller has reached the top of the scroller
             // Threshold is when the top of inner-scroller reaches the scroller top
             const hasReachedTop = innerScrollerTop <= scrollerTop;
+            const previousState = reachedTopStates[index];
             
             if (hasReachedTop) {
                 // Move this number container to align next to previous containers
@@ -66,17 +91,84 @@ document.addEventListener('DOMContentLoaded', function() {
                 const finalLeft = pagePadding + (index * (menuItemHeight + containerGap));
                 numberContainer.style.left = `${finalLeft}px`;
                 
-                // Debug log
-                console.log(`Inner-scroller ${index + 1} reached top → Moving Number ${index + 1}:`, {
-                    initialLeft: initialLeft.toFixed(2),
-                    finalLeft: finalLeft.toFixed(2),
-                    innerScrollerTop: innerScrollerTop.toFixed(2),
-                    scrollerTop: scrollerTop.toFixed(2),
-                    hasReachedTop
-                });
+                // Only set timeout if state just changed from false to true (transition happened)
+                if (previousState !== true) {
+                    console.log(`State changed! Number ${index + 1} just reached top`);
+                    
+                    // Clear any existing timeout for this container
+                    if (connectionTimeouts[index]) {
+                        clearTimeout(connectionTimeouts[index]);
+                    }
+                    
+                    // After half the transition duration, add "connected" class to this container
+                    // and remove from all others
+                    const halfDuration = transitionDuration / 2;
+                    console.log(`Setting timeout for Number ${index + 1} with duration:`, halfDuration);
+                    connectionTimeouts[index] = setTimeout(() => {
+                        console.log(`Timeout fired! Adding "connected" class to Number ${index + 1}`);
+                        numberContainers.forEach((container, i) => {
+                            if (i === index) {
+                                container.classList.add('connected');
+                                console.log(`Added "connected" to Number ${i + 1}`);
+                            } else {
+                                container.classList.remove('connected');
+                                console.log(`Removed "connected" from Number ${i + 1}`);
+                            }
+                        });
+                    }, halfDuration);
+                }
+                
+                // Update state
+                reachedTopStates[index] = true;
             } else {
                 // Reset to initial position if inner-scroller hasn't reached top
                 numberContainer.style.left = `${initialLeft}px`;
+                
+                // If state changed from true to false (scrolling backwards)
+                if (previousState === true) {
+                    console.log(`State changed! Number ${index + 1} scrolled back down`);
+                    
+                    // Immediately remove connected class from this container
+                    numberContainer.classList.remove('connected');
+                    
+                    // Find the highest index container that still has hasReachedTop = true
+                    // and add connected to that one after transition
+                    const halfDuration = transitionDuration / 2;
+                    setTimeout(() => {
+                        // Find the last container that's still in reached state
+                        let lastReachedIndex = -1;
+                        for (let i = numberContainers.length - 1; i >= 0; i--) {
+                            if (reachedTopStates[i] === true) {
+                                lastReachedIndex = i;
+                                break;
+                            }
+                        }
+                        
+                        // Remove connected from all first
+                        numberContainers.forEach((container) => {
+                            container.classList.remove('connected');
+                        });
+                        
+                        if (lastReachedIndex >= 0) {
+                            // Add to the last reached one
+                            numberContainers[lastReachedIndex].classList.add('connected');
+                            console.log(`Added "connected" to Number ${lastReachedIndex + 1} (scrolling back)`);
+                        } else {
+                            // No containers are in moved state, add connected to first number (index 0)
+                            numberContainers[0].classList.add('connected');
+                            console.log('All scrolled back, added "connected" to Number 1');
+                        }
+                    }, halfDuration);
+                }
+                
+                // Clear any pending timeout for this container
+                if (connectionTimeouts[index]) {
+                    clearTimeout(connectionTimeouts[index]);
+                    delete connectionTimeouts[index];
+                }
+                
+                // Update state
+                reachedTopStates[index] = false;
             }
         });
     }
@@ -97,5 +189,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initial setup
     captureInitialPositions();
     updateNumberPositions();
+    
+    // Add "connected" class to first number container on page load
+    if (numberContainers.length > 0) {
+        numberContainers[0].classList.add('connected');
+        console.log('Initial load: added "connected" to Number 1');
+    }
 });
 
