@@ -16,6 +16,7 @@
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="/assets/scripts/helper.js"></script>
 <script src="/assets/scripts/startMenuMobile.js"></script>
+<script src="/assets/scripts/startMenuDesktop.js"></script>
 <script src="/assets/scripts/contentScrollerDesktop.js"></script>
 <script src="/assets/scripts/contentScrollerMobile.js"></script>
 <script src="/assets/scripts/numberContainerClick.js"></script>

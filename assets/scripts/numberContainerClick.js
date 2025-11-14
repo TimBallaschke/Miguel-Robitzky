@@ -1,24 +1,26 @@
-// Click handler for number containers - works on both desktop and mobile
+// Click handler for number containers and start menu items - works on both desktop and mobile
 document.addEventListener('DOMContentLoaded', function() {
     const scroller = document.querySelector('.scroller');
     const innerScrollers = document.querySelectorAll('.inner-scroller');
     const numberContainers = document.querySelectorAll('.number-container');
+    const startMenuItems = document.querySelectorAll('.start-menu-item');
 
-    if (!scroller || innerScrollers.length === 0 || numberContainers.length === 0) return;
+    if (!scroller || innerScrollers.length === 0) return;
 
     // Scroll speed in pixels per millisecond (adjust this to control speed)
-    const SCROLL_SPEED = 3; // 2px per ms = 2000px per second
+    const SCROLL_SPEED = 3; // 3px per ms = 3000px per second
     
     let scrollAnimation = null; // Track current animation
     
     /**
      * Custom smooth scroll with consistent speed
      * @param {number} targetPosition - Target scroll position
+     * @param {number} speed - Optional scroll speed (defaults to SCROLL_SPEED)
      */
-    function smoothScrollTo(targetPosition) {
+    function smoothScrollTo(targetPosition, speed = SCROLL_SPEED) {
         const startPosition = scroller.scrollTop;
         const distance = targetPosition - startPosition;
-        const duration = Math.abs(distance) / SCROLL_SPEED; // Duration based on distance
+        const duration = Math.abs(distance) / speed; // Duration based on distance
         
         let startTime = null;
         
@@ -81,6 +83,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Add cursor pointer style
         numberContainer.style.cursor = 'pointer';
+    });
+    
+    // Add click event to each start menu item
+    startMenuItems.forEach((startMenuItem, index) => {
+        startMenuItem.addEventListener('click', function() {
+            const correspondingScroller = innerScrollers[index];
+            if (!correspondingScroller) return;
+
+            console.log(`Start menu item ${index + 1} clicked, scrolling to corresponding inner-scroller`);
+
+            // Small delay to allow Alpine.js and mobile positioning to complete first
+            setTimeout(() => {
+                // Get the position of the inner-scroller relative to the scroller container
+                const scrollerRect = scroller.getBoundingClientRect();
+                const innerScrollerRect = correspondingScroller.getBoundingClientRect();
+                
+                // Calculate the scroll position needed to bring inner-scroller to top of scroller
+                // Current scroll position + (inner-scroller top - scroller top) + 1px extra
+                const targetScrollTop = scroller.scrollTop + (innerScrollerRect.top - scrollerRect.top) + 1;
+
+                // Smooth scroll with slower speed (0.1px per ms) for start menu items
+                smoothScrollTo(targetScrollTop, 6);
+            }, 50);
+        });
+
+        // Add cursor pointer style
+        startMenuItem.style.cursor = 'pointer';
     });
 });
 
