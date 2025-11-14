@@ -297,7 +297,7 @@ html {
 }
 
 .start-menu .start-menu-item {
-  height: calc(4 * var(--menu-item-height) + 3 * var(--container-gap));
+  height: calc(4 * var(--menu-item-height) + 3 * var(--container-gap) + var(--page-padding));
 }
 
 .start-menu-item-placeholder-before {
@@ -305,14 +305,14 @@ html {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  transition: all 1000ms ease-in-out;
+  transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
 }
 .start-menu-item-placeholder-before .placeholder-before-inner {
   position: relative;
   width: 0%;
   height: 0%;
   background-color: var(--grey-color);
-  transition: all 1000ms ease-in-out;
+  transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
   transform: translateY(1px);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
@@ -321,20 +321,20 @@ html {
   width: calc(100% - 2 * var(--page-padding) - var(--container-gap));
 }
 .clicked-menu-item .start-menu-item-placeholder-before .start-menu-radius {
-  display: block;
+  opacity: 1;
 }
 .clicked-menu-item .start-menu-item-placeholder-before .start-menu-radius-cut-out {
-  display: block;
+  opacity: 1;
   border-bottom-right-radius: var(--border-radius);
 }
 .start-menu-item-placeholder-before .start-menu-radius {
   position: absolute;
   height: var(--border-radius);
   width: var(--border-radius);
-  bottom: 0px;
+  bottom: 1px;
   left: calc(var(--border-radius) * -1);
   background-color: var(--grey-color);
-  display: none;
+  opacity: 0;
 }
 .start-menu-item-placeholder-before .start-menu-radius-cut-out {
   position: absolute;
@@ -344,8 +344,8 @@ html {
   left: calc(var(--border-radius) * -1);
   background-color: var(--background-color);
   border-bottom-right-radius: 0;
-  transition: border-bottom-right-radius 75ms ease-in-out;
-  display: none;
+  transition: border-bottom-right-radius 500ms ease-in-out;
+  opacity: 0;
 }
 
 .start-menu-item-placeholder-after {
@@ -354,25 +354,25 @@ html {
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
-  transition: all 1000ms ease-in-out;
+  transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
 }
 .start-menu-item-placeholder-after .placeholder-after-inner {
   width: 0%;
   height: 0%;
   background-color: var(--grey-color);
-  transition: all 1000ms ease-in-out;
+  transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
   transform: translateY(-1px);
-  border-radius: 0 0 var(--border-radius) var(--border-radius);
+  border-radius: 0 0 0 0;
 }
 .clicked-menu-item .start-menu-item-placeholder-after .placeholder-after-inner {
   height: calc(100% + 1px);
   width: calc(100% - 2 * var(--page-padding) - var(--container-gap));
 }
 .clicked-menu-item .start-menu-item-placeholder-after .start-menu-radius {
-  display: block;
+  opacity: 1;
 }
 .clicked-menu-item .start-menu-item-placeholder-after .start-menu-radius-cut-out {
-  display: block;
+  opacity: 1;
   border-top-right-radius: var(--border-radius);
 }
 .start-menu-item-placeholder-after .start-menu-radius {
@@ -382,7 +382,7 @@ html {
   top: 1px;
   left: calc(var(--border-radius) * -1);
   background-color: var(--grey-color);
-  display: none;
+  opacity: 0;
 }
 .start-menu-item-placeholder-after .start-menu-radius-cut-out {
   position: absolute;
@@ -392,21 +392,21 @@ html {
   left: calc(var(--border-radius) * -1);
   background-color: var(--background-color);
   border-top-right-radius: 0;
-  display: none;
-  transition: border-top-right-radius 75ms ease-in-out;
+  opacity: 0;
+  transition: border-top-right-radius 500ms ease-in-out;
 }
 
 .start-menu-item {
   position: fixed;
-  left: 2rem;
-  bottom: 2rem;
+  left: var(--page-padding);
+  bottom: 0;
   width: calc(100vw - 2 * var(--page-padding));
   pointer-events: none;
   display: grid;
-  transition: all 1000ms ease-in-out;
+  transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
 }
 .start-menu-item.unfolded {
-  height: calc(100dvh - 10rem);
+  height: calc(100dvh - var(--page-title-size));
 }
 .start-menu-item.folded {
   width: 4rem;
@@ -427,6 +427,9 @@ html {
 
 #start-menu-item-1 {
   grid-template-rows: auto 1fr;
+}
+#start-menu-item-1.clicked-menu-item .start-menu-item-button {
+  border-radius: var(--border-radius) var(--border-radius) 0 var(--border-radius);
 }
 
 #start-menu-item-2 {

@@ -32,14 +32,12 @@ $menuItems = 4;
                 
                 <div class="start-menu-item-button"></div>
                 
-                <?php if ($i < $menuItems): ?>
-                    <div class="start-menu-item-placeholder-after">
-                        <div class="placeholder-after-inner">
-                            <div class="start-menu-radius"></div>
-                            <div class="start-menu-radius-cut-out"></div>
-                        </div>
+                <div class="start-menu-item-placeholder-after">
+                    <div class="placeholder-after-inner">
+                        <div class="start-menu-radius"></div>
+                        <div class="start-menu-radius-cut-out"></div>
                     </div>
-                <?php endif; ?>
+                </div>
             </div>
         <?php endfor; ?>
     </div>
