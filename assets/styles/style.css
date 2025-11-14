@@ -47,6 +47,11 @@ html {
   overflow: scroll;
   transition: border-radius 75ms ease-in-out;
 }
+@media (max-width: 768px) {
+  .scroller.first-connected {
+    border-radius: 0 var(--border-radius) 0 0;
+  }
+}
 
 .inner-scroller {
   width: 100%;
@@ -67,6 +72,12 @@ html {
 .inner-scroller.connected-middle {
   border-top-left-radius: 0;
   transition: border-radius 0ms ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .first-connected #inner-scroller-1 {
+    border-radius: 0 var(--border-radius) 0 0;
+  }
 }
 
 .number-container {
@@ -91,8 +102,12 @@ html {
   border-bottom-right-radius: 0;
   width: calc(var(--menu-item-height) + var(--container-gap));
 }
-.number-container.connected {
-  height: calc(var(--menu-item-height) + var(--container-gap));
+@media (max-width: 768px) {
+  .number-container.connected {
+    height: calc(var(--menu-item-height) + var(--container-gap));
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 }
 @media (max-width: 768px) {
   .number-container {
@@ -117,6 +132,13 @@ html {
   height: var(--container-gap);
   background-color: #FAFAFA;
 }
+@media (max-width: 768px) {
+  .number-before {
+    top: unset;
+    bottom: 0;
+    left: calc(-1 * var(--container-gap));
+  }
+}
 
 .number-before-cut-out {
   position: absolute;
@@ -127,6 +149,18 @@ html {
   background-color: var(--background-color);
   border-bottom-right-radius: 0;
 }
+@media (max-width: 768px) {
+  .number-before-cut-out {
+    top: unset;
+    bottom: 0;
+    left: calc(-1 * var(--container-gap));
+  }
+}
+@media (max-width: 768px) {
+  .connected .number-before-cut-out {
+    border-bottom-right-radius: var(--border-radius);
+  }
+}
 
 .number-after {
   position: absolute;
@@ -135,6 +169,12 @@ html {
   width: var(--container-gap);
   height: var(--container-gap);
   background-color: #FAFAFA;
+}
+@media (max-width: 768px) {
+  .number-after {
+    bottom: 0;
+    right: calc(-1 * var(--container-gap));
+  }
 }
 
 .number-after-cut-out {
@@ -147,6 +187,12 @@ html {
   border-top-right-radius: 0;
   transition: border-radius 75ms ease-in-out;
 }
+@media (max-width: 768px) {
+  .number-after-cut-out {
+    bottom: 0;
+    right: calc(-1 * var(--container-gap));
+  }
+}
 .connected-top .number-after-cut-out {
   border-top-right-radius: var(--container-gap);
   transition-delay: 75ms;
@@ -155,6 +201,11 @@ html {
   border-top-right-radius: var(--container-gap);
   transition: border-radius 75ms ease-in-out;
   transition-delay: 75ms;
+}
+@media (max-width: 768px) {
+  .connected .number-after-cut-out {
+    border-bottom-left-radius: var(--border-radius);
+  }
 }
 
 #number-1-container {
