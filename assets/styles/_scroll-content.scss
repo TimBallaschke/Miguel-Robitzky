@@ -57,7 +57,7 @@
 
     @include mobile {
         .first-connected & {
-            border-radius: 0 var(--border-radius) 0 0;
+            border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
         }
     }
 }
@@ -202,7 +202,9 @@
     }
 
     &.connected {
-        height: calc(var(--menu-item-height) + var(--container-gap));
+        @include mobile {
+            height: calc(var(--menu-item-height) + var(--container-gap));
+        }
     }
 }
 

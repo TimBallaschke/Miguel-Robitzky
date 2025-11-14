@@ -76,7 +76,7 @@ html {
 
 @media (max-width: 768px) {
   .first-connected #inner-scroller-1 {
-    border-radius: 0 var(--border-radius) 0 0;
+    border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
   }
 }
 
@@ -217,8 +217,10 @@ html {
     left: var(--page-padding);
   }
 }
-#number-1-container.connected {
-  height: calc(var(--menu-item-height) + var(--container-gap));
+@media (max-width: 768px) {
+  #number-1-container.connected {
+    height: calc(var(--menu-item-height) + var(--container-gap));
+  }
 }
 
 #number-2-container {

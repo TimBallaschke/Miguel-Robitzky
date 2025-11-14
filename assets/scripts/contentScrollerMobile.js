@@ -107,6 +107,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Add to current top
                     numberContainers[currentTopIndex].classList.add('connected');
                     console.log(`Added "connected" to Number ${currentTopIndex + 1}`);
+                    
+                    // Add/remove "first-connected" class to scroller based on first number-container
+                    if (currentTopIndex === 0) {
+                        scroller.classList.add('first-connected');
+                        console.log('Added "first-connected" to scroller');
+                    } else {
+                        scroller.classList.remove('first-connected');
+                        console.log('Removed "first-connected" from scroller');
+                    }
                 }, halfDuration);
                 
                 // Update states
@@ -119,10 +128,10 @@ document.addEventListener('DOMContentLoaded', function() {
             // No inner-scroller is at top, remove connected from all
             const hadConnected = Object.keys(atTopStates).some(key => atTopStates[key] === true);
             if (hadConnected) {
-                console.log('No inner-scroller at top, removing all connected classes');
                 numberContainers.forEach((container) => {
                     container.classList.remove('connected');
                 });
+                scroller.classList.remove('first-connected');
                 Object.keys(atTopStates).forEach(key => {
                     atTopStates[key] = false;
                 });
