@@ -215,3 +215,18 @@
         height: calc(3 * (var(--menu-item-height) + var(--container-gap)));
     }
 }
+
+.inner-scroller-placeholder {
+    position: fixed;
+    bottom: 0;
+    width: calc(100vw - 2 * var(--page-padding));
+    height: calc(100dvh - var(--page-title-size) - var(--container-gap));
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    background-color: var(--grey-color);
+    transform: translateY(100%);
+    transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
+
+    &.to-top {
+        transform: translateY(0);
+    }
+}

@@ -43,5 +43,6 @@ $menuItems = 4;
             </div>
         <?php endfor; ?>
     </div>
+    <div class="inner-scroller-placeholder"></div>
 </div>
 
