@@ -29,7 +29,7 @@ $menuLabels = [
                     'folded-mobile': !isDesktop && activeItem !== null,
                     'clicked-menu-item-mobile': !isDesktop && activeItem === <?= $i ?> 
                 }"
-                @click="activeItem = <?= $i ?>"
+                @click="activeItem = <?= $i ?>; document.body.classList.remove('start-menu-opened')"
             >
                 <?php if ($i > 1): ?>
                     <div class="start-menu-item-placeholder-before">

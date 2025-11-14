@@ -6,7 +6,7 @@
     <title>Miguel Robitzky</title>
     <link rel="stylesheet" href="/assets/styles/style.css">
 </head>
-<body>
+<body class="start-menu-opened">
     <div class="background-image">
         <img src="/assets/images/TooManyTabs.png" alt="Background Image">
     </div>
