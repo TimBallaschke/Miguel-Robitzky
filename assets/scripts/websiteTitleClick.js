@@ -96,11 +96,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Disable transitions on start-menu-container before adjusting classes
+        const innerScrollerPlaceholder = document.querySelector('.inner-scroller-placeholder');
         if (startMenuContainer) {
             startMenuContainer.style.transition = 'none';
         }
         if (startMenu) {
             startMenu.style.transition = 'none';
+        }
+        if (innerScrollerPlaceholder) {
+            innerScrollerPlaceholder.style.transition = 'none';
         }
         startMenuItems.forEach(item => {
             item.style.transition = 'none';
@@ -117,17 +121,52 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Update start-menu-item classes based on connected state
         if (connectedIndex !== -1 && startMenuItems.length > 0) {
-            startMenuItems.forEach((item, index) => {
-                if (isMobileView) {
+            if (isMobileView) {
+                // Get CSS variables for positioning
+                const rootStyles = getComputedStyle(document.documentElement);
+                const rootFontSize = parseFloat(rootStyles.fontSize);
+                const pagePadding = parseFloat(rootStyles.getPropertyValue('--page-padding')) * rootFontSize;
+                const menuItemHeight = parseFloat(rootStyles.getPropertyValue('--menu-item-height')) * rootFontSize;
+                const containerGap = parseFloat(rootStyles.getPropertyValue('--container-gap')) * rootFontSize;
+                const viewportWidth = window.innerWidth;
+                
+                startMenuItems.forEach((item, index) => {
                     // Mobile: all items get folded-mobile, connected item gets clicked-menu-item-mobile
                     item.classList.add('folded-mobile');
+                    item.classList.add('to-top');
                     if (index === connectedIndex) {
                         item.classList.add('clicked-menu-item-mobile');
+                        item.classList.add('connected');
                     } else {
                         item.classList.remove('clicked-menu-item-mobile');
+                        item.classList.remove('connected');
                     }
-                } else {
-                    // Desktop: items up to connected get unfolded, non-connected get folded, connected gets clicked-menu-item
+                    
+                    // Position items horizontally
+                    if (index <= connectedIndex) {
+                        // Items up to and including the connected one: position from the left
+                        const finalLeft = pagePadding + (index * (menuItemHeight + containerGap));
+                        item.style.left = `${finalLeft}px`;
+                    } else {
+                        // Items after the connected one: position from the right edge
+                        const positionFromRight = startMenuItems.length - index - 1;
+                        const finalLeft = viewportWidth - pagePadding - menuItemHeight - (positionFromRight * (menuItemHeight + containerGap));
+                        item.style.left = `${finalLeft}px`;
+                    }
+                });
+                
+                // Update inner-scroller-placeholder classes
+                if (innerScrollerPlaceholder) {
+                    innerScrollerPlaceholder.classList.add('to-top');
+                    if (connectedIndex === 0) {
+                        innerScrollerPlaceholder.classList.add('no-radius');
+                    } else {
+                        innerScrollerPlaceholder.classList.remove('no-radius');
+                    }
+                }
+            } else {
+                // Desktop: items up to connected get unfolded, non-connected get folded, connected gets clicked-menu-item
+                startMenuItems.forEach((item, index) => {
                     if (index <= connectedIndex) {
                         item.classList.add('unfolded');
                     } else {
@@ -142,11 +181,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     if (index === connectedIndex) {
                         item.classList.add('clicked-menu-item');
+                        item.classList.add('connected');
                     } else {
                         item.classList.remove('clicked-menu-item');
+                        item.classList.remove('connected');
                     }
-                }
-            });
+                });
+            }
         }
         
         // Re-enable transitions after a frame and remove display-none
@@ -157,6 +198,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             if (startMenu) {
                 startMenu.style.transition = '';
+            }
+            if (innerScrollerPlaceholder) {
+                innerScrollerPlaceholder.style.transition = '';
             }
             startMenuItems.forEach(item => {
                 item.style.transition = '';
@@ -238,6 +282,13 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Click handler
     websiteTitleContainer.addEventListener('click', function() {
+        // On mobile, skip in-between checks and go straight to connected state
+        if (isMobile()) {
+            checkConnectedState();
+            return;
+        }
+        
+        // Desktop only: Check for in-between states
         // Get CSS variables
         const rootStyles = getComputedStyle(document.documentElement);
         const rootFontSize = parseFloat(rootStyles.fontSize);
