@@ -409,7 +409,10 @@ html {
   height: calc(100dvh - var(--page-title-size));
 }
 .start-menu-item.folded {
-  width: 4rem;
+  width: var(--menu-item-height);
+}
+.start-menu-item.folded-mobile {
+  width: var(--menu-item-height);
 }
 
 .start-menu-item-button {

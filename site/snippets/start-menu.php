@@ -8,16 +8,18 @@
 $menuItems = 4;
 ?>
 
-<div class="start-menu-container" x-data="{ activeItem: null }">
-    <div class="start-menu" :class="{ 'content-unfolded': activeItem !== null }">
+<div class="start-menu-container" x-data="{ activeItem: null, isDesktop: window.innerWidth > 768 }" @resize.window="isDesktop = window.innerWidth > 768">
+    <div class="start-menu" :class="{ 'content-unfolded': isDesktop && activeItem !== null }">
         <?php for ($i = 1; $i <= $menuItems; $i++): ?>
             <div 
                 id="start-menu-item-<?= $i ?>" 
                 class="start-menu-item"
                 :class="{ 
-                    'unfolded': activeItem !== null && activeItem >= <?= $i ?>, 
-                    'folded': activeItem !== null && activeItem !== <?= $i ?>, 
-                    'clicked-menu-item': activeItem === <?= $i ?> 
+                    'unfolded': isDesktop && activeItem !== null && activeItem >= <?= $i ?>, 
+                    'folded': isDesktop && activeItem !== null && activeItem !== <?= $i ?>, 
+                    'clicked-menu-item': isDesktop && activeItem === <?= $i ?>,
+                    'folded-mobile': !isDesktop && activeItem !== null,
+                    'clicked-menu-item-mobile': !isDesktop && activeItem === <?= $i ?> 
                 }"
                 @click="activeItem = <?= $i ?>"
             >

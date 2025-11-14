@@ -147,7 +147,11 @@
     }
 
     &.folded {
-        width: 4rem;
+        width: var(--menu-item-height);
+    }
+
+    &.folded-mobile {
+        width: var(--menu-item-height);
     }
 }
 

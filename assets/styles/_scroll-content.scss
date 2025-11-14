@@ -215,7 +215,7 @@
 
     @include mobile {
         top: calc(var(--page-title-size) - var(--container-gap) - var(--menu-item-height));
-        left: calc(100vw - var(--page-padding) - 3 *var(--menu-item-height) - 2 * var(--container-gap));
+        left: calc(100vw - var(--page-padding) - 3 * var(--menu-item-height) - 2 * var(--container-gap));
     }
 }
 
