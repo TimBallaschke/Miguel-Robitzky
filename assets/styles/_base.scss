@@ -34,6 +34,7 @@ html {
     letter-spacing: -0.02em;
     color: black;
     transition: color 1000ms ease-in-out;
+    cursor: pointer;
 
     .start-menu-opened & {
         color: var(--grey-color);

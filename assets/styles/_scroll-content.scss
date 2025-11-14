@@ -59,6 +59,10 @@
         border-top-left-radius: 0;
         transition: border-radius 0ms ease-in-out;
     }
+
+    &:last-child {
+        margin-bottom: 5rem;
+    }
 }
 
 #inner-scroller-1 {

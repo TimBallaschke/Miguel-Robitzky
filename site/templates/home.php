@@ -26,5 +26,6 @@
 <script src="/assets/scripts/contentScrollerDesktop.js"></script>
 <script src="/assets/scripts/contentScrollerMobile.js"></script>
 <script src="/assets/scripts/numberContainerClick.js"></script>
+<script src="/assets/scripts/websiteTitleClick.js"></script>
 <script src="/assets/scripts/imagePositioning.js"></script>
 </html>

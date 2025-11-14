@@ -64,6 +64,7 @@ html {
   letter-spacing: -0.02em;
   color: black;
   transition: color 1000ms ease-in-out;
+  cursor: pointer;
 }
 .start-menu-opened .title-element {
   color: var(--grey-color);
@@ -125,6 +126,9 @@ html {
 .inner-scroller.connected-middle {
   border-top-left-radius: 0;
   transition: border-radius 0ms ease-in-out;
+}
+.inner-scroller:last-child {
+  margin-bottom: 5rem;
 }
 
 @media (max-width: 768px) {
