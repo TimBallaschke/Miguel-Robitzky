@@ -523,4 +523,7 @@ html {
 }
 .inner-scroller-placeholder.to-top {
   transform: translateY(0);
+}
+.inner-scroller-placeholder.no-radius {
+  border-radius: 0 var(--border-radius) 0 0;
 }/*# sourceMappingURL=style.css.map */

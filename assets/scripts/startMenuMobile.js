@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             if (innerScrollerPlaceholder) {
                 innerScrollerPlaceholder.classList.remove('to-top');
+                innerScrollerPlaceholder.classList.remove('no-radius');
             }
             
             // Count how many items are after the clicked one
@@ -103,6 +104,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 startMenuItems.forEach(item => item.classList.add('to-top'));
                 if (innerScrollerPlaceholder) {
                     innerScrollerPlaceholder.classList.add('to-top');
+                    // Add "no-radius" class if first item is clicked
+                    if (clickedIndex === 0) {
+                        innerScrollerPlaceholder.classList.add('no-radius');
+                        console.log('Added "no-radius" to inner-scroller-placeholder');
+                    } else {
+                        innerScrollerPlaceholder.classList.remove('no-radius');
+                    }
                 }
                 console.log('Added "to-top" to all items');
             }, 1000);
@@ -128,6 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             if (innerScrollerPlaceholder) {
                 innerScrollerPlaceholder.classList.remove('to-top');
+                innerScrollerPlaceholder.classList.remove('no-radius');
             }
         }
     }

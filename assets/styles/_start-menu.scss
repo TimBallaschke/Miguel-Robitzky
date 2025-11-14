@@ -286,4 +286,8 @@
     &.to-top {
         transform: translateY(0);
     }
+
+    &.no-radius {
+        border-radius: 0 var(--border-radius) 0 0;
+    }
 }
