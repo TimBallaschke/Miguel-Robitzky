@@ -5,6 +5,8 @@
     width: calc(100vw - 2 * var(--page-padding) - var(--menu-item-height) - var(--container-gap));
     height: calc(100vh - 10rem);
 
+    display: none;
+
     @include mobile {
         left: var(--page-padding);
         width: calc(100vw - 2 * var(--page-padding));
@@ -115,7 +117,7 @@
     right: 0;
     width: var(--container-gap);
     height: var(--container-gap);
-    background-color: #FAFAFA;
+    background-color: var(--grey-color);
 
     @include mobile {
         top: unset;

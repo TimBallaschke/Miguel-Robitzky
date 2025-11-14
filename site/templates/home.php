@@ -7,83 +7,8 @@
     <link rel="stylesheet" href="/assets/styles/style.css">
 </head>
 <body>
-    <div class="content-container" x-data="{ activeItem: null }">
-        <!-- <div class="start-menu" :class="{ 'content-unfolded': activeItem !== null }">
-            <div id="start-menu-item-1" 
-                 class="start-menu-item"
-                 :class="{ 'unfolded': activeItem !== null && activeItem >= 1, 'folded': activeItem !== null && activeItem !== 1, 'clicked-menu-item': activeItem === 1 }"
-                 @click="activeItem = 1">
-                 <div class="start-menu-item-button"></div>
-                 <div class="start-menu-item-placeholder-after"></div>
-            </div>
-            <div id="start-menu-item-2" 
-                 class="start-menu-item"
-                 :class="{ 'unfolded': activeItem !== null && activeItem >= 2, 'folded': activeItem !== null && activeItem !== 2, 'clicked-menu-item': activeItem === 2 }"
-                 @click="activeItem = 2">
-                 <div class="start-menu-item-placeholder-before"></div>
-                 <div class="start-menu-item-button"></div>
-                 <div class="start-menu-item-placeholder-after"></div>
-            </div>
-            <div id="start-menu-item-3" 
-                 class="start-menu-item"
-                 :class="{ 'unfolded': activeItem !== null && activeItem >= 3, 'folded': activeItem !== null && activeItem !== 3, 'clicked-menu-item': activeItem === 3 }"
-                 @click="activeItem = 3">
-                 <div class="start-menu-item-placeholder-before"></div>
-                 <div class="start-menu-item-button"></div>
-                 <div class="start-menu-item-placeholder-after"></div></div>
-            <div id="start-menu-item-4" 
-                 class="start-menu-item"
-                 :class="{ 'unfolded': activeItem !== null && activeItem >= 4, 'folded': activeItem !== null && activeItem !== 4, 'clicked-menu-item': activeItem === 4 }"
-                 @click="activeItem = 4">
-                 <div class="start-menu-item-placeholder-before"></div>
-                 <div class="start-menu-item-button"></div>
-                 <div class="start-menu-item-placeholder-after"></div>
-            </div>
-        </div> -->
-        <div class="scroller first-connected">
-            <div id="inner-scroller-1" class="inner-scroller"></div>
-            <div id="inner-scroller-2" class="inner-scroller"></div>
-            <div id="inner-scroller-3" class="inner-scroller"></div>
-            <div id="inner-scroller-4" class="inner-scroller"></div>
-        </div>
-        <div class="numbers">
-            <div id="number-1-container" class="number-container connected" data-scroller="inner-scroller-1">
-                <div class="number">
-                    <div class="number-content"></div>
-                    <div class="number-after"></div>
-                    <div class="number-after-cut-out"></div>
-                </div>
-            </div>
-            <div id="number-2-container" class="number-container" data-scroller="inner-scroller-2">
-                <div class="number">
-                    <div class="number-before"></div>
-                    <div class="number-before-cut-out"></div>
-                    <div class="number-content"></div>
-                    <div class="number-after"></div>
-                    <div class="number-after-cut-out"></div>
-                </div>
-            </div>
-            <div id="number-3-container" class="number-container" data-scroller="inner-scroller-3">
-                <div class="number">
-                    <div class="number-before"></div>
-                    <div class="number-before-cut-out"></div>
-                    <div class="number-content"></div>
-                    <div class="number-after"></div>
-                    <div class="number-after-cut-out"></div>
-                </div>
-            </div>
-            <div id="number-4-container" class="number-container" data-scroller="inner-scroller-4">
-                <div class="number">
-                    <div class="number-before"></div>
-                    <div class="number-before-cut-out"></div>
-                    <div class="number-content"></div>
-                    <div class="number-after"></div>
-                    <div class="number-after-cut-out"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="numbers-container"></div>
+    <?php snippet('start-menu') ?>
+    <?php snippet('content-scroller') ?>
     <div class="images-test">
         <!-- <img src="/assets/images/Bildschirmfoto2025-09-12um11.00.03.png" alt="Image 1"> -->
     </div>
