@@ -7,7 +7,7 @@
     width: calc(100vw - 2 * var(--page-padding));
     height: calc(100dvh - var(--page-title-size));
     display: grid;
-    grid-template-columns: 2rem 1fr;
+    // grid-template-columns: var(--page-padding) 1fr;
 
     &.display-none {
         display: none;
@@ -182,6 +182,7 @@
     cursor: pointer;
     position: relative;
     transition: height 75ms ease-in-out;
+    overflow: hidden;
 
     .start-menu-item-button-inner-before {
         position: absolute;
@@ -257,7 +258,34 @@
     }
 }
 
+.button-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 0 var(--page-padding);
+    opacity: 1;
 
+    .folded & {
+        opacity: 0;
+    }
+
+    .folded-mobile & {
+        opacity: 0;
+    }
+}
+
+.button-label {
+    font-family: "GeistMono";
+    font-size: var(--monospace-font-size);
+    font-weight: 500;
+    color: black;
+}
+
+.button-plus {
+
+}
 
 #start-menu-item-1 {
     grid-template-rows: auto 1fr;

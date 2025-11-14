@@ -22,15 +22,17 @@
     --background-color: #B5FF87;
     --grey-color: #FAFAFA;
 
-    --page-padding: 2rem;
-    --menu-item-height: 4rem;
+    --page-padding: 1.5rem;
+    --menu-item-height: 3rem;
     --menu-item-spacing: 1rem;
 
     --border-radius: 1rem;
-    --container-gap: 0.8rem;
-    --page-title-size: 10rem;
+    --container-gap: 0.5rem;
+    --page-title-size: 13.5rem;
 
     --transition-duration-1: 250ms;
+
+    --monospace-font-size: 1rem;
 
     @include mobile {
         --border-radius: 3rem;
@@ -38,5 +40,7 @@
         --page-title-size: 40rem;
         --menu-item-height: 12rem;
         --menu-item-spacing: 3rem;
+
+        --monospace-font-size: 4rem;
     }
 }

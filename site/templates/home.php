@@ -7,6 +7,12 @@
     <link rel="stylesheet" href="/assets/styles/style.css">
 </head>
 <body>
+    <div class="background-image">
+        <img src="/assets/images/TooManyTabs.png" alt="Background Image">
+    </div>
+    <div class="website-title-container">
+        <div class="title-element">Miguel Robitzky</div>
+    </div>
     <?php snippet('start-menu') ?>
     <?php snippet('content-scroller') ?>
     <div class="images-test">

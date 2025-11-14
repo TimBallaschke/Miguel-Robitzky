@@ -6,6 +6,14 @@
 
 // Number of menu items (can be made dynamic based on content)
 $menuItems = 4;
+
+// Menu item labels
+$menuLabels = [
+    1 => 'Biografie & Schaffen',
+    2 => 'Projekte',
+    3 => 'Pressebilder',
+    4 => 'Kontakt'
+];
 ?>
 
 <div class="start-menu-container" x-data="{ activeItem: null, isDesktop: window.innerWidth > 768 }" @resize.window="isDesktop = window.innerWidth > 768">
@@ -37,6 +45,10 @@ $menuItems = 4;
                         <div class="start-menu-item-button-inner-before"></div>
                         <div class="start-menu-item-button-inner-before-cut-out"></div>
                     <?php endif; ?>
+                    <div class="button-content">
+                        <div class="button-label"><?= $menuLabels[$i] ?></div>
+                        <div class="button-plus"></div>
+                    </div>
                     <div class="start-menu-item-button-inner-after"></div>
                     <div class="start-menu-item-button-inner-after-cut-out"></div>
                 </div>
