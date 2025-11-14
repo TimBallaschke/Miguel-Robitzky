@@ -19,8 +19,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const innerScrollerRect = correspondingScroller.getBoundingClientRect();
             
             // Calculate the scroll position needed to bring inner-scroller to top of scroller
-            // Current scroll position + (inner-scroller top - scroller top)
-            const targetScrollTop = scroller.scrollTop + (innerScrollerRect.top - scrollerRect.top);
+            // Current scroll position + (inner-scroller top - scroller top) + 1px extra
+            const targetScrollTop = scroller.scrollTop + (innerScrollerRect.top - scrollerRect.top) + 1;
 
             // Smooth scroll to the target position
             scroller.scrollTo({
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 behavior: 'smooth'
             });
 
-            console.log(`Scrolling to position: ${targetScrollTop}`);
+            console.log(`Scrolling to position: ${targetScrollTop} (1px past top)`);
         });
 
         // Add cursor pointer style
