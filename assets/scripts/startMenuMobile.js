@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let initialPositions = [];
     let toTopTimeout = null;
+    let connectedTimeout = null;
     
     // Function to capture initial left positions from CSS
     function captureInitialPositions() {
@@ -59,15 +60,21 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Clicked index:', clickedIndex);
         
-        // Clear any existing timeout
+        // Clear any existing timeouts
         if (toTopTimeout) {
             clearTimeout(toTopTimeout);
+        }
+        if (connectedTimeout) {
+            clearTimeout(connectedTimeout);
         }
         
         // If an item is clicked, position all items
         if (clickedIndex !== -1) {
-            // Remove "to-top" class when starting transition
-            startMenuItems.forEach(item => item.classList.remove('to-top'));
+            // Remove "to-top" and "connected" classes when starting transition
+            startMenuItems.forEach(item => {
+                item.classList.remove('to-top');
+                item.classList.remove('connected');
+            });
             if (innerScrollerPlaceholder) {
                 innerScrollerPlaceholder.classList.remove('to-top');
             }
@@ -91,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
-            // Add "to-top" class after transition (1000ms = --transition-duration-1)
+            // Add "to-top" class after transition (1000ms)
             toTopTimeout = setTimeout(() => {
                 startMenuItems.forEach(item => item.classList.add('to-top'));
                 if (innerScrollerPlaceholder) {
@@ -100,11 +107,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Added "to-top" to all items');
             }, 1000);
             
+            // Add "connected" class 1000ms after "to-top" (2000ms total)
+            connectedTimeout = setTimeout(() => {
+                startMenuItems.forEach(item => {
+                    if (item.classList.contains('clicked-menu-item-mobile')) {
+                        item.classList.add('connected');
+                        console.log('Added "connected" to clicked item');
+                    } else {
+                        item.classList.remove('connected');
+                    }
+                });
+            }, 1800);
+            
         } else {
             // No item clicked, reset all to pagePadding (stacked position)
             startMenuItems.forEach((item, index) => {
                 item.style.left = `${pagePadding}px`;
                 item.classList.remove('to-top');
+                item.classList.remove('connected');
             });
             if (innerScrollerPlaceholder) {
                 innerScrollerPlaceholder.classList.remove('to-top');

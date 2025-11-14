@@ -163,6 +163,8 @@
         }
 
     }
+
+
 }
 
 .start-menu-item-button {
@@ -173,9 +175,64 @@
     height: var(--menu-item-height);
     pointer-events: auto;
     cursor: pointer;
+    position: relative;
+    transition: height 75ms ease-in-out;
+
+    .start-menu-item-button-inner-before {
+        position: absolute;
+        bottom: 0;
+        left: calc(var(--border-radius) * -1);
+        width: var(--border-radius);
+        height: var(--border-radius);
+        background-color: var(--grey-color);
+    }
+
+    .start-menu-item-button-inner-before-cut-out {
+        position: absolute;
+        bottom: 0;
+        left: calc(var(--border-radius) * -1);
+        width: var(--border-radius);
+        height: var(--border-radius);
+        background-color: var(--background-color);
+        border-bottom-left-radius: 0;
+        transition: border-radius 75ms ease-in-out;
+    }
+
+    .start-menu-item-button-inner-after {
+        position: absolute;
+        bottom: 0;
+        right: calc(var(--border-radius) * -1);
+        width: var(--border-radius);
+        height: var(--border-radius);
+        background-color: var(--grey-color);
+    }
+
+    .start-menu-item-button-inner-after-cut-out {
+        position: absolute;
+        bottom: 0;
+        right: calc(var(--border-radius) * -1);
+        width: var(--border-radius);
+        height: var(--border-radius);
+        background-color: var(--background-color);
+        border-bottom-left-radius: 0;
+        transition: border-radius 75ms ease-in-out;
+    }
 
     .clicked-menu-item & {
         border-radius: var(--border-radius) 0 0 var(--border-radius);
+    }
+
+    .connected & {
+        height: calc(var(--menu-item-height) + var(--container-gap));
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+
+        .start-menu-item-button-inner-before-cut-out {
+            border-bottom-right-radius: var(--border-radius);
+        }
+
+        .start-menu-item-button-inner-after-cut-out {
+            border-bottom-left-radius: var(--border-radius);
+        }
     }
 }
 

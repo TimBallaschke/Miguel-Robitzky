@@ -32,7 +32,12 @@ $menuItems = 4;
                     </div>
                 <?php endif; ?>
                 
-                <div class="start-menu-item-button"></div>
+                <div class="start-menu-item-button">
+                    <div class="start-menu-item-button-inner-before"></div>
+                    <div class="start-menu-item-button-inner-before-cut-out"></div>
+                    <div class="start-menu-item-button-inner-after"></div>
+                    <div class="start-menu-item-button-inner-after-cut-out"></div>
+                </div>
                 
                 <div class="start-menu-item-placeholder-after">
                     <div class="placeholder-after-inner">
