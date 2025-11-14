@@ -440,6 +440,8 @@ html {
   width: var(--border-radius);
   height: var(--border-radius);
   background-color: var(--grey-color);
+  transition: all 75ms ease-in-out;
+  opacity: 0;
 }
 .start-menu-item-button .start-menu-item-button-inner-before-cut-out {
   position: absolute;
@@ -449,7 +451,8 @@ html {
   height: var(--border-radius);
   background-color: var(--background-color);
   border-bottom-left-radius: 0;
-  transition: border-radius 75ms ease-in-out;
+  transition: all 75ms ease-in-out;
+  opacity: 0;
 }
 .start-menu-item-button .start-menu-item-button-inner-after {
   position: absolute;
@@ -458,6 +461,8 @@ html {
   width: var(--border-radius);
   height: var(--border-radius);
   background-color: var(--grey-color);
+  transition: all 75ms ease-in-out;
+  opacity: 0;
 }
 .start-menu-item-button .start-menu-item-button-inner-after-cut-out {
   position: absolute;
@@ -467,7 +472,8 @@ html {
   height: var(--border-radius);
   background-color: var(--background-color);
   border-bottom-left-radius: 0;
-  transition: border-radius 75ms ease-in-out;
+  transition: all 75ms ease-in-out;
+  opacity: 0;
 }
 .clicked-menu-item .start-menu-item-button {
   border-radius: var(--border-radius) 0 0 var(--border-radius);
@@ -478,9 +484,17 @@ html {
 }
 .connected .start-menu-item-button .start-menu-item-button-inner-before-cut-out {
   border-bottom-right-radius: var(--border-radius);
+  opacity: 1;
 }
 .connected .start-menu-item-button .start-menu-item-button-inner-after-cut-out {
   border-bottom-left-radius: var(--border-radius);
+  opacity: 1;
+}
+.connected .start-menu-item-button .start-menu-item-button-inner-before {
+  opacity: 1;
+}
+.connected .start-menu-item-button .start-menu-item-button-inner-after {
+  opacity: 1;
 }
 
 #start-menu-item-1 {
