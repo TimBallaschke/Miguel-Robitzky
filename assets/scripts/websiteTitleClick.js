@@ -70,6 +70,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Function to check and log connected state
     function checkConnectedState() {
         const isMobileView = isMobile();
+        const startMenuItems = document.querySelectorAll('.start-menu-item');
+        const startMenu = document.querySelector('.start-menu');
+        const startMenuContainer = document.querySelector('.start-menu-container');
         let connectedIndex = -1;
         let isInBetween = false;
         
@@ -91,6 +94,74 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
         }
+        
+        // Disable transitions on start-menu-container before adjusting classes
+        if (startMenuContainer) {
+            startMenuContainer.style.transition = 'none';
+        }
+        if (startMenu) {
+            startMenu.style.transition = 'none';
+        }
+        startMenuItems.forEach(item => {
+            item.style.transition = 'none';
+        });
+        
+        // Update start-menu container class
+        if (startMenu) {
+            if (connectedIndex !== -1 && !isMobileView) {
+                startMenu.classList.add('content-unfolded');
+            } else {
+                startMenu.classList.remove('content-unfolded');
+            }
+        }
+        
+        // Update start-menu-item classes based on connected state
+        if (connectedIndex !== -1 && startMenuItems.length > 0) {
+            startMenuItems.forEach((item, index) => {
+                if (isMobileView) {
+                    // Mobile: all items get folded-mobile, connected item gets clicked-menu-item-mobile
+                    item.classList.add('folded-mobile');
+                    if (index === connectedIndex) {
+                        item.classList.add('clicked-menu-item-mobile');
+                    } else {
+                        item.classList.remove('clicked-menu-item-mobile');
+                    }
+                } else {
+                    // Desktop: items up to connected get unfolded, non-connected get folded, connected gets clicked-menu-item
+                    if (index <= connectedIndex) {
+                        item.classList.add('unfolded');
+                    } else {
+                        item.classList.remove('unfolded');
+                    }
+                    
+                    if (index !== connectedIndex) {
+                        item.classList.add('folded');
+                    } else {
+                        item.classList.remove('folded');
+                    }
+                    
+                    if (index === connectedIndex) {
+                        item.classList.add('clicked-menu-item');
+                    } else {
+                        item.classList.remove('clicked-menu-item');
+                    }
+                }
+            });
+        }
+        
+        // Re-enable transitions after a frame and remove display-none
+        requestAnimationFrame(() => {
+            if (startMenuContainer) {
+                startMenuContainer.style.transition = '';
+                startMenuContainer.classList.remove('display-none');
+            }
+            if (startMenu) {
+                startMenu.style.transition = '';
+            }
+            startMenuItems.forEach(item => {
+                item.style.transition = '';
+            });
+        });
         
         // Clear any existing timeout
         if (inBetweenTimeout) {
@@ -211,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetScrollTop = scroller.scrollTop + (innerScrollerRect.top - scrollerRect.top) + 1;
             
             // Scroll with 500ms duration, wait for classes to update, then check connected state
-            smoothScrollToWithDuration(targetScrollTop, 500).then(() => {
+            smoothScrollToWithDuration(targetScrollTop, 400).then(() => {
                 // Wait an additional 100ms for classes to update from connected-top to connected-middle
                 setTimeout(() => {
                     checkConnectedState();
