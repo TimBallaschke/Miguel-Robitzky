@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (startMenuItems.length === 0) return;
     
     let initialPositions = [];
+    let toTopTimeout = null;
     
     // Function to capture initial left positions from CSS
     function captureInitialPositions() {
@@ -57,8 +58,16 @@ document.addEventListener('DOMContentLoaded', function() {
         
         console.log('Clicked index:', clickedIndex);
         
+        // Clear any existing timeout
+        if (toTopTimeout) {
+            clearTimeout(toTopTimeout);
+        }
+        
         // If an item is clicked, position all items
         if (clickedIndex !== -1) {
+            // Remove "to-top" class when starting transition
+            startMenuItems.forEach(item => item.classList.remove('to-top'));
+            
             // Count how many items are after the clicked one
             const itemsAfterClicked = startMenuItems.length - clickedIndex - 1;
             
@@ -77,10 +86,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     item.style.left = `${finalLeft}px`;
                 }
             });
+            
+            // Add "to-top" class after transition (1000ms = --transition-duration-1)
+            toTopTimeout = setTimeout(() => {
+                startMenuItems.forEach(item => item.classList.add('to-top'));
+                console.log('Added "to-top" to all items');
+            }, 1000);
+            
         } else {
             // No item clicked, reset all to pagePadding (stacked position)
             startMenuItems.forEach((item, index) => {
                 item.style.left = `${pagePadding}px`;
+                item.classList.remove('to-top');
             });
         }
     }
@@ -90,18 +107,14 @@ document.addEventListener('DOMContentLoaded', function() {
         updateMenuPositions();
     }
     
-    // Use MutationObserver to watch for class changes on menu items
-    const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-            if (mutation.attributeName === 'class') {
+    // Listen for click events on menu items
+    startMenuItems.forEach((item, index) => {
+        item.addEventListener('click', function() {
+            // Small delay to let Alpine.js update classes first
+            setTimeout(() => {
                 updateMenuPositions();
-            }
+            }, 10);
         });
-    });
-    
-    // Observe each menu item for class changes
-    startMenuItems.forEach(item => {
-        observer.observe(item, { attributes: true });
     });
     
     // Update on resize

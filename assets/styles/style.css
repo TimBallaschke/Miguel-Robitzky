@@ -414,6 +414,13 @@ html {
 .start-menu-item.folded-mobile {
   width: var(--menu-item-height);
 }
+.start-menu-item.to-top {
+  bottom: calc(100dvh - var(--page-title-size));
+  height: var(--menu-item-height);
+}
+.start-menu-item.to-top .start-menu-item-placeholder-before {
+  height: 0 !important;
+}
 
 .start-menu-item-button {
   width: 100%;
