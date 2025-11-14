@@ -8,7 +8,7 @@
 $sections = 4;
 ?>
 
-<div class="content-container">
+<div class="content-container hidden">
     <div class="scroller first-connected">
         <?php for ($i = 1; $i <= $sections; $i++): ?>
             <div id="inner-scroller-<?= $i ?>" class="inner-scroller"></div>
@@ -28,12 +28,10 @@ $sections = 4;
                         <div class="number-before-cut-out"></div>
                     <?php endif; ?>
                     
-                    <div class="number-content"></div>
-                    
-                    <?php if ($i < $sections): ?>
-                        <div class="number-after"></div>
-                        <div class="number-after-cut-out"></div>
-                    <?php endif; ?>
+                <div class="number-content"></div>
+                
+                <div class="number-after"></div>
+                <div class="number-after-cut-out"></div>
                 </div>
             </div>
         <?php endfor; ?>

@@ -5,11 +5,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const startMenuItems = document.querySelectorAll('.start-menu-item');
     const innerScrollerPlaceholder = document.querySelector('.inner-scroller-placeholder');
+    const contentContainer = document.querySelector('.content-container');
+    const startMenuContainer = document.querySelector('.start-menu-container');
     if (startMenuItems.length === 0) return;
     
     let initialPositions = [];
     let toTopTimeout = null;
     let connectedTimeout = null;
+    let contentVisibleTimeout = null;
+    let menuHideTimeout = null;
     
     // Function to capture initial left positions from CSS
     function captureInitialPositions() {
@@ -67,6 +71,12 @@ document.addEventListener('DOMContentLoaded', function() {
         if (connectedTimeout) {
             clearTimeout(connectedTimeout);
         }
+        if (contentVisibleTimeout) {
+            clearTimeout(contentVisibleTimeout);
+        }
+        if (menuHideTimeout) {
+            clearTimeout(menuHideTimeout);
+        }
         
         // If an item is clicked, position all items
         if (clickedIndex !== -1) {
@@ -115,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Added "to-top" to all items');
             }, 1000);
             
-            // Add "connected" class 1000ms after "to-top" (2000ms total)
+            // Add "connected" class 800ms after "to-top" (1800ms total)
             connectedTimeout = setTimeout(() => {
                 startMenuItems.forEach(item => {
                     if (item.classList.contains('clicked-menu-item-mobile')) {
@@ -127,6 +137,22 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }, 1800);
             
+            // Remove "hidden" class from content-container 75ms after "connected" (1875ms total)
+            contentVisibleTimeout = setTimeout(() => {
+                if (contentContainer) {
+                    contentContainer.classList.remove('hidden');
+                    console.log('Removed "hidden" from content-container');
+                }
+            }, 1875);
+            
+            // Add "display-none" class to start-menu-container 100ms after content visible (1975ms total)
+            menuHideTimeout = setTimeout(() => {
+                if (startMenuContainer) {
+                    startMenuContainer.classList.add('display-none');
+                    console.log('Added "display-none" to start-menu-container');
+                }
+            }, 1975);
+            
         } else {
             // No item clicked, reset all to pagePadding (stacked position)
             startMenuItems.forEach((item, index) => {
@@ -137,6 +163,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (innerScrollerPlaceholder) {
                 innerScrollerPlaceholder.classList.remove('to-top');
                 innerScrollerPlaceholder.classList.remove('no-radius');
+            }
+            if (contentContainer) {
+                contentContainer.classList.add('hidden');
+            }
+            if (startMenuContainer) {
+                startMenuContainer.classList.remove('display-none');
             }
         }
     }
