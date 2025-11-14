@@ -18,24 +18,57 @@
 
 .start-menu-item-placeholder-before {
     position: relative;
-    transition: all 1s ease-in-out;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    transition: all 1000ms ease-in-out;
 
-    &::before {
-        content: "";
-        position: absolute;
-        bottom: -1px;
-        right: 0;
+    .placeholder-before-inner {
+        position: relative;
         width: 0%;
         height: 0%;
         background-color: var(--grey-color);
-        transition: all 1s ease-in-out;
+        transition: all 1000ms ease-in-out;
+        transform: translateY(1px);
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
     }
 
     .clicked-menu-item & {
-        &::before {
+        .placeholder-before-inner {
             height: calc(100% + 1px);
             width: calc(100% - 2 * var(--page-padding) - var(--container-gap));
         }
+
+        .start-menu-radius {
+            display: block;
+        }
+
+        .start-menu-radius-cut-out {
+            display: block;
+            border-bottom-right-radius: var(--border-radius);
+        }
+    }
+
+    .start-menu-radius {
+        position: absolute;
+        height: var(--border-radius);
+        width: var(--border-radius);
+        bottom: 0px;
+        left: calc(var(--border-radius) * -1);
+        background-color: var(--grey-color);
+        display: none;
+    }
+
+    .start-menu-radius-cut-out {
+        position: absolute;
+        height: var(--border-radius);
+        width: var(--border-radius);
+        bottom: 1px;
+        left: calc(var(--border-radius) * -1);
+        background-color: var(--background-color);
+        border-bottom-right-radius: 0;
+        transition: border-bottom-right-radius 75ms ease-in-out;
+        display: none;
     }
 
 
@@ -43,23 +76,58 @@
 
 .start-menu-item-placeholder-after {
     position: relative;
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-start;
+    transition: all 1000ms ease-in-out;
 
-    &::after {
-        content: "";
-        position: absolute;
-        top: -1px;
-        right: 0;
+    .placeholder-after-inner {
         width: 0%;
         height: 0%;
         background-color: var(--grey-color);
-        transition: all 1s ease-in-out;
+        transition: all 1000ms ease-in-out;
+        transform: translateY(-1px);
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
+
     }
 
     .clicked-menu-item & {
-        &::after {
+        .placeholder-after-inner {
             height: calc(100% + 1px);
             width: calc(100% - 2 * var(--page-padding) - var(--container-gap));
         }
+
+        .start-menu-radius {
+            display: block;
+        }
+
+        .start-menu-radius-cut-out {
+            display: block;
+            border-top-right-radius: var(--border-radius);
+        }
+    }
+
+    .start-menu-radius {
+        position: absolute;
+        height: var(--border-radius);
+        width: var(--border-radius);
+        top: 1px;
+        left: calc(var(--border-radius) * -1);
+        background-color: var(--grey-color);
+        display: none;
+    }
+
+    .start-menu-radius-cut-out {
+        position: absolute;
+        height: var(--border-radius);
+        width: var(--border-radius);
+        top: 1px;
+        left: calc(var(--border-radius) * -1);
+        background-color: var(--background-color);
+        border-top-right-radius: 0;
+        display: none;
+        transition: border-top-right-radius 75ms ease-in-out;
     }
 }
 
@@ -72,7 +140,7 @@
     width: calc(100vw - 2 * var(--page-padding));
     pointer-events: none;
     display: grid;
-    transition: all 1s ease-in-out;
+    transition: all 1000ms ease-in-out;
 
     &.unfolded {
         height: calc(100dvh - 10rem);
@@ -87,10 +155,14 @@
     width: 100%;
     height: 100%;
     background-color: var(--grey-color);
-    border-radius: var(--border-radius);
+    border-radius: var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius);
     height: var(--menu-item-height);
     pointer-events: auto;
     cursor: pointer;
+
+    .clicked-menu-item & {
+        border-radius: var(--border-radius) 0 0 var(--border-radius);
+    }
 }
 
 
