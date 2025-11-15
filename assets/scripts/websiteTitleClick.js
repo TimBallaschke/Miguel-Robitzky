@@ -206,10 +206,93 @@ document.addEventListener('DOMContentLoaded', function() {
                 item.style.transition = '';
             });
             
-            // Remove hidden class from content-container after start menu is visible
+            // Add hidden class to content-container and reverse start menu animation on mobile
             const contentContainer = document.querySelector('.content-container');
             if (contentContainer) {
                 contentContainer.classList.add('hidden');
+                
+                // Reverse animation sequence for mobile
+                if (isMobileView) {
+                    // Remove "display-none" from start-menu-container after 100ms
+                    setTimeout(() => {
+                        if (startMenuContainer) {
+                            startMenuContainer.classList.remove('display-none');
+                            console.log('Removed "display-none" from start-menu-container');
+                        }
+                        
+                        // Remove "connected" class after another 75ms (175ms total)
+                        setTimeout(() => {
+                            startMenuItems.forEach(item => {
+                                item.classList.remove('connected');
+                            });
+                            console.log('Removed "connected" from all items');
+                            
+                            // Remove "to-top" class after another 800ms (975ms total)
+                            setTimeout(() => {
+                                startMenuItems.forEach(item => {
+                                    item.classList.remove('to-top');
+                                });
+                                if (innerScrollerPlaceholder) {
+                                    innerScrollerPlaceholder.classList.remove('to-top');
+                                    innerScrollerPlaceholder.classList.remove('no-radius');
+                                }
+                                console.log('Removed "to-top" from all items');
+                                
+                                // Reset positioning after another 1000ms (1975ms total)
+                                setTimeout(() => {
+                                    const rootStyles = getComputedStyle(document.documentElement);
+                                    const rootFontSize = parseFloat(rootStyles.fontSize);
+                                    const pagePadding = parseFloat(rootStyles.getPropertyValue('--page-padding')) * rootFontSize;
+                                    
+                                    startMenuItems.forEach((item, index) => {
+                                        item.style.left = `${pagePadding}px`;
+                                        item.classList.remove('folded-mobile');
+                                        item.classList.remove('clicked-menu-item-mobile');
+                                    });
+                                    
+                                    // Reset Alpine.js activeItem state
+                                    if (startMenuContainer && startMenuContainer.__x) {
+                                        startMenuContainer.__x.$data.activeItem = null;
+                                    }
+                                    
+                                    console.log('Reset all items to initial position');
+                                }, 1000);
+                            }, 800);
+                        }, 75);
+                    }, 100);
+                } else {
+                    // Reverse animation sequence for desktop
+                    // Remove "display-none" from start-menu-container after 100ms
+                    setTimeout(() => {
+                        if (startMenuContainer) {
+                            startMenuContainer.classList.remove('display-none');
+                            console.log('Desktop: Removed "display-none" from start-menu-container');
+                        }
+                        
+                        // Reset Alpine.js activeItem state after another 1000ms (1100ms total)
+                        setTimeout(() => {
+                            // Reset Alpine.js state
+                            if (startMenuContainer && startMenuContainer.__x) {
+                                startMenuContainer.__x.$data.activeItem = null;
+                            }
+                            
+                            // Remove desktop classes from start menu
+                            if (startMenu) {
+                                startMenu.classList.remove('content-unfolded');
+                            }
+                            
+                            // Remove desktop classes from all start-menu-items
+                            startMenuItems.forEach(item => {
+                                item.classList.remove('unfolded');
+                                item.classList.remove('folded');
+                                item.classList.remove('clicked-menu-item');
+                                item.classList.remove('connected');
+                            });
+                            
+                            console.log('Desktop: Reset activeItem and removed all desktop classes');
+                        }, 1000);
+                    }, 100);
+                }
             }
         });
         
