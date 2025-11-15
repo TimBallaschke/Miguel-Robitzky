@@ -205,6 +205,12 @@ document.addEventListener('DOMContentLoaded', function() {
             startMenuItems.forEach(item => {
                 item.style.transition = '';
             });
+            
+            // Remove hidden class from content-container after start menu is visible
+            const contentContainer = document.querySelector('.content-container');
+            if (contentContainer) {
+                contentContainer.classList.add('hidden');
+            }
         });
         
         // Clear any existing timeout

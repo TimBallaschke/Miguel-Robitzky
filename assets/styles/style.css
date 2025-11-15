@@ -386,20 +386,20 @@ html {
 }
 .start-menu-item-placeholder-before .start-menu-radius {
   position: absolute;
-  height: var(--border-radius);
-  width: var(--border-radius);
+  height: var(--container-gap);
+  width: var(--container-gap);
   bottom: 1px;
-  left: calc(var(--border-radius) * -1);
+  left: calc(var(--container-gap) * -1);
   background-color: var(--grey-color);
   transition: opacity 3000ms ease-in-out;
   opacity: 0;
 }
 .start-menu-item-placeholder-before .start-menu-radius-cut-out {
   position: absolute;
-  height: var(--border-radius);
-  width: var(--border-radius);
+  height: var(--container-gap);
+  width: var(--container-gap);
   bottom: 1px;
-  left: calc(var(--border-radius) * -1);
+  left: calc(var(--container-gap) * -1);
   background-color: var(--background-color);
   border-bottom-right-radius: 0;
   transition: all 3000ms ease-in-out;
@@ -435,20 +435,20 @@ html {
 }
 .start-menu-item-placeholder-after .start-menu-radius {
   position: absolute;
-  height: var(--border-radius);
-  width: var(--border-radius);
+  height: var(--container-gap);
+  width: var(--container-gap);
   top: 1px;
-  left: calc(var(--border-radius) * -1);
+  left: calc(var(--container-gap) * -1);
   background-color: var(--grey-color);
   opacity: 0;
   transition: all 3000ms ease-in-out;
 }
 .start-menu-item-placeholder-after .start-menu-radius-cut-out {
   position: absolute;
-  height: var(--border-radius);
-  width: var(--border-radius);
+  height: var(--container-gap);
+  width: var(--container-gap);
   top: 1px;
-  left: calc(var(--border-radius) * -1);
+  left: calc(var(--container-gap) * -1);
   background-color: var(--background-color);
   border-top-right-radius: 0;
   opacity: 0;
@@ -538,23 +538,25 @@ html {
 .clicked-menu-item .start-menu-item-button {
   border-radius: var(--border-radius) 0 0 var(--border-radius);
 }
-.connected .start-menu-item-button {
-  height: calc(var(--menu-item-height) + var(--container-gap));
-  border-radius: var(--border-radius) var(--border-radius) 0 0;
-}
-.connected .start-menu-item-button .start-menu-item-button-inner-before-cut-out {
-  border-bottom-right-radius: var(--border-radius);
-  opacity: 1;
-}
-.connected .start-menu-item-button .start-menu-item-button-inner-after-cut-out {
-  border-bottom-left-radius: var(--border-radius);
-  opacity: 1;
-}
-.connected .start-menu-item-button .start-menu-item-button-inner-before {
-  opacity: 1;
-}
-.connected .start-menu-item-button .start-menu-item-button-inner-after {
-  opacity: 1;
+@media (max-width: 768px) {
+  .connected .start-menu-item-button {
+    height: calc(var(--menu-item-height) + var(--container-gap));
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+  }
+  .connected .start-menu-item-button .start-menu-item-button-inner-before-cut-out {
+    border-bottom-right-radius: var(--border-radius);
+    opacity: 1;
+  }
+  .connected .start-menu-item-button .start-menu-item-button-inner-after-cut-out {
+    border-bottom-left-radius: var(--border-radius);
+    opacity: 1;
+  }
+  .connected .start-menu-item-button .start-menu-item-button-inner-before {
+    opacity: 1;
+  }
+  .connected .start-menu-item-button .start-menu-item-button-inner-after {
+    opacity: 1;
+  }
 }
 
 .button-content {
