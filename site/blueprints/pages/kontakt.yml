@@ -1,0 +1,70 @@
+title: Kontakt
+
+num: num
+status:
+  draft: true
+  listed: true
+
+options:
+  delete: false
+
+columns:
+  left:
+    width: 1/2
+    sections:
+      management:
+        type: fields
+        fields:
+          management_heading:
+            label: Management & Presse
+            type: headline
+          management_name:
+            label: Name
+            type: text
+          management_company:
+            label: Firma
+            type: text
+          management_email:
+            label: E-Mail
+            type: email
+  right:
+    width: 1/2
+    sections:
+      impressum:
+        type: fields
+        fields:
+          impressum_heading:
+            label: Impressum/Datenschutz
+            type: headline
+          impressum_company:
+            label: Seitenbetreiberin
+            type: text
+          impressum_address:
+            label: Adresse
+            type: textarea
+            buttons:
+              - bold
+              - italic
+            size: small
+          impressum_handelsregister:
+            label: Handelsregister
+            type: text
+          impressum_registergericht:
+            label: Registergericht
+            type: text
+          impressum_vertreter:
+            label: Gesetzlicher Vertreter
+            type: text
+          impressum_email:
+            label: E-Mail
+            type: email
+          impressum_umsatzsteuer:
+            label: Umsatzsteuer-Identifikationsnummer
+            type: text
+          impressum_datenschutz:
+            label: Datenschutzangaben
+            type: textarea
+            buttons:
+              - bold
+              - italic
+            size: small

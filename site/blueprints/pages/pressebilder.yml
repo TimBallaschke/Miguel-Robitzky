@@ -1,0 +1,17 @@
+title: Pressebilder
+
+num: num
+status:
+  draft: true
+  listed: true
+
+options:
+  delete: false
+
+sections:
+  images:
+    type: files
+    headline: Pressebilder
+    template: image
+    layout: cards
+    size: medium

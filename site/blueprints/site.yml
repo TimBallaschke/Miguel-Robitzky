@@ -3,3 +3,11 @@ title: Site
 sections:
   pages:
     type: pages
+    sortable: true
+    create: false
+    delete: false
+    templates:
+      - biografie-und-schaffen
+      - projekte
+      - pressebilder
+      - kontakt

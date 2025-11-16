@@ -1,0 +1,35 @@
+title: Biografie und Schaffen
+
+num: num
+status:
+  draft: true
+  listed: true
+
+options:
+  delete: false
+
+columns:
+  left:
+    width: 1/2
+    sections:
+      kurzbiografie:
+        type: fields
+        fields:
+          kurzbiografie:
+            label: Kurzbiografie
+            type: textarea
+            buttons:
+              - bold
+            size: huge
+  right:
+    width: 1/2
+    sections:
+      schaffen:
+        type: fields
+        fields:
+          schaffen:
+            label: Schaffen
+            type: textarea
+            buttons:
+              - bold
+            size: huge

@@ -1,0 +1,15 @@
+title: Projekte
+
+num: num
+status:
+  draft: true
+  listed: true
+
+options:
+  delete: false
+
+sections:
+  projects:
+    type: pages
+    headline: Projekte
+    template: projekt
