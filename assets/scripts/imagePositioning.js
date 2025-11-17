@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Store clones and their original elements
     const imageClones = [];
+    
+    // Single container for all clones with the mask applied
+    let clonesContainer = null;
 
     // Check if device is mobile
     function isMobile() {
@@ -16,28 +19,49 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Create clones for all projects-images
     function createClones() {
-        // Remove existing clones if any
-        imageClones.forEach(item => {
-            if (item.clone && item.clone.parentNode) {
-                item.clone.remove();
-            }
-        });
+        // Remove existing container and clones
+        if (clonesContainer && clonesContainer.parentNode) {
+            clonesContainer.remove();
+        }
         imageClones.length = 0;
 
         // Skip on mobile
         if (isMobile()) return;
 
+        // Create a single container for all clones
+        clonesContainer = document.createElement('div');
+        clonesContainer.className = 'projects-images-clones-container';
+        
+        // The container is fixed and covers the entire viewport
+        clonesContainer.style.position = 'fixed';
+        clonesContainer.style.top = '0';
+        clonesContainer.style.left = '0';
+        clonesContainer.style.width = '100vw';
+        clonesContainer.style.height = '100vh';
+        clonesContainer.style.zIndex = '100';
+        clonesContainer.style.pointerEvents = 'none';
+        clonesContainer.style.userSelect = 'none';
+        
+        // Apply the SVG mask to the container (not individual clones)
+        // This mask stays in a fixed position, matching the red SVG
+        const maskId = 'combined-mask-2';
+        clonesContainer.style.mask = `url(#${maskId})`;
+        clonesContainer.style.webkitMask = `url(#${maskId})`;
+        
+        // Append container to body
+        document.body.appendChild(clonesContainer);
+
         projectsImages.forEach(original => {
             // Clone the element
             const clone = original.cloneNode(true);
             
-            // Style the clone
-            clone.style.position = 'fixed';
+            // Style the clone - position absolute within the fixed container
+            clone.style.position = 'absolute';
             clone.style.top = '0';
             clone.style.left = '0';
-            clone.style.zIndex = '100';
-            clone.style.pointerEvents = 'none'; // Don't interfere with interactions
-            clone.style.userSelect = 'none'; // Can't select text
+            clone.style.pointerEvents = 'none';
+            clone.style.userSelect = 'none';
+            clone.style.zIndex = '1000';
             clone.classList.add('projects-images-clone');
             
             // Remove cursor pointer from clone since it's not interactive
@@ -52,8 +76,8 @@ document.addEventListener('DOMContentLoaded', function() {
             // Hide the original (clone will be visible instead)
             original.style.opacity = '0';
             
-            // Append clone to body
-            document.body.appendChild(clone);
+            // Append clone to the container (not body)
+            clonesContainer.appendChild(clone);
             
             // Store reference
             imageClones.push({
