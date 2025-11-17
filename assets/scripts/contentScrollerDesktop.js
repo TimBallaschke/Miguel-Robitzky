@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
             svg.style.zIndex = '9999';
             svg.setAttribute('width', '100%');
             svg.setAttribute('height', '100%');
-            document.body.appendChild(svg);
+            // document.body.appendChild(svg);
             
             // Create a defs section for masks
             const defs = document.createElementNS(svgNS, 'defs');
@@ -723,11 +723,22 @@ document.addEventListener('DOMContentLoaded', function() {
         updateSVGShapes();
     }
     
-    // Update on scroll
-    scroller.addEventListener('scroll', function() {
-        updateNumberPositions();
-        updateSVGShapes();
-    });
+    // Use requestAnimationFrame to batch updates and reduce layout thrashing
+    let rafScheduled = false;
+    
+    function scheduleUpdate() {
+        if (!rafScheduled) {
+            rafScheduled = true;
+            requestAnimationFrame(() => {
+                updateNumberPositions();
+                updateSVGShapes();
+                rafScheduled = false;
+            });
+        }
+    }
+    
+    // Update on scroll - use RAF for smoother performance in Safari
+    scroller.addEventListener('scroll', scheduleUpdate, { passive: true });
     
     // Update on resize
     window.addEventListener('resize', handleResize);

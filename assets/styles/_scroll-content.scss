@@ -86,6 +86,7 @@
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
     transition: border-radius 75ms ease-in-out, width 75ms ease-in-out;
+    will-change: transform; // Hint to browser to optimize transform animations
 
     &.connected-top {
         border-top-right-radius: 0;
