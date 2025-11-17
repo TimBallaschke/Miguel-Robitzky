@@ -82,6 +82,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Update clone positions to follow originals
+    // Clones are positioned absolutely within fixed container at 0,0
+    // Use viewport coordinates (from getBoundingClientRect) directly
     function updateClonePositions() {
         // Skip on mobile
         if (isMobile()) {
@@ -92,29 +94,22 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        console.log('[ImagePositioning] updateClonePositions() called');
-
         imageClones.forEach(({ original, clone }, index) => {
-            // Get the position of the original element
+            // Get the position of the original element (viewport coordinates)
             const rect = original.getBoundingClientRect();
             
-            // Position the clone to match the original
+            // Position the clone using viewport coordinates (same as SVG mask)
+            clone.style.top = rect.top + 'px';
+            clone.style.left = rect.left + 'px';
             clone.style.width = rect.width + 'px';
             clone.style.height = rect.height + 'px';
-            clone.style.transform = `translate(${rect.left}px, ${rect.top}px)`;
-        
-            // Control visibility based on whether it's in or near viewport
-            const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
-            clone.style.opacity = isInViewport ? '1' : '0';
             
             if (index === 0) {
                 console.log('[ImagePositioning] First clone position:', {
-                    width: rect.width,
-                    height: rect.height,
-                    left: rect.left,
                     top: rect.top,
-                    isInViewport,
-                    opacity: clone.style.opacity
+                    left: rect.left,
+                    width: rect.width,
+                    height: rect.height
                 });
             }
         });
@@ -138,9 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const innerScroller2 = document.querySelector('#inner-scroller-2');
     const numberContainer2 = document.querySelector('#number-2-container');
     
-    // Function to control clone visibility and mask based on connection state
-    // Clones should only be visible when the red SVG is being drawn,
-    // which happens when number-container-2 has 'connected-top' or 'connected-middle' class
+    // Function to control container visibility based on connection state
+    // Container (with mask) should only be visible when red SVG is being drawn
     function updateCloneVisibility() {
         if (!numberContainer2 || isMobile()) return;
         
@@ -148,21 +142,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const hasConnectedMiddle = numberContainer2.classList.contains('connected-middle');
         const isConnected = hasConnectedTop || hasConnectedMiddle;
         
-        console.log('[ImagePositioning] Connection state:', {
-            hasConnectedTop,
-            hasConnectedMiddle,
-            isConnected
-        });
+        // Show/hide entire container (mask moves/reshapes automatically with SVG)
+        clonesContainer.style.opacity = isConnected ? '1' : '0';
         
-        if (isConnected) {
-            clonesContainer.classList.add('masked');
-            clonesContainer.style.opacity = '1';
-            console.log('[ImagePositioning] Showing clones with mask (connected)');
-        } else {
-            clonesContainer.classList.remove('masked');
-            clonesContainer.style.opacity = '0';
-            console.log('[ImagePositioning] Hiding clones and mask (not connected)');
-        }
+        console.log('[ImagePositioning] Container ' + (isConnected ? 'visible' : 'hidden'));
     }
     
     // Initialize - clones already in DOM from PHP
