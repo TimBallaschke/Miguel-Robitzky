@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastConnectionState = false;
     let connectionTrueCount = 0;
     let connectionFalseCount = 0;
-    const STABILITY_THRESHOLD = 3; // Need 3 consecutive checks to change state
+    const STABILITY_THRESHOLD = 3; // Need 1 consecutive check to change state (immediate response)
     
     
     // Function to capture initial top positions from CSS
