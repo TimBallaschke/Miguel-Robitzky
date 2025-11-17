@@ -362,14 +362,14 @@ html {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  transition: all 600ms ease-in-out;
+  transition: all 500ms ease-in-out;
 }
 .start-menu-item-placeholder-before .placeholder-before-inner {
   position: relative;
   width: 0%;
   height: 0%;
   background-color: var(--grey-color);
-  transition: all 600ms ease-in-out;
+  transition: all 500ms ease-in-out;
   transform: translateY(1px);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
@@ -391,7 +391,7 @@ html {
   bottom: 1px;
   left: calc(var(--container-gap) * -1);
   background-color: var(--grey-color);
-  transition: opacity 600ms ease-in-out;
+  transition: opacity 500ms ease-in-out;
   opacity: 0;
 }
 .unfolded .start-menu-item-placeholder-before .start-menu-radius {
@@ -405,7 +405,7 @@ html {
   left: calc(var(--container-gap) * -1);
   background-color: var(--background-color);
   border-bottom-right-radius: 0;
-  transition: all 600ms ease-in-out;
+  transition: all 500ms ease-in-out;
   opacity: 0;
 }
 .unfolded .start-menu-item-placeholder-before .start-menu-radius-cut-out {
@@ -418,13 +418,13 @@ html {
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
-  transition: all 600ms ease-in-out;
+  transition: all 500ms ease-in-out;
 }
 .start-menu-item-placeholder-after .placeholder-after-inner {
   width: 0%;
   height: 0%;
   background-color: var(--grey-color);
-  transition: all 600ms ease-in-out;
+  transition: all 500ms ease-in-out;
   transform: translateY(-1px);
   border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
@@ -448,7 +448,7 @@ html {
   left: calc(var(--container-gap) * -1);
   background-color: var(--grey-color);
   opacity: 0;
-  transition: all 600ms ease-in-out;
+  transition: all 500ms ease-in-out;
 }
 .unfolded .start-menu-item-placeholder-after .start-menu-radius {
   transition: opacity 3000ms ease-in-out;
@@ -462,7 +462,7 @@ html {
   background-color: var(--background-color);
   border-top-right-radius: 0;
   opacity: 0;
-  transition: all 600ms ease-in-out;
+  transition: all 500ms ease-in-out;
 }
 .unfolded .start-menu-item-placeholder-after .start-menu-radius-cut-out {
   transition: opacity 3000ms ease-in-out;
@@ -475,7 +475,7 @@ html {
   width: calc(100vw - 2 * var(--page-padding));
   pointer-events: none;
   display: grid;
-  transition: all 600ms ease-in-out;
+  transition: all 500ms ease-in-out;
 }
 .start-menu-item.unfolded {
   height: calc(100dvh - var(--page-title-size));
@@ -581,7 +581,7 @@ html {
   height: 100%;
   padding: 0 var(--page-padding);
   opacity: 1;
-  transition: all 600ms ease-in-out;
+  transition: all 500ms ease-in-out;
 }
 .no-opacity .button-content {
   opacity: 0;
@@ -633,7 +633,7 @@ html {
   border-radius: var(--border-radius) var(--border-radius) 0 0;
   background-color: var(--grey-color);
   transform: translateY(100%);
-  transition: all 600ms ease-in-out;
+  transition: all 500ms ease-in-out;
 }
 .inner-scroller-placeholder.to-top {
   transform: translateY(0);

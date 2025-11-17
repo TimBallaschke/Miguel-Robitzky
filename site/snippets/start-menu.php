@@ -16,7 +16,7 @@ $menuLabels = [
 ];
 ?>
 
-<div class="start-menu-container" x-data="{ activeItem: null, isDesktop: window.innerWidth > 768 }" @resize.window="isDesktop = window.innerWidth > 768">
+<div class="start-menu-container" x-data="{ activeItem: null, isDesktop: window.innerWidth > 768 }" @resize.window="isDesktop = window.innerWidth > 768" @reset-menu.window="activeItem = null; console.log('Alpine: activeItem reset to null via event')">
     <div class="start-menu" :class="{ 'content-unfolded': isDesktop && activeItem !== null }">
         <?php for ($i = 1; $i <= $menuItems; $i++): ?>
             <div 

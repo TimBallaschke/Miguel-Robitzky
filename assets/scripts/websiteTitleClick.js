@@ -69,12 +69,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to check and log connected state
     function checkConnectedState() {
+        console.log('=== checkConnectedState CALLED ===');
         const isMobileView = isMobile();
         const startMenuItems = document.querySelectorAll('.start-menu-item');
         const startMenu = document.querySelector('.start-menu');
         const startMenuContainer = document.querySelector('.start-menu-container');
         let connectedIndex = -1;
         let isInBetween = false;
+        
+        // Log current state
+        console.log('startMenuContainer exists:', !!startMenuContainer);
         
         if (isMobileView) {
             // Mobile: check for "connected" class
@@ -95,8 +99,11 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
+        console.log('Connected index:', connectedIndex, 'isMobile:', isMobileView);
+        
         // Disable transitions on start-menu-container before adjusting classes
         const innerScrollerPlaceholder = document.querySelector('.inner-scroller-placeholder');
+        console.log('Disabling transitions...');
         if (startMenuContainer) {
             startMenuContainer.style.transition = 'none';
         }
@@ -113,8 +120,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Update start-menu container class
         if (startMenu) {
             if (connectedIndex !== -1 && !isMobileView) {
+                console.log('Adding content-unfolded to start-menu');
                 startMenu.classList.add('content-unfolded');
             } else {
+                console.log('Removing content-unfolded from start-menu');
                 startMenu.classList.remove('content-unfolded');
             }
         }
@@ -166,6 +175,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             } else {
                 // Desktop: items up to connected get unfolded, non-connected get folded, connected gets clicked-menu-item
+                console.log('Desktop: Manually adding classes for connected index:', connectedIndex);
                 startMenuItems.forEach((item, index) => {
                     if (index <= connectedIndex) {
                         item.classList.add('unfolded');
@@ -182,6 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (index === connectedIndex) {
                         item.classList.add('clicked-menu-item');
                         item.classList.add('connected');
+                        console.log(`Item ${index + 1}: Added clicked-menu-item and connected`);
                     } else {
                         item.classList.remove('clicked-menu-item');
                         item.classList.remove('connected');
@@ -192,6 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Re-enable transitions after a frame and remove display-none
         requestAnimationFrame(() => {
+            console.log('Re-enabling transitions...');
             if (startMenuContainer) {
                 startMenuContainer.style.transition = '';
                 startMenuContainer.classList.remove('display-none');
@@ -258,18 +270,13 @@ document.addEventListener('DOMContentLoaded', function() {
                                         console.log('Mobile: Removed "no-opacity" class');
                                     }, 700);
                                     
-                                    // Remove no-radius class after 800ms
+                                    // Remove no-radius class after 500ms
                                     setTimeout(() => {
                                         startMenuItems.forEach(item => {
                                             item.classList.remove('no-radius');
                                         });
                                         console.log('Mobile: Removed "no-radius" class');
-                                    }, 500);
-                                    
-                                    // Reset Alpine.js activeItem state
-                                    if (startMenuContainer && startMenuContainer.__x) {
-                                        startMenuContainer.__x.$data.activeItem = null;
-                                    }
+                                    }, 400);
                                     
                                     // Add start-menu-opened class back to body
                                     document.body.classList.add('start-menu-opened');
@@ -288,16 +295,13 @@ document.addEventListener('DOMContentLoaded', function() {
                             console.log('Desktop: Removed "display-none" from start-menu-container');
                         }
                         
-                        // Reset Alpine.js activeItem state after another 1000ms (1100ms total)
+                        // Remove desktop classes after 100ms
                         setTimeout(() => {
-                            // Reset Alpine.js state
-                            if (startMenuContainer && startMenuContainer.__x) {
-                                startMenuContainer.__x.$data.activeItem = null;
-                            }
-                            
+                            console.log('Desktop: Starting class removal...');
                             // Remove desktop classes from start menu
                             if (startMenu) {
                                 startMenu.classList.remove('content-unfolded');
+                                console.log('Removed content-unfolded from start-menu');
                             }
                             
                             // Remove desktop classes from all start-menu-items
@@ -307,9 +311,11 @@ document.addEventListener('DOMContentLoaded', function() {
                                 item.classList.remove('clicked-menu-item');
                                 item.classList.remove('connected');
                             });
+                            console.log('Removed all desktop classes from items');
 
                             // Add start-menu-opened class back to body
                             document.body.classList.add('start-menu-opened');
+                            console.log('Added start-menu-opened back to body');
                             
                             // Remove no-opacity class after 700ms
                             setTimeout(() => {
@@ -319,15 +325,21 @@ document.addEventListener('DOMContentLoaded', function() {
                                 console.log('Desktop: Removed "no-opacity" class');
                             }, 700);
                             
-                            // Remove no-radius class after 800ms
+                            // Remove no-radius class after 500ms
                             setTimeout(() => {
                                 startMenuItems.forEach(item => {
                                     item.classList.remove('no-radius');
                                 });
                                 console.log('Desktop: Removed "no-radius" class');
-                            }, 500);
+                            }, 400);
                             
-                            console.log('Desktop: Reset activeItem and removed all desktop classes');
+                            // Reset Alpine.js activeItem at the very end (after all cleanup)
+                            setTimeout(() => {
+                                console.log('1500ms timeout fired - dispatching reset-menu event');
+                                window.dispatchEvent(new CustomEvent('reset-menu'));
+                            }, 1200);
+                             
+                             console.log('Desktop: Reset activeItem and removed all desktop classes');
                         }, 100);
                     }, 10);
                 }
