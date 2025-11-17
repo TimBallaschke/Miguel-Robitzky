@@ -185,8 +185,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     if (index !== connectedIndex) {
                         item.classList.add('folded');
+                        item.classList.add('no-opacity'); // Add no-opacity manually along with folded
                     } else {
                         item.classList.remove('folded');
+                        item.classList.remove('no-opacity');
                     }
                     
                     if (index === connectedIndex) {
@@ -268,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                             item.classList.remove('no-opacity');
                                         });
                                         console.log('Mobile: Removed "no-opacity" class');
-                                    }, 500);
+                                    }, 300);
                                     
                                     // Remove no-radius class after 500ms
                                     setTimeout(() => {
@@ -323,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     item.classList.remove('no-opacity');
                                 });
                                 console.log('Desktop: Removed "no-opacity" class');
-                            }, 500);
+                            }, 300);
                             
                             // Remove no-radius class after 500ms
                             setTimeout(() => {
