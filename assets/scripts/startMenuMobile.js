@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
                 console.log('Added "to-top" to all items');
-            }, 1000);
+            }, 500);
             
             // Add "connected" class 800ms after "to-top" (1800ms total)
             connectedTimeout = setTimeout(() => {
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         item.classList.remove('connected');
                     }
                 });
-            }, 1800);
+            }, 800);
             
             // Remove "hidden" class from content-container 75ms after "connected" (1875ms total)
             contentVisibleTimeout = setTimeout(() => {
@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     contentContainer.classList.remove('hidden');
                     console.log('Removed "hidden" from content-container');
                 }
-            }, 1875);
+            }, 1000);
             
             // Add "display-none" class to start-menu-container 100ms after content visible (1975ms total)
             menuHideTimeout = setTimeout(() => {

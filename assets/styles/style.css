@@ -553,6 +553,11 @@ html {
   transition: height 75ms ease-in-out, border-radius 0ms ease-in-out;
 }
 @media (max-width: 768px) {
+  .no-radius .start-menu-item-button {
+    border-radius: var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius);
+  }
+}
+@media (max-width: 768px) {
   .connected .start-menu-item-button {
     height: calc(var(--menu-item-height) + var(--container-gap));
     border-radius: var(--border-radius) var(--border-radius) 0 0;
@@ -581,7 +586,7 @@ html {
   height: 100%;
   padding: 0 var(--page-padding);
   opacity: 1;
-  transition: all 500ms ease-in-out;
+  transition: all 200ms ease-in-out;
 }
 .no-opacity .button-content {
   opacity: 0;

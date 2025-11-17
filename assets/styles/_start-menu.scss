@@ -252,6 +252,10 @@
     .no-radius & {
         border-radius: var(--border-radius) 0 0 var(--border-radius);
         transition: height 75ms ease-in-out, border-radius 0ms ease-in-out;
+
+        @include mobile {
+            border-radius: var(--border-radius) var(--border-radius) var(--border-radius) var(--border-radius);
+        }
     }
 
     .connected & {
@@ -288,7 +292,7 @@
     height: 100%;
     padding: 0 var(--page-padding);
     opacity: 1;
-    transition: all 500ms ease-in-out;
+    transition: all 200ms ease-in-out;
 
     .no-opacity & {
         opacity: 0;
