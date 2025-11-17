@@ -107,6 +107,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.log(`Setting item ${index + 1} left to: ${finalLeft}px (right-aligned, position ${positionFromRight} from right)`);
                     item.style.left = `${finalLeft}px`;
                 }
+                
+                // Add no-opacity to all items at the start
+                item.classList.add('no-opacity');
             });
             
             // Add "to-top" class after transition (1000ms)

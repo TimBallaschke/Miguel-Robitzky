@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                             item.classList.remove('no-opacity');
                                         });
                                         console.log('Mobile: Removed "no-opacity" class');
-                                    }, 300);
+                                    }, 400);
                                     
                                     // Remove no-radius class after 500ms
                                     setTimeout(() => {
@@ -284,8 +284,8 @@ document.addEventListener('DOMContentLoaded', function() {
                                     document.body.classList.add('start-menu-opened');
                                     
                                     console.log('Reset all items to initial position');
-                                }, 100);
-                            }, 800);
+                                }, 500);
+                            }, 0);
                         }, 75);
                     }, 100);
                 } else {
