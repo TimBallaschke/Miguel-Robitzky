@@ -365,7 +365,6 @@ html {
   height: 100%;
   top: 0;
   right: 0;
-  cursor: pointer;
 }
 .projects-images .project-image {
   position: absolute;
@@ -386,6 +385,42 @@ html {
      object-fit: cover;
   display: block;
 }
+.projects-images .carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.5);
+  border: none;
+  color: white;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
+}
+.projects-images .carousel-arrow:hover {
+  background: rgba(0, 0, 0, 0.7);
+  transform: translateY(-50%) scale(1.1);
+}
+.projects-images .carousel-arrow:active {
+  transform: translateY(-50%) scale(0.95);
+}
+.projects-images .carousel-arrow svg {
+  width: 24px;
+  height: 24px;
+}
+.projects-images .carousel-arrow.carousel-arrow-left {
+  left: 1rem;
+}
+.projects-images .carousel-arrow.carousel-arrow-right {
+  right: 1rem;
+}
 
 .projects-images-clone {
   pointer-events: none !important;
@@ -398,6 +433,12 @@ html {
   -webkit-user-select: none !important;
      -moz-user-select: none !important;
           user-select: none !important;
+}
+.projects-images-clone .carousel-arrow {
+  pointer-events: auto !important;
+}
+.projects-images-clone .carousel-arrow * {
+  pointer-events: auto !important;
 }
 
 .start-menu-container {

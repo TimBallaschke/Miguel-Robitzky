@@ -325,7 +325,6 @@
     height: 100%;
     top: 0;
     right: 0;
-    cursor: pointer;
     
     .project-image {
         position: absolute;
@@ -347,9 +346,50 @@
             display: block;
         }
     }
+    
+    // Navigation arrows
+    .carousel-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        border: none;
+        color: white;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 10;
+        transition: all 0.3s ease;
+        backdrop-filter: blur(4px);
+        
+        &:hover {
+            background: rgba(0, 0, 0, 0.7);
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        &:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+        
+        svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        &.carousel-arrow-left {
+            left: 1rem;
+        }
+        
+        &.carousel-arrow-right {
+            right: 1rem;
+        }
+    }
 }
 
-// Cloned images (created by JavaScript)
 .projects-images-clone {
     pointer-events: none !important;
     user-select: none !important;
@@ -357,6 +397,15 @@
     * {
         pointer-events: none !important;
         user-select: none !important;
+    }
+    
+    // Allow arrow buttons to be clicked on clones
+    .carousel-arrow {
+        pointer-events: auto !important;
+        
+        * {
+            pointer-events: auto !important;
+        }
     }
 }
 
