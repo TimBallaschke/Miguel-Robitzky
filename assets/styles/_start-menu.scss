@@ -64,7 +64,7 @@
         opacity: 0;
 
         .unfolded & {
-            transition: opacity 3000ms ease-in-out;
+            transition: opacity 1000ms ease-in-out;
         }
     }
 
@@ -80,7 +80,7 @@
         opacity: 0;
 
         .unfolded & {
-            transition: opacity 3000ms ease-in-out;
+            transition: opacity 1000ms ease-in-out;
         }
     }
 
@@ -133,7 +133,7 @@
         transition: all 500ms ease-in-out;
 
         .unfolded & {
-            transition: opacity 3000ms ease-in-out;
+            transition: opacity 1000ms ease-in-out;
         }
     }
 
@@ -149,7 +149,7 @@
         transition: all 500ms ease-in-out;
 
         .unfolded & {
-            transition: opacity 3000ms ease-in-out;
+            transition: opacity 1000ms ease-in-out;
         }
     }
 }

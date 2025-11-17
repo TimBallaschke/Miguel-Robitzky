@@ -268,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                             item.classList.remove('no-opacity');
                                         });
                                         console.log('Mobile: Removed "no-opacity" class');
-                                    }, 700);
+                                    }, 500);
                                     
                                     // Remove no-radius class after 500ms
                                     setTimeout(() => {
@@ -323,7 +323,7 @@ document.addEventListener('DOMContentLoaded', function() {
                                     item.classList.remove('no-opacity');
                                 });
                                 console.log('Desktop: Removed "no-opacity" class');
-                            }, 700);
+                            }, 500);
                             
                             // Remove no-radius class after 500ms
                             setTimeout(() => {
@@ -337,7 +337,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             setTimeout(() => {
                                 console.log('1500ms timeout fired - dispatching reset-menu event');
                                 window.dispatchEvent(new CustomEvent('reset-menu'));
-                            }, 1200);
+                            }, 1000);
                              
                              console.log('Desktop: Reset activeItem and removed all desktop classes');
                         }, 100);

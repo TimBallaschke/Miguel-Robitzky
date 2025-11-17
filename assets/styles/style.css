@@ -395,7 +395,7 @@ html {
   opacity: 0;
 }
 .unfolded .start-menu-item-placeholder-before .start-menu-radius {
-  transition: opacity 3000ms ease-in-out;
+  transition: opacity 1000ms ease-in-out;
 }
 .start-menu-item-placeholder-before .start-menu-radius-cut-out {
   position: absolute;
@@ -409,7 +409,7 @@ html {
   opacity: 0;
 }
 .unfolded .start-menu-item-placeholder-before .start-menu-radius-cut-out {
-  transition: opacity 3000ms ease-in-out;
+  transition: opacity 1000ms ease-in-out;
 }
 
 .start-menu-item-placeholder-after {
@@ -451,7 +451,7 @@ html {
   transition: all 500ms ease-in-out;
 }
 .unfolded .start-menu-item-placeholder-after .start-menu-radius {
-  transition: opacity 3000ms ease-in-out;
+  transition: opacity 1000ms ease-in-out;
 }
 .start-menu-item-placeholder-after .start-menu-radius-cut-out {
   position: absolute;
@@ -465,7 +465,7 @@ html {
   transition: all 500ms ease-in-out;
 }
 .unfolded .start-menu-item-placeholder-after .start-menu-radius-cut-out {
-  transition: opacity 3000ms ease-in-out;
+  transition: opacity 1000ms ease-in-out;
 }
 
 .start-menu-item {
