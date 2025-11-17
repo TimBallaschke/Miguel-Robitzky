@@ -42,7 +42,7 @@ html {
   height: 100%;
   z-index: -1;
   opacity: 0;
-  transition: opacity 1000ms ease-in-out;
+  transition: opacity 600ms ease-in-out;
 }
 .start-menu-opened .background-image {
   opacity: 1;
@@ -63,7 +63,7 @@ html {
   font-size: 10.7rem;
   letter-spacing: -0.02em;
   color: black;
-  transition: color 1000ms ease-in-out;
+  transition: color 600ms ease-in-out;
   cursor: pointer;
 }
 .start-menu-opened .title-element {
@@ -362,14 +362,14 @@ html {
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
+  transition: all 600ms ease-in-out;
 }
 .start-menu-item-placeholder-before .placeholder-before-inner {
   position: relative;
   width: 0%;
   height: 0%;
   background-color: var(--grey-color);
-  transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
+  transition: all 600ms ease-in-out;
   transform: translateY(1px);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
@@ -391,8 +391,11 @@ html {
   bottom: 1px;
   left: calc(var(--container-gap) * -1);
   background-color: var(--grey-color);
-  transition: opacity 3000ms ease-in-out;
+  transition: opacity 600ms ease-in-out;
   opacity: 0;
+}
+.unfolded .start-menu-item-placeholder-before .start-menu-radius {
+  transition: opacity 3000ms ease-in-out;
 }
 .start-menu-item-placeholder-before .start-menu-radius-cut-out {
   position: absolute;
@@ -402,8 +405,11 @@ html {
   left: calc(var(--container-gap) * -1);
   background-color: var(--background-color);
   border-bottom-right-radius: 0;
-  transition: all 3000ms ease-in-out;
+  transition: all 600ms ease-in-out;
   opacity: 0;
+}
+.unfolded .start-menu-item-placeholder-before .start-menu-radius-cut-out {
+  transition: opacity 3000ms ease-in-out;
 }
 
 .start-menu-item-placeholder-after {
@@ -412,19 +418,20 @@ html {
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
-  transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
+  transition: all 600ms ease-in-out;
 }
 .start-menu-item-placeholder-after .placeholder-after-inner {
   width: 0%;
   height: 0%;
   background-color: var(--grey-color);
-  transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
+  transition: all 600ms ease-in-out;
   transform: translateY(-1px);
-  border-radius: 0 0 0 0;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 .clicked-menu-item .start-menu-item-placeholder-after .placeholder-after-inner {
   height: calc(100% + 1px);
   width: calc(100% - 2 * var(--page-padding) - var(--container-gap));
+  border-radius: 0 0 0 0;
 }
 .clicked-menu-item .start-menu-item-placeholder-after .start-menu-radius {
   opacity: 1;
@@ -441,7 +448,10 @@ html {
   left: calc(var(--container-gap) * -1);
   background-color: var(--grey-color);
   opacity: 0;
-  transition: all 3000ms ease-in-out;
+  transition: all 600ms ease-in-out;
+}
+.unfolded .start-menu-item-placeholder-after .start-menu-radius {
+  transition: opacity 3000ms ease-in-out;
 }
 .start-menu-item-placeholder-after .start-menu-radius-cut-out {
   position: absolute;
@@ -452,7 +462,10 @@ html {
   background-color: var(--background-color);
   border-top-right-radius: 0;
   opacity: 0;
-  transition: all 3000ms ease-in-out;
+  transition: all 600ms ease-in-out;
+}
+.unfolded .start-menu-item-placeholder-after .start-menu-radius-cut-out {
+  transition: opacity 3000ms ease-in-out;
 }
 
 .start-menu-item {
@@ -462,7 +475,7 @@ html {
   width: calc(100vw - 2 * var(--page-padding));
   pointer-events: none;
   display: grid;
-  transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
+  transition: all 600ms ease-in-out;
 }
 .start-menu-item.unfolded {
   height: calc(100dvh - var(--page-title-size));
@@ -490,7 +503,7 @@ html {
   pointer-events: auto;
   cursor: pointer;
   position: relative;
-  transition: height 75ms ease-in-out;
+  transition: height 75ms ease-in-out, border-radius 150ms ease-in-out;
   overflow: hidden;
 }
 .start-menu-item-button .start-menu-item-button-inner-before {
@@ -535,8 +548,9 @@ html {
   transition: all 75ms ease-in-out;
   opacity: 0;
 }
-.clicked-menu-item .start-menu-item-button {
+.no-radius .start-menu-item-button {
   border-radius: var(--border-radius) 0 0 var(--border-radius);
+  transition: height 75ms ease-in-out, border-radius 0ms ease-in-out;
 }
 @media (max-width: 768px) {
   .connected .start-menu-item-button {
@@ -567,7 +581,7 @@ html {
   height: 100%;
   padding: 0 var(--page-padding);
   opacity: 1;
-  transition: opacity 500ms cubic-bezier(0.69, 0, 0.29, 0.99);
+  transition: all 600ms ease-in-out;
 }
 .no-opacity .button-content {
   opacity: 0;
@@ -619,7 +633,7 @@ html {
   border-radius: var(--border-radius) var(--border-radius) 0 0;
   background-color: var(--grey-color);
   transform: translateY(100%);
-  transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
+  transition: all 600ms ease-in-out;
 }
 .inner-scroller-placeholder.to-top {
   transform: translateY(0);

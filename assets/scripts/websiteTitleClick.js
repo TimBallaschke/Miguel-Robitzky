@@ -258,13 +258,24 @@ document.addEventListener('DOMContentLoaded', function() {
                                         console.log('Mobile: Removed "no-opacity" class');
                                     }, 700);
                                     
+                                    // Remove no-radius class after 800ms
+                                    setTimeout(() => {
+                                        startMenuItems.forEach(item => {
+                                            item.classList.remove('no-radius');
+                                        });
+                                        console.log('Mobile: Removed "no-radius" class');
+                                    }, 500);
+                                    
                                     // Reset Alpine.js activeItem state
                                     if (startMenuContainer && startMenuContainer.__x) {
                                         startMenuContainer.__x.$data.activeItem = null;
                                     }
                                     
+                                    // Add start-menu-opened class back to body
+                                    document.body.classList.add('start-menu-opened');
+                                    
                                     console.log('Reset all items to initial position');
-                                }, 1000);
+                                }, 100);
                             }, 800);
                         }, 75);
                     }, 100);
@@ -296,6 +307,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                 item.classList.remove('clicked-menu-item');
                                 item.classList.remove('connected');
                             });
+
+                            // Add start-menu-opened class back to body
+                            document.body.classList.add('start-menu-opened');
                             
                             // Remove no-opacity class after 700ms
                             setTimeout(() => {
@@ -305,9 +319,17 @@ document.addEventListener('DOMContentLoaded', function() {
                                 console.log('Desktop: Removed "no-opacity" class');
                             }, 700);
                             
+                            // Remove no-radius class after 800ms
+                            setTimeout(() => {
+                                startMenuItems.forEach(item => {
+                                    item.classList.remove('no-radius');
+                                });
+                                console.log('Desktop: Removed "no-radius" class');
+                            }, 500);
+                            
                             console.log('Desktop: Reset activeItem and removed all desktop classes');
-                        }, 1000);
-                    }, 100);
+                        }, 100);
+                    }, 10);
                 }
             }
         });

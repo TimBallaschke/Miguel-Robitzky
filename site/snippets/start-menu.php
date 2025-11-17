@@ -27,6 +27,7 @@ $menuLabels = [
                     'folded': isDesktop && activeItem !== null && activeItem !== <?= $i ?>, 
                     'no-opacity': isDesktop && activeItem !== null && activeItem !== <?= $i ?>,
                     'clicked-menu-item': isDesktop && activeItem === <?= $i ?>,
+                    'no-radius': activeItem === <?= $i ?>,
                     'folded-mobile': !isDesktop && activeItem !== null,
                     'clicked-menu-item-mobile': !isDesktop && activeItem === <?= $i ?> 
                 }"

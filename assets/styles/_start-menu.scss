@@ -25,14 +25,14 @@
     display: flex;
     justify-content: flex-end;
     align-items: flex-end;
-    transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
+    transition: all 600ms ease-in-out;
 
     .placeholder-before-inner {
         position: relative;
         width: 0%;
         height: 0%;
         background-color: var(--grey-color);
-        transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
+        transition: all 600ms ease-in-out;
         transform: translateY(1px);
         border-radius: var(--border-radius) var(--border-radius) 0 0;
     }
@@ -60,8 +60,12 @@
         bottom: 1px;
         left: calc(var(--container-gap) * -1);
         background-color: var(--grey-color);
-        transition: opacity 3000ms ease-in-out;
+        transition: opacity 600ms ease-in-out;
         opacity: 0;
+
+        .unfolded & {
+            transition: opacity 3000ms ease-in-out;
+        }
     }
 
     .start-menu-radius-cut-out {
@@ -72,8 +76,12 @@
         left: calc(var(--container-gap) * -1);
         background-color: var(--background-color);
         border-bottom-right-radius: 0;
-        transition: all 3000ms ease-in-out;
+        transition: all 600ms ease-in-out;
         opacity: 0;
+
+        .unfolded & {
+            transition: opacity 3000ms ease-in-out;
+        }
     }
 
 
@@ -85,15 +93,15 @@
     display: flex;
     justify-content: flex-end;
     align-items: flex-start;
-    transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
+    transition: all 600ms ease-in-out;
 
     .placeholder-after-inner {
         width: 0%;
         height: 0%;
         background-color: var(--grey-color);
-        transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
+        transition: all 600ms ease-in-out;
         transform: translateY(-1px);
-        border-radius: 0 0 0 0;
+        border-radius: 0 0 var(--border-radius) var(--border-radius);
 
     }
 
@@ -101,6 +109,7 @@
         .placeholder-after-inner {
             height: calc(100% + 1px);
             width: calc(100% - 2 * var(--page-padding) - var(--container-gap));
+            border-radius: 0 0 0 0;
         }
 
         .start-menu-radius {
@@ -121,7 +130,11 @@
         left: calc(var(--container-gap) * -1);
         background-color: var(--grey-color);
         opacity: 0;
-        transition: all 3000ms ease-in-out;
+        transition: all 600ms ease-in-out;
+
+        .unfolded & {
+            transition: opacity 3000ms ease-in-out;
+        }
     }
 
     .start-menu-radius-cut-out {
@@ -133,7 +146,11 @@
         background-color: var(--background-color);
         border-top-right-radius: 0;
         opacity: 0;
-        transition: all 3000ms ease-in-out;
+        transition: all 600ms ease-in-out;
+
+        .unfolded & {
+            transition: opacity 3000ms ease-in-out;
+        }
     }
 }
 
@@ -146,7 +163,7 @@
     width: calc(100vw - 2 * var(--page-padding));
     pointer-events: none;
     display: grid;
-    transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
+    transition: all 600ms ease-in-out;
 
     &.unfolded {
         height: calc(100dvh - var(--page-title-size));
@@ -183,7 +200,7 @@
     pointer-events: auto;
     cursor: pointer;
     position: relative;
-    transition: height 75ms ease-in-out;
+    transition: height 75ms ease-in-out, border-radius 150ms ease-in-out;
     overflow: hidden;
 
     .start-menu-item-button-inner-before {
@@ -232,8 +249,9 @@
         opacity: 0;
     }
 
-    .clicked-menu-item & {
+    .no-radius & {
         border-radius: var(--border-radius) 0 0 var(--border-radius);
+        transition: height 75ms ease-in-out, border-radius 0ms ease-in-out;
     }
 
     .connected & {
@@ -270,7 +288,7 @@
     height: 100%;
     padding: 0 var(--page-padding);
     opacity: 1;
-    transition: opacity 500ms cubic-bezier(0.69, 0, 0.29, 0.99);
+    transition: all 600ms ease-in-out;
 
     .no-opacity & {
         opacity: 0;
@@ -335,7 +353,7 @@
     border-radius: var(--border-radius) var(--border-radius) 0 0;
     background-color: var(--grey-color);
     transform: translateY(100%);
-    transition: all 1000ms cubic-bezier(0.69, 0, 0.29, 0.99);
+    transition: all 600ms ease-in-out;
 
     &.to-top {
         transform: translateY(0);
