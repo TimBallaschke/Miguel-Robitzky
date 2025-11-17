@@ -387,6 +387,19 @@ html {
   display: block;
 }
 
+.projects-images-clone {
+  pointer-events: none !important;
+  -webkit-user-select: none !important;
+     -moz-user-select: none !important;
+          user-select: none !important;
+}
+.projects-images-clone * {
+  pointer-events: none !important;
+  -webkit-user-select: none !important;
+     -moz-user-select: none !important;
+          user-select: none !important;
+}
+
 .start-menu-container {
   position: fixed;
   top: var(--page-title-size);

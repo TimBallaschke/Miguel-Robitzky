@@ -349,3 +349,14 @@
     }
 }
 
+// Cloned images (created by JavaScript)
+.projects-images-clone {
+    pointer-events: none !important;
+    user-select: none !important;
+    
+    * {
+        pointer-events: none !important;
+        user-select: none !important;
+    }
+}
+
