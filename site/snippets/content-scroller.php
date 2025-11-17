@@ -24,9 +24,17 @@ $sections = 4;
                 ?>
                     <div class="project">
                         <div class="projects-images">
-                            <?php foreach ($projekt->images() as $image): ?>
-                                <img src="<?= $image->url() ?>" alt="<?= $projekt->title() ?>">
-                            <?php endforeach ?>
+                            <?php 
+                            $index = 0;
+                            foreach ($projekt->images() as $image): 
+                            ?>
+                                <div class="project-image <?= $index === 0 ? 'active' : '' ?>">
+                                    <img src="<?= $image->url() ?>" alt="<?= $projekt->title() ?>">
+                                </div>
+                            <?php 
+                            $index++;
+                            endforeach; 
+                            ?>
                         </div>
                     </div>
                 <?php 

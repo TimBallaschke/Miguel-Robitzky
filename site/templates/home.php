@@ -28,4 +28,5 @@
 <script src="/assets/scripts/numberContainerClick.js"></script>
 <script src="/assets/scripts/websiteTitleClick.js"></script>
 <script src="/assets/scripts/imagePositioning.js"></script>
+<script src="/assets/scripts/imageCarousel.js"></script>
 </html>

@@ -127,7 +127,6 @@ html {
   transition: border-radius 75ms ease-in-out;
   position: relative;
   overflow: hidden;
-  padding: 1.5rem;
 }
 .inner-scroller.connected-top {
   border-top-left-radius: 0;
@@ -349,18 +348,42 @@ html {
   display: block;
 }
 
-.image {
+.projects {
+  position: relative;
+  width: 100%;
+}
+
+.project {
+  position: relative;
+  width: 100%;
+  height: 100dvh;
+}
+
+.projects-images {
   position: absolute;
+  width: calc(100vw - 2 * var(--page-padding));
+  height: 100%;
   top: 0;
   right: 0;
-  width: calc(100vw - 2 * var(--page-padding));
-  height: auto;
-  overflow: hidden;
-  border-radius: var(--border-radius);
+  cursor: pointer;
 }
-.image img {
+.projects-images .project-image {
+  position: absolute;
   width: 100%;
-  height: auto;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease-in-out;
+  pointer-events: none;
+}
+.projects-images .project-image.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.projects-images .project-image img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
   display: block;
 }
 
