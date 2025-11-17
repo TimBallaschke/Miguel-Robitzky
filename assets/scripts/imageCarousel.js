@@ -10,7 +10,7 @@
             
             // Skip if only one or no images
             if (images.length <= 1) return;
-            
+        
             let currentIndex = 0;
             
             // Function to show specific image
