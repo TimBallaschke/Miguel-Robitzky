@@ -1,6 +1,14 @@
 html {
     font-size: 1vw;
     background-color: var(--background-color);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-smooth: never; /* Note: font-smooth is not widely supported */
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
 }
 
 .background-image {

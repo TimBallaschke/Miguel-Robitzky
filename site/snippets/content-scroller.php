@@ -11,7 +11,11 @@ $sections = 4;
 <div class="content-container hidden">
     <div class="scroller first-connected">
         <?php for ($i = 1; $i <= $sections; $i++): ?>
-            <div id="inner-scroller-<?= $i ?>" class="inner-scroller"></div>
+            <div id="inner-scroller-<?= $i ?>" class="inner-scroller">
+                <!-- <div class="image">
+                    <img src="/assets/images/Bildschirmfoto2025-09-12um11.00.03.png" alt="Image <?= $i ?>" >
+                </div> -->
+            </div>
         <?php endfor; ?>
     </div>
 
