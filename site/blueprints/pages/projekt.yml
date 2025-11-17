@@ -16,3 +16,4 @@ sections:
     template: image
     layout: cards
     size: medium
+    uploads: true

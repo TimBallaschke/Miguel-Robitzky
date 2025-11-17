@@ -15,9 +15,9 @@
     </div>
     <?php snippet('start-menu') ?>
     <?php snippet('content-scroller') ?>
-    <div class="images-test">
+    <!-- <div class="images-test">
         <img src="/assets/images/Bildschirmfoto2025-09-12um11.00.03.png" alt="Image 1">
-    </div>
+    </div> -->
     </body>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="/assets/scripts/helper.js"></script>

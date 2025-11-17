@@ -10,13 +10,39 @@ $sections = 4;
 
 <div class="content-container hidden">
     <div class="scroller first-connected">
-        <?php for ($i = 1; $i <= $sections; $i++): ?>
-            <div id="inner-scroller-<?= $i ?>" class="inner-scroller">
-                <!-- <div class="image">
-                    <img src="/assets/images/Bildschirmfoto2025-09-12um11.00.03.png" alt="Image <?= $i ?>" >
-                </div> -->
+        <div id="inner-scroller-1" class="inner-scroller">
+            <!-- Add content for section 1 here -->
+        </div>
+        
+        <div id="inner-scroller-2" class="inner-scroller">
+            <div class="projects">
+                <?php 
+                // Get all project pages (children of the projekte page)
+                $projektePages = $site->find('projekte');
+                if ($projektePages && $projektePages->children()->isNotEmpty()): 
+                    foreach ($projektePages->children() as $projekt): 
+                ?>
+                    <div class="project">
+                        <div class="projects-images">
+                            <?php foreach ($projekt->images() as $image): ?>
+                                <img src="<?= $image->url() ?>" alt="<?= $projekt->title() ?>">
+                            <?php endforeach ?>
+                        </div>
+                    </div>
+                <?php 
+                    endforeach;
+                endif; 
+                ?>
             </div>
-        <?php endfor; ?>
+        </div>
+        
+        <div id="inner-scroller-3" class="inner-scroller">
+            <!-- Add content for section 3 here -->
+        </div>
+        
+        <div id="inner-scroller-4" class="inner-scroller">
+            <!-- Add content for section 4 here -->
+        </div>
     </div>
 
     <div class="numbers">
