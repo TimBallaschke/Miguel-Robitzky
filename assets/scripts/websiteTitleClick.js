@@ -250,6 +250,14 @@ document.addEventListener('DOMContentLoaded', function() {
                                         item.classList.remove('clicked-menu-item-mobile');
                                     });
                                     
+                                    // Remove no-opacity class after 700ms
+                                    setTimeout(() => {
+                                        startMenuItems.forEach(item => {
+                                            item.classList.remove('no-opacity');
+                                        });
+                                        console.log('Mobile: Removed "no-opacity" class');
+                                    }, 700);
+                                    
                                     // Reset Alpine.js activeItem state
                                     if (startMenuContainer && startMenuContainer.__x) {
                                         startMenuContainer.__x.$data.activeItem = null;
@@ -288,6 +296,14 @@ document.addEventListener('DOMContentLoaded', function() {
                                 item.classList.remove('clicked-menu-item');
                                 item.classList.remove('connected');
                             });
+                            
+                            // Remove no-opacity class after 700ms
+                            setTimeout(() => {
+                                startMenuItems.forEach(item => {
+                                    item.classList.remove('no-opacity');
+                                });
+                                console.log('Desktop: Removed "no-opacity" class');
+                            }, 700);
                             
                             console.log('Desktop: Reset activeItem and removed all desktop classes');
                         }, 1000);

@@ -25,6 +25,7 @@ $menuLabels = [
                 :class="{ 
                     'unfolded': isDesktop && activeItem !== null && activeItem >= <?= $i ?>, 
                     'folded': isDesktop && activeItem !== null && activeItem !== <?= $i ?>, 
+                    'no-opacity': isDesktop && activeItem !== null && activeItem !== <?= $i ?>,
                     'clicked-menu-item': isDesktop && activeItem === <?= $i ?>,
                     'folded-mobile': !isDesktop && activeItem !== null,
                     'clicked-menu-item-mobile': !isDesktop && activeItem === <?= $i ?> 
