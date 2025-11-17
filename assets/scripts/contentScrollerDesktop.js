@@ -59,8 +59,8 @@ document.addEventListener('DOMContentLoaded', function() {
             svgMask.setAttribute('width', window.innerWidth);
             svgMask.setAttribute('height', window.innerHeight);
             defs.appendChild(svgMask);
-            
-            // Create a group inside the mask that will be clipped (like the red 'group')
+                
+                // Create a group inside the mask that will be clipped (like the red 'group')
             const maskClippedGroup = document.createElementNS(svgNS, 'g');
             maskClippedGroup.setAttribute('id', 'mask-clipped-2');
             maskClippedGroup.setAttribute('clip-path', 'url(#scroller-boundary-clip)');
@@ -400,8 +400,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Only process inner-scroller-2 (index 1)
                 const index = 1;
                 const numberContainer = numberContainers[index];
-                const innerScroller = innerScrollers[index];
-                
+                    const innerScroller = innerScrollers[index];
+                    
                 if (numberContainer && innerScroller && svgGroup && svgMask && maskClippedGroup && numberGroup) {
                     
                     // Clear previous shapes

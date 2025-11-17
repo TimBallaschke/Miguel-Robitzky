@@ -422,11 +422,36 @@ html {
   right: 1rem;
 }
 
+.projects-images-clones-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  pointer-events: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  opacity: 0;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.projects-images-clones-container.masked {
+  mask: url(#combined-mask-2);
+  -webkit-mask: url(#combined-mask-2);
+}
+
 .projects-images-clone {
+  position: absolute;
+  top: 0;
+  left: 0;
   pointer-events: none !important;
   -webkit-user-select: none !important;
      -moz-user-select: none !important;
           user-select: none !important;
+  z-index: 1000;
 }
 .projects-images-clone * {
   pointer-events: none !important;
