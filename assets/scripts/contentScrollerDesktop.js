@@ -81,6 +81,14 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let initialPositions = [];
     
+    // Track last known connection state to prevent flickering during class transitions
+    // Use a "sticky" approach: once connected, stay connected for a brief period
+    let lastConnectionState = false;
+    let connectionTrueCount = 0;
+    let connectionFalseCount = 0;
+    const STABILITY_THRESHOLD = 3; // Need 3 consecutive checks to change state
+    
+    
     // Function to capture initial top positions from CSS
     function captureInitialPositions() {
         // Temporarily remove inline styles to get CSS values
@@ -160,47 +168,27 @@ document.addEventListener('DOMContentLoaded', function() {
             const distancePassedTop = numberTop - innerScrollerTop;
             const hasPassedTopThreshold = innerScrollerTop < numberTop;
             
-            // Console logs for debugging
-            console.log(`Number ${index + 1}:`, {
-                isMovingWithScroller,
-                isAtMinPosition,
-                isScrollerOverlapping,
-                distanceFromBottom: distanceFromBottom.toFixed(2),
-                distancePassedTop: distancePassedTop.toFixed(2),
-                menuItemSpacing: menuItemSpacing.toFixed(2),
-                shouldStayConnected,
-                hasPassedTopThreshold,
-                innerScrollerTop: innerScrollerTop.toFixed(2),
-                innerScrollerBottom: innerScrollerBottom.toFixed(2),
-                numberTop: numberTop.toFixed(2),
-                numberBottom: numberBottom.toFixed(2)
-            });
-            
             // Update classes based on state
             if (isMovingWithScroller && !isAtMinPosition) {
                 // Number is moving with scroller but hasn't reached final position
-                console.log(`Number ${index + 1}: Adding connected-top`);
                 numberContainer.classList.add('connected-top');
                 numberContainer.classList.remove('connected-middle');
                 innerScroller.classList.add('connected-top');
                 innerScroller.classList.remove('connected-middle');
             } else if (isAtMinPosition && isScrollerOverlapping && shouldStayConnected && !hasPassedTopThreshold) {
                 // Number at final position, still connected, but hasn't passed top threshold yet - keep connected-top
-                console.log(`Number ${index + 1}: Keeping connected-top`);
                 numberContainer.classList.add('connected-top');
                 numberContainer.classList.remove('connected-middle');
                 innerScroller.classList.add('connected-top');
                 innerScroller.classList.remove('connected-middle');
             } else if (isAtMinPosition && isScrollerOverlapping && shouldStayConnected && hasPassedTopThreshold) {
                 // Number has reached final position, scroller has passed top threshold, and bottom is still far enough
-                console.log(`Number ${index + 1}: Adding connected-middle, removing connected-top`);
                 numberContainer.classList.remove('connected-top');
                 numberContainer.classList.add('connected-middle');
                 innerScroller.classList.remove('connected-top');
                 innerScroller.classList.add('connected-middle');
             } else {
                 // Number is at initial position, scroller has reached disconnect threshold
-                console.log(`Number ${index + 1}: Removing all classes`);
                 numberContainer.classList.remove('connected-top', 'connected-middle');
                 innerScroller.classList.remove('connected-top', 'connected-middle');
             }
@@ -210,13 +198,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 let beforeCutOutBottomRadius = 0;
                 
                 const hasConnectedMiddle = numberContainer.classList.contains('connected-middle');
-                
-                console.log(`Number ${index + 1} border-radius calc:`, {
-                    hasConnectedMiddle,
-                    isAtMinPosition,
-                    distanceFromBottom: distanceFromBottom.toFixed(2),
-                    initialRadius: beforeCutOutBottomRadius
-                });
                 
                 // Only animate when connected-middle class is present
                 if (hasConnectedMiddle) {
@@ -247,8 +228,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         const clampedProgress = Math.max(0, Math.min(1, passedProgress));
                         
                         beforeCutOutBottomRadius = menuItemSpacing * clampedProgress;
-                        
-                        console.log(`  -> Connected-middle (passedDistance): passedDistance=${passedDistance.toFixed(2)}, progress=${clampedProgress.toFixed(3)}, radius=${beforeCutOutBottomRadius.toFixed(2)}`);
                     }
                     // Scenario 2: Animate based on distanceFromBottom (when approaching from below)
                     // Connected-middle is added at 2 * --container-gap
@@ -268,21 +247,14 @@ document.addEventListener('DOMContentLoaded', function() {
                         const clampedProgress = Math.max(0, Math.min(1, bottomProgress));
                         
                         beforeCutOutBottomRadius = menuItemSpacing * clampedProgress;
-                        
-                        console.log(`  -> Connected-middle (distanceFromBottom): distanceFromBottom=${distanceFromBottom.toFixed(2)}, progress=${clampedProgress.toFixed(3)}, radius=${beforeCutOutBottomRadius.toFixed(2)}`);
                     }
                     // Otherwise, stay at full value
                     else {
                         beforeCutOutBottomRadius = menuItemSpacing;
-                        console.log(`  -> Connected-middle (full): passedDistance=${passedDistance.toFixed(2)}, distanceFromBottom=${distanceFromBottom.toFixed(2)}, radius at max`);
                     }
-                }
-                else {
-                    console.log(`  -> No animation condition met, radius stays at 0`);
                 }
                 
                 // Always apply the calculated value (including 0 when neither condition is met)
-                console.log(`  -> Final applied radius: ${beforeCutOutBottomRadius.toFixed(2)}px`);
                 numberBeforeCutOut.style.borderBottomRightRadius = `${beforeCutOutBottomRadius}px`;
             }
             
@@ -427,9 +399,40 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Check if elements are connected
                     const hasConnectedTop = numberContainer.classList.contains('connected-top');
                     const hasConnectedMiddle = numberContainer.classList.contains('connected-middle');
+                    const isCurrentlyConnected = hasConnectedTop || hasConnectedMiddle;
                     
-                    // Only draw the number container when it's connected
-                    if (hasConnectedTop || hasConnectedMiddle) {
+                    // Use stability counter to prevent flickering during brief class transitions
+                    // Require multiple consecutive checks before changing state
+                    if (isCurrentlyConnected) {
+                        connectionTrueCount++;
+                        connectionFalseCount = 0;
+                        // Switch to connected after threshold consecutive true checks
+                        if (connectionTrueCount >= STABILITY_THRESHOLD) {
+                            lastConnectionState = true;
+                        }
+                    } else {
+                        connectionFalseCount++;
+                        connectionTrueCount = 0;
+                        // Switch to disconnected after threshold consecutive false checks
+                        if (connectionFalseCount >= STABILITY_THRESHOLD) {
+                            lastConnectionState = false;
+                        }
+                    }
+                    
+                    // Use the stable connection state for mask drawing
+                    // This prevents mask from disappearing during brief class transition moments
+                    if (lastConnectionState) {
+                        // Clear and redraw
+                        svgGroup.innerHTML = '';
+                        maskClippedGroup.innerHTML = '';
+                        numberGroup.innerHTML = '';
+                        
+                        Array.from(svgMask.children).forEach(child => {
+                            if (child.id !== 'mask-clipped-2') {
+                                child.remove();
+                            }
+                        });
+                        
                         // Define offset to shift number container + connectors right to cover edge
                         const maskOffset = 0; // No offset needed with stroke-width: 0
                         
@@ -456,11 +459,11 @@ document.addEventListener('DOMContentLoaded', function() {
                             parseFloat(numberStyle.borderBottomLeftRadius) || 0
                         );
                         
-                        // Add number to unmasked group (visible outside scroller boundaries) - VISIBLE
+                        // Add number to unmasked group (visible outside scroller boundaries) - INVISIBLE
                         const numberVisPath = document.createElementNS(svgNS, 'path');
                         numberVisPath.setAttribute('d', numberPath);
                         numberVisPath.setAttribute('fill', 'red');
-                        numberVisPath.setAttribute('opacity', '0.3');
+                        numberVisPath.setAttribute('opacity', '0');
                         numberGroup.appendChild(numberVisPath);
                         
                         // Helper functions that mirror the red visualization structure
@@ -468,11 +471,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Add to red 'svgGroup' (clipped) AND white maskClippedGroup (clipped)
                         // pathDataShifted is optional for mask (shifted right)
                         const addShape = (pathData, pathDataShifted = null) => {
-                            // Red visualization - clipped by scroller boundary (VISIBLE)
+                            // Red visualization - clipped by scroller boundary (INVISIBLE)
                             const visPath = document.createElementNS(svgNS, 'path');
                             visPath.setAttribute('d', pathData);
                             visPath.setAttribute('fill', 'red');
-                            visPath.setAttribute('opacity', '0.3');
+                            visPath.setAttribute('opacity', '0');
                             svgGroup.appendChild(visPath);
                             
                             // White mask - clipped by scroller boundary (use shifted version if provided)
@@ -490,11 +493,11 @@ document.addEventListener('DOMContentLoaded', function() {
                         // Add to red 'numberGroup' (NOT clipped) AND white mask root (NOT clipped)
                         // pathData is for red vis, pathDataShifted is optional for mask (shifted right)
                         const addUnclippedShape = (pathData, pathDataShifted = null) => {
-                            // Red visualization - NOT clipped (VISIBLE)
+                            // Red visualization - NOT clipped (INVISIBLE)
                             const visPath = document.createElementNS(svgNS, 'path');
                             visPath.setAttribute('d', pathData);
                             visPath.setAttribute('fill', 'red');
-                            visPath.setAttribute('opacity', '0.3');
+                            visPath.setAttribute('opacity', '0');
                             numberGroup.appendChild(visPath);
                             
                             // White mask - NOT clipped (use shifted version if provided)

@@ -1,18 +1,10 @@
 // Image positioning script - clones project images with fixed positioning
 // Only applies on desktop (viewport width > 768px)
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('[ImagePositioning] Script initialized');
-    
     const scroller = document.querySelector('.scroller');
     const projectsImages = document.querySelectorAll('.projects-images');
     
-    console.log('[ImagePositioning] Found elements:', {
-        scroller: !!scroller,
-        projectsImagesCount: projectsImages.length
-    });
-    
     if (!scroller || !projectsImages.length) {
-        console.log('[ImagePositioning] Missing required elements, exiting');
         return;
     }
 
@@ -23,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const clonesContainer = document.querySelector('.projects-images-clones-container');
     
     if (!clonesContainer) {
-        console.log('[ImagePositioning] Clones container not found in DOM');
         return;
     }
 
@@ -34,21 +25,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Initialize clones (they already exist in DOM from PHP)
     function initializeClones() {
-        console.log('[ImagePositioning] initializeClones() called');
-        
         imageClones.length = 0;
 
         // Skip on mobile
         if (isMobile()) {
-            console.log('[ImagePositioning] Mobile device detected, hiding clones');
             clonesContainer.style.display = 'none';
             return;
         }
         
         // Show container on desktop
         clonesContainer.style.display = 'block';
-        
-        console.log('[ImagePositioning] Container found in DOM with clones already rendered by PHP');
 
         // Get the clones that were rendered by PHP
         const clones = clonesContainer.querySelectorAll('.projects-images-clone');
@@ -58,11 +44,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const clone = clones[index];
             
             if (!clone) {
-                console.log(`[ImagePositioning] Warning: Clone ${index} not found`);
                 return;
             }
-            
-            console.log(`[ImagePositioning] Pairing clone ${index + 1}/${projectsImages.length}`);
             
             // Keep originals visible (they're inside content-container)
             // Only clones will have controlled opacity
@@ -73,8 +56,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 clone
             });
         });
-        
-        console.log('[ImagePositioning] All clones initialized:', imageClones.length);
     }
 
     // Update clone positions to follow originals
@@ -95,15 +76,6 @@ document.addEventListener('DOMContentLoaded', function() {
             clone.style.left = rect.left + 'px';
             clone.style.width = rect.width + 'px';
             clone.style.height = rect.height + 'px';
-            
-            if (index === 0) {
-                console.log('[ImagePositioning] First clone position:', {
-                    top: rect.top,
-                    left: rect.left,
-                    width: rect.width,
-                    height: rect.height
-                });
-            }
         });
     }
 
@@ -125,6 +97,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const innerScroller2 = document.querySelector('#inner-scroller-2');
     const numberContainer2 = document.querySelector('#number-2-container');
     
+    // Track current visibility state to avoid unnecessary updates
+    let currentOpacity = '0';
+    
     // Function to control container visibility based on connection state
     // Container (with mask) should only be visible when red SVG is being drawn
     function updateCloneVisibility() {
@@ -134,24 +109,36 @@ document.addEventListener('DOMContentLoaded', function() {
         const hasConnectedMiddle = numberContainer2.classList.contains('connected-middle');
         const isConnected = hasConnectedTop || hasConnectedMiddle;
         
-        // Show/hide entire container (mask moves/reshapes automatically with SVG)
-        clonesContainer.style.opacity = isConnected ? '1' : '0';
+        const targetOpacity = isConnected ? '1' : '0';
         
-        console.log('[ImagePositioning] Container ' + (isConnected ? 'visible' : 'hidden'));
+        // Only update if opacity actually changed to prevent flickering
+        if (currentOpacity !== targetOpacity) {
+            clonesContainer.style.opacity = targetOpacity;
+            currentOpacity = targetOpacity;
+        }
+    }
+    
+    // Use requestAnimationFrame to batch updates and reduce flickering
+    let rafScheduled = false;
+    
+    function scheduleUpdate() {
+        if (!rafScheduled) {
+            rafScheduled = true;
+            requestAnimationFrame(() => {
+                updateClonePositions();
+                updateCloneVisibility();
+                rafScheduled = false;
+            });
+        }
     }
     
     // Initialize - clones already in DOM from PHP
-    console.log('[ImagePositioning] Starting initialization...');
-    
     initializeClones();
     updateClonePositions();
     updateCloneVisibility(); // Initial visibility check
 
-    // Update on scroll
-    scroller.addEventListener('scroll', () => {
-        updateClonePositions();
-        updateCloneVisibility();
-    });
+    // Update on scroll - use RAF for smoother performance and avoid flickering
+    scroller.addEventListener('scroll', scheduleUpdate, { passive: true });
     
     // Update on resize
     window.addEventListener('resize', () => {

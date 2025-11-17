@@ -405,6 +405,9 @@
     // Hidden by default
     opacity: 0;
     
+    // Smooth transition to prevent flickering during class changes
+    transition: opacity 0.3s ease-out;
+    
     // Mask applied directly to container (moves/reshapes with red SVG)
     mask: url(#combined-mask-2);
     -webkit-mask: url(#combined-mask-2);
