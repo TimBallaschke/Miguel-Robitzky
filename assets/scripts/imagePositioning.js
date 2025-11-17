@@ -42,10 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (isMobile()) {
             console.log('[ImagePositioning] Mobile device detected, hiding clones');
             clonesContainer.style.display = 'none';
-            // Show originals on mobile
-            projectsImages.forEach(img => {
-                img.style.opacity = '1';
-            });
             return;
         }
         
@@ -68,8 +64,8 @@ document.addEventListener('DOMContentLoaded', function() {
             
             console.log(`[ImagePositioning] Pairing clone ${index + 1}/${projectsImages.length}`);
             
-            // Hide the original (clone will be visible instead)
-            original.style.opacity = '0';
+            // Keep originals visible (they're inside content-container)
+            // Only clones will have controlled opacity
             
             // Store reference
             imageClones.push({
@@ -87,10 +83,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateClonePositions() {
         // Skip on mobile
         if (isMobile()) {
-            // Show originals on mobile
-            projectsImages.forEach(img => {
-                img.style.opacity = '1';
-            });
             return;
         }
 
