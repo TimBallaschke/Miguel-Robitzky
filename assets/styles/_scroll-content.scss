@@ -390,9 +390,9 @@
     }
 }
 
-// Container for all cloned images - mask applied via CSS for Safari compatibility
+// Container for all cloned images - ONE mask applied to entire container
 .projects-images-clones-container {
-    // Fixed position covering viewport
+    // Fixed position covering viewport (doesn't move)
     position: fixed;
     top: 0;
     left: 0;
@@ -401,18 +401,13 @@
     z-index: 100;
     pointer-events: none;
     user-select: none;
+    
+    // Hidden by default
     opacity: 0;
     
-    // GPU acceleration
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    
-    // Mask applied via class when ready
-    &.masked {
-        mask: url(#combined-mask-2);
-        -webkit-mask: url(#combined-mask-2);
-    }
+    // Mask applied directly to container (moves/reshapes with red SVG)
+    mask: url(#combined-mask-2);
+    -webkit-mask: url(#combined-mask-2);
 }
 
 .projects-images-clone {

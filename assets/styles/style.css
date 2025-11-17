@@ -434,11 +434,6 @@ html {
      -moz-user-select: none;
           user-select: none;
   opacity: 0;
-  transform: translateZ(0);
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-.projects-images-clones-container.masked {
   mask: url(#combined-mask-2);
   -webkit-mask: url(#combined-mask-2);
 }
