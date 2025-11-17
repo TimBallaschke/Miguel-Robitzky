@@ -272,16 +272,22 @@ document.addEventListener('DOMContentLoaded', function() {
                                         console.log('Mobile: Removed "no-opacity" class');
                                     }, 400);
                                     
-                                    // Remove no-radius class after 500ms
+                                    // Remove no-radius class after 400ms
                                     setTimeout(() => {
                                         startMenuItems.forEach(item => {
                                             item.classList.remove('no-radius');
                                         });
                                         console.log('Mobile: Removed "no-radius" class');
-                                    }, 400);
+                                    }, 350);
                                     
                                     // Add start-menu-opened class back to body
                                     document.body.classList.add('start-menu-opened');
+                                    
+                                    // Reset Alpine.js activeItem at the very end (after all cleanup)
+                                    setTimeout(() => {
+                                        console.log('Mobile: 800ms timeout fired - dispatching reset-menu event');
+                                        window.dispatchEvent(new CustomEvent('reset-menu'));
+                                    }, 800);
                                     
                                     console.log('Reset all items to initial position');
                                 }, 500);
