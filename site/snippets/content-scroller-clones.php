@@ -74,6 +74,7 @@
     ?>
         <div class="project-text-container project-text-clone text-small">
             <div class="text-container-white-gradient"></div>
+            <div class="mobile-scroll-gradient"></div>
             <div class="project-text-content">
                 <div class="project-text"><?= $projekt->text()->kirbytext() ?>
                     <div class="project-navigation">
