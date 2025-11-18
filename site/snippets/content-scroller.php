@@ -61,7 +61,19 @@ $sections = 4;
                             foreach ($images as $image): 
                             ?>
                                 <div class="project-image <?= $index === 0 ? 'active' : '' ?>">
-                                    <img src="<?= $image->url() ?>" alt="<?= $projekt->title() ?>">
+                                    <img 
+                                        src="<?= $image->resize(20, 20)->url() ?>"
+                                        srcset="<?= 
+                                            $image->srcset([
+                                                '400w' => ['width' => 400, 'format' => 'webp'],
+                                                '600w' => ['width' => 600, 'format' => 'webp'],
+                                                '800w' => ['width' => 800, 'format' => 'webp'],
+                                                '1200w' => ['width' => 1200, 'format' => 'webp']
+                                            ])
+                                        ?>"
+                                        loading="lazy"
+                                        alt="<?= $projekt->title() ?>"
+                                    >
                                 </div>
                             <?php 
                             $index++;
@@ -128,7 +140,19 @@ $sections = 4;
                         <div class="pressebilder-images">
                             <?php foreach ($images as $image): ?>
                                 <div class="pressebild-item">
-                                    <img src="<?= $image->url() ?>" alt="<?= $image->filename() ?>">
+                                    <img 
+                                        src="<?= $image->resize(20, 20)->url() ?>"
+                                        srcset="<?= 
+                                            $image->srcset([
+                                                '400w' => ['width' => 400, 'format' => 'webp'],
+                                                '600w' => ['width' => 600, 'format' => 'webp'],
+                                                '800w' => ['width' => 800, 'format' => 'webp'],
+                                                '1200w' => ['width' => 1200, 'format' => 'webp']
+                                            ])
+                                        ?>"
+                                        loading="lazy"
+                                        alt="<?= $image->filename() ?>"
+                                    >
                                 </div>
                             <?php endforeach; ?>
                         </div>
