@@ -651,6 +651,12 @@
 .pressebilder-download {
     font-family: "FocalMaxi Medium Italic";
     text-decoration: underline;
+    color: inherit;
+    cursor: pointer;
+    
+    &:hover {
+        opacity: 0.7;
+    }
 }
 
 .pressebilder-images {

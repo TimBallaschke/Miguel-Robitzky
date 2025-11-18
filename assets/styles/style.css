@@ -693,6 +693,11 @@ body.fullscreen-gallery {
 .pressebilder-download {
   font-family: "FocalMaxi Medium Italic";
   text-decoration: underline;
+  color: inherit;
+  cursor: pointer;
+}
+.pressebilder-download:hover {
+  opacity: 0.7;
 }
 
 .pressebilder-images {
