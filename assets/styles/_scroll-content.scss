@@ -316,13 +316,12 @@
 .project {
     position: relative;
     width: 100%;
-    height: 100dvh;
 }
 
 .projects-images {
     position: sticky;
     width: 100%;
-    height: 30dvh;
+    height: var(--project-images-height);
     top: 0; // Stick below the page title
     right: 0;
     overflow: hidden;
@@ -443,9 +442,11 @@
 }
 
 .project-text-container {
-    background-color: white;
+    background-color: var(--grey-color);
     position: relative;
     width: 100%;
+    min-height: var(--project-images-height);
+    padding-left: var(--text-padding);
     z-index: 2000;
 }
 
@@ -455,7 +456,7 @@
     width: 100%;
     top: calc(-1 * 4rem);
     left: 0;
-    background: linear-gradient(to bottom, transparent, white);
+    background: linear-gradient(to bottom, transparent, var(--grey-color));
 }
 
 // Container for all cloned text - masked by same SVG mask as images
@@ -485,5 +486,6 @@
     left: var(--page-padding);
     user-select: text;
     width: calc(100vw - 2 * var(--page-padding)); // Match original width
+    padding-left: calc(var(--menu-item-height) + var(--container-gap) + var(--text-padding));
 }
 

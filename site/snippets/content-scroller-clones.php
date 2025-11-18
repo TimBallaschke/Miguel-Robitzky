@@ -1,5 +1,5 @@
 <!-- Clones for images (masked by SVG) -->
-<div class="projects-images-clones-container">
+<div class="projects-images-clones-container hidden">
     <?php 
     // Get all project pages (children of the projekte page)
     $projektePages = $site->find('projekte');
@@ -42,7 +42,7 @@
 </div>
 
 <!-- Clones for text (unmasked, follow originals) -->
-<div class="project-text-clones-container">
+<div class="project-text-clones-container hidden">
     <?php 
     // Get all project pages again for text clones
     if ($projektePages && $projektePages->children()->isNotEmpty()): 

@@ -102,6 +102,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to control container visibility based on connection state
     // Container (with mask) should only be visible when red SVG is being drawn
+    // AND when content-container is not hidden
     function updateCloneVisibility() {
         if (!numberContainer2 || isMobile()) return;
         
@@ -109,7 +110,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const hasConnectedMiddle = numberContainer2.classList.contains('connected-middle');
         const isConnected = hasConnectedTop || hasConnectedMiddle;
         
-        const targetOpacity = isConnected ? '1' : '0';
+        // Also check if content-container is hidden
+        const contentContainer = document.querySelector('.content-container');
+        const isContentHidden = contentContainer && contentContainer.classList.contains('hidden');
+        
+        // Only show clones when connected AND content is not hidden
+        const targetOpacity = (isConnected && !isContentHidden) ? '1' : '0';
         
         // Only update if opacity actually changed to prevent flickering
         if (currentOpacity !== targetOpacity) {
@@ -145,5 +151,17 @@ document.addEventListener('DOMContentLoaded', function() {
         handleResize();
         updateCloneVisibility();
     });
+    
+    // Watch for changes to content-container class (when "hidden" is removed)
+    const contentContainer = document.querySelector('.content-container');
+    if (contentContainer) {
+        const observer = new MutationObserver(() => {
+            updateCloneVisibility();
+        });
+        observer.observe(contentContainer, { 
+            attributes: true, 
+            attributeFilter: ['class'] 
+        });
+    }
 });
 

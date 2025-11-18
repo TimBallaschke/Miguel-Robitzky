@@ -18,6 +18,7 @@
   --transition-duration-1: 250ms;
   --monospace-font-size: 1rem;
   --text-padding: 4rem;
+  --project-images-height: calc(100dvh - var(--page-title-size));
 }
 @media (max-width: 768px) {
   :root {
@@ -356,13 +357,12 @@ html {
 .project {
   position: relative;
   width: 100%;
-  height: 100dvh;
 }
 
 .projects-images {
   position: sticky;
   width: 100%;
-  height: 30dvh;
+  height: var(--project-images-height);
   top: 0;
   right: 0;
   overflow: hidden;
@@ -467,9 +467,11 @@ html {
 }
 
 .project-text-container {
-  background-color: white;
+  background-color: var(--grey-color);
   position: relative;
   width: 100%;
+  min-height: var(--project-images-height);
+  padding-left: var(--text-padding);
   z-index: 2000;
 }
 
@@ -479,7 +481,7 @@ html {
   width: 100%;
   top: -4rem;
   left: 0;
-  background: linear-gradient(to bottom, transparent, white);
+  background: linear-gradient(to bottom, transparent, var(--grey-color));
 }
 
 .project-text-clones-container {
@@ -506,6 +508,7 @@ html {
      -moz-user-select: text;
           user-select: text;
   width: calc(100vw - 2 * var(--page-padding));
+  padding-left: calc(var(--menu-item-height) + var(--container-gap) + var(--text-padding));
 }
 
 .start-menu-container {

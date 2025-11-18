@@ -36,6 +36,8 @@
 
     --text-padding: 4rem;
 
+    --project-images-height: calc(100dvh - var(--page-title-size));
+
     @include mobile {
         --border-radius: 3rem;
         --container-gap: 2rem;
