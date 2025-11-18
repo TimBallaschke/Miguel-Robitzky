@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!scroller || innerScrollers.length === 0) return;
 
     // Scroll speed in pixels per millisecond (adjust this to control speed)
-    const SCROLL_SPEED = 3; // 3px per ms = 3000px per second
+    const SCROLL_SPEED = 4; // 3px per ms = 3000px per second
     
     let scrollAnimation = null; // Track current animation
     
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             console.log(`Start menu item ${index + 1} clicked, scrolling to corresponding inner-scroller`);
 
-            // Small delay to allow Alpine.js and mobile positioning to complete first
+            // Delay to allow offset-top class removal to complete (happens at 700ms in startMenuDesktop.js)
             setTimeout(() => {
                 // Get the position of the inner-scroller relative to the scroller container
                 const scrollerRect = scroller.getBoundingClientRect();
@@ -103,8 +103,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Current scroll position + (inner-scroller top - scroller top) + 1px extra
                 const targetScrollTop = scroller.scrollTop + (innerScrollerRect.top - scrollerRect.top) + 1;
 
-                // Smooth scroll with slower speed (0.1px per ms) for start menu items
-                smoothScrollTo(targetScrollTop, 6);
+                // Instant scroll for start menu items (no animation)
+                scroller.scrollTop = targetScrollTop;
+                
+                // Trigger mask and clone updates by scrolling 1px with very fast animation
+                setTimeout(() => {
+                    const currentScrollTop = scroller.scrollTop;
+                    smoothScrollTo(currentScrollTop + 5, 0.1); // 100px per ms = very fast
+                    console.log('Desktop: Triggered 1px scroll to update mask and clones');
+                }, 100);
+
             }, 50);
         });
 

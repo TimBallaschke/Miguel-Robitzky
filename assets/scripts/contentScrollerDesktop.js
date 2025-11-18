@@ -733,5 +733,11 @@ document.addEventListener('DOMContentLoaded', function() {
     captureInitialPositions();
     updateNumberPositions();
     updateSVGShapes();
+    
+    // Expose update functions globally for manual triggering
+    window.forceScrollerUpdate = function() {
+        updateNumberPositions();
+        updateSVGShapes();
+    };
 });
 

@@ -71,6 +71,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function checkConnectedState() {
         console.log('=== checkConnectedState CALLED ===');
         const isMobileView = isMobile();
+        
+        // Desktop only: Add "offset-top" class back to offset elements at the very beginning
+        if (!isMobileView) {
+            const offsetElements = document.querySelectorAll('.offset-element');
+            offsetElements.forEach(element => {
+                element.classList.add('offset-top');
+            });
+        }
+        
         const startMenuItems = document.querySelectorAll('.start-menu-item');
         const startMenu = document.querySelector('.start-menu');
         const startMenuContainer = document.querySelector('.start-menu-container');

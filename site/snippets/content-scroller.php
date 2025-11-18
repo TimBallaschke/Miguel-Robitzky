@@ -50,7 +50,7 @@ $sections = 4;
                 ?>
                     <div class="project">
                         <div class="projects-images">
-                            <div class="project-header offset-top">
+                            <div class="project-header offset-element offset-top">
                                 <div class="projects-title button-label"><?= $projektePages->title() ?></div>
                                 <div class="project-title text-large bold"><?= $projekt->title() ?></div>
                             </div>
@@ -87,7 +87,7 @@ $sections = 4;
                         <div class="project-text-container text-small">
                             <div class="text-container-white-gradient"></div>
                             <div class="project-text-content">
-                                <div class="project-text"><?= $projekt->text() ?>
+                                <div class="project-text"><?= $projekt->text()->kirbytext() ?>
                                     <div class="project-navigation">
                                         <?php if ($hasPrev): ?>
                                             <button class="project-nav-button project-nav-prev button-label">vorheriges Projekt ↑</button>
@@ -108,7 +108,18 @@ $sections = 4;
         </div>
         
         <div id="inner-scroller-3" class="inner-scroller">
-            <!-- Add content for section 3 here -->
+            <?php 
+            // Get the Pressebilder page
+            $pressebilderPage = $site->find('pressebilder');
+            if ($pressebilderPage): 
+            ?>
+                <div class="pressebilder-content offset-element offset-top">
+                    <div class="pressebilder-title button-label"><?= $pressebilderPage->title() ?></div>
+                    <?php if ($pressebilderPage->text()->isNotEmpty()): ?>
+                        <div class="pressebilder-text text-large"><?= $pressebilderPage->text()->kirbytext() ?></div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
         </div>
         
         <div id="inner-scroller-4" class="inner-scroller">

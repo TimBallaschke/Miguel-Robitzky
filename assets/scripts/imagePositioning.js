@@ -178,5 +178,11 @@ document.addEventListener('DOMContentLoaded', function() {
         attributes: true, 
         attributeFilter: ['class'] 
     });
+    
+    // Expose update functions globally for manual triggering
+    window.forceImageClonesUpdate = function() {
+        updateClonePositions();
+        updateCloneVisibility();
+    };
 });
 

@@ -33,12 +33,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 setTimeout(() => {
-                    // Remove "offset-top" class from all project headers
-                    const projectHeaders = document.querySelectorAll('.project-header');
-                    projectHeaders.forEach(header => {
-                        header.classList.remove('offset-top');
+                    // Remove "offset-top" class from all offset elements
+                    const offsetElements = document.querySelectorAll('.offset-element');
+                    offsetElements.forEach(element => {
+                        element.classList.remove('offset-top');
                     });
-                }, 0);
+                    
+                }, 200);
                 
             }, 500);
             
@@ -48,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     startMenuContainer.classList.add('display-none');
                     console.log('Desktop: Added "display-none" to start-menu-container');
                 }
-            }, 900);
+            }, 800);
         });
     });
 });

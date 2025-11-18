@@ -9,6 +9,15 @@ options:
   delete: false
 
 sections:
+  text:
+    type: fields
+    fields:
+      text:
+        label: Text
+        type: textarea
+        size: small
+        buttons: false
+        
   images:
     type: files
     headline: Pressebilder

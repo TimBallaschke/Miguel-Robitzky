@@ -7,7 +7,7 @@
         foreach ($projektePages->children() as $projekt): 
     ?>
         <div class="projects-images projects-images-clone">
-            <div class="project-header offset-top">
+            <div class="project-header offset-element offset-top">
                 <div class="projects-title button-label"><?= $projektePages->title() ?></div>
                 <div class="project-title text-large bold"><?= $projekt->title() ?></div>
             </div>
@@ -63,7 +63,7 @@
         <div class="project-text-container project-text-clone text-small">
             <div class="text-container-white-gradient"></div>
             <div class="project-text-content">
-                <div class="project-text"><?= $projekt->text() ?>
+                <div class="project-text"><?= $projekt->text()->kirbytext() ?>
                     <div class="project-navigation">
                         <?php if ($hasPrev): ?>
                             <button class="project-nav-button project-nav-prev button-label">vorheriges Projekt ↑</button>
