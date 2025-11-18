@@ -465,6 +465,13 @@ html {
   pointer-events: auto !important;
 }
 
+.project-text-container {
+  background-color: white;
+  position: relative;
+  width: 100%;
+  z-index: 2000;
+}
+
 .start-menu-container {
   position: fixed;
   top: var(--page-title-size);

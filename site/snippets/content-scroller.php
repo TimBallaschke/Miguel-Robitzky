@@ -52,6 +52,11 @@ $sections = 4;
                                 </button>
                             <?php endif; ?>
                         </div>
+                        <div class="project-text-container">
+                            <div class="project-text-content">
+                                <div class="project-text"><?= $projekt->text() ?></div>
+                            </div>
+                        </div>
                     </div>
                 <?php 
                     endforeach;
