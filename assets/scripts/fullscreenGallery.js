@@ -72,7 +72,8 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Adding active class to overlay');
             fullscreenOverlay.classList.add('active');
             console.log('Overlay classList:', fullscreenOverlay.classList);
-            // Prevent body scroll
+            // Add class to body and prevent scroll
+            document.body.classList.add('fullscreen-gallery');
             document.body.style.overflow = 'hidden';
         }
         
@@ -85,21 +86,26 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log('Attached handler to clone button');
         }
         
+        // Function to close fullscreen
+        function closeFullscreen() {
+            fullscreenOverlay.classList.remove('active');
+            // Remove class from body and restore scroll
+            document.body.classList.remove('fullscreen-gallery');
+            document.body.style.overflow = '';
+        }
+        
         // Close fullscreen
         if (fullscreenClose) {
             fullscreenClose.addEventListener('click', (e) => {
                 e.stopPropagation();
-                fullscreenOverlay.classList.remove('active');
-                // Restore body scroll
-                document.body.style.overflow = '';
+                closeFullscreen();
             });
         }
         
         // Close on overlay click (but not on content)
         fullscreenOverlay.addEventListener('click', (e) => {
             if (e.target === fullscreenOverlay) {
-                fullscreenOverlay.classList.remove('active');
-                document.body.style.overflow = '';
+                closeFullscreen();
             }
         });
         
@@ -126,8 +132,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!fullscreenOverlay.classList.contains('active')) return;
             
             if (e.key === 'Escape') {
-                fullscreenOverlay.classList.remove('active');
-                document.body.style.overflow = '';
+                closeFullscreen();
             } else if (e.key === 'ArrowLeft') {
                 const newIndex = (currentIndex - 1 + fullscreenImages.length) % fullscreenImages.length;
                 showImage(newIndex);

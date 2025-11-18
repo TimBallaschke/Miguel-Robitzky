@@ -98,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Function to control container visibility based on connection state
     // AND when content-container is not hidden
+    // AND when fullscreen gallery is not open
     function updateCloneVisibility() {
         if (!numberContainer2 || isMobile()) return;
         
@@ -109,8 +110,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const contentContainer = document.querySelector('.content-container');
         const isContentHidden = contentContainer && contentContainer.classList.contains('hidden');
         
-        // Only show clones when connected AND content is not hidden
-        const targetOpacity = (isConnected && !isContentHidden) ? '1' : '0';
+        // Check if fullscreen gallery is open
+        const isFullscreenOpen = document.body.classList.contains('fullscreen-gallery');
+        
+        // Only show clones when connected AND content is not hidden AND fullscreen is not open
+        const targetOpacity = (isConnected && !isContentHidden && !isFullscreenOpen) ? '1' : '0';
         
         // Only update if opacity actually changed
         if (currentOpacity !== targetOpacity) {
@@ -160,5 +164,14 @@ document.addEventListener('DOMContentLoaded', function() {
             attributeFilter: ['class'] 
         });
     }
+    
+    // Watch for changes to body class (when "fullscreen-gallery" is added/removed)
+    const bodyObserver = new MutationObserver(() => {
+        updateCloneVisibility();
+    });
+    bodyObserver.observe(document.body, { 
+        attributes: true, 
+        attributeFilter: ['class'] 
+    });
 });
 
