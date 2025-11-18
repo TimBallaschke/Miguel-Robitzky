@@ -4,6 +4,36 @@
 }
 
 @font-face {
+    font-family: "FocalMaxi Medium";
+    src: url("../fonts/FocalMaxi-Medium-Trial.otf") format("opentype");
+}
+
+@font-face {
+    font-family: "FocalMaxi Medium Italic";
+    src: url("../fonts/FocalMaxi-MediumItalic-Trial.otf") format("opentype");
+}
+
+@font-face {
     font-family: "GeistMono";
     src: url("../fonts/GeistMono-Medium.ttf") format("truetype");
 }
+
+.text-large {
+    font-family: "FocalMaxi Medium";
+    font-size: var(--font-size-large);
+    line-height: 1.2;
+
+    strong {
+        font-family: "FocalMaxi";
+    }
+}
+
+.text-small {
+    font-family: "FocalMaxi Medium";
+    font-size: var(--font-size-small);
+    line-height: 1.2;
+
+    strong {
+        font-family: "FocalMaxi";
+    }
+}   

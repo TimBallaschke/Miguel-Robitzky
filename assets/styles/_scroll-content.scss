@@ -4,7 +4,7 @@
     left: calc(var(--page-padding) + var(--menu-item-height) + var(--container-gap));
     width: calc(100vw - 2 * var(--page-padding) - var(--menu-item-height) - var(--container-gap));
     height: calc(100vh - 10rem);
-    transition: opacity 200ms ease-in-out;
+    transition: opacity 300ms ease-in-out;
     opacity: 1;
     pointer-events: auto;
 
@@ -488,7 +488,7 @@
     position: relative;
     width: 100%;
     min-height: var(--project-images-height);
-    padding-left: var(--text-padding);
+    padding-left: var(--text-padding-1);
     z-index: 2000;
 }
 
@@ -534,6 +534,23 @@
     user-select: text;
     pointer-events: none; // Allow text selection even though parent has pointer-events: none
     width: calc(100vw - 2 * var(--page-padding)); // Match original width
-    padding-left: calc(var(--menu-item-height) + var(--container-gap) + var(--text-padding));
+    padding-left: calc(var(--menu-item-height) + var(--container-gap) + var(--text-padding-1));
 }
+
+.biografie-content {
+    padding-top: 0.93rem;
+    padding-left: var(--text-padding-1);
+    width: 100%;
+}
+
+.kurzbiografie-section {
+    padding-right: calc(var(--text-padding-1) * 2.75);
+}
+
+.schaffen-section {
+    padding-left: var(--text-padding-2);
+    padding-right: calc(var(--page-padding) * 3);
+}
+
+
 

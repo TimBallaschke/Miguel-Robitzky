@@ -11,7 +11,27 @@ $sections = 4;
 <div class="content-container hidden">
     <div class="scroller first-connected">
         <div id="inner-scroller-1" class="inner-scroller">
-            <!-- Add content for section 1 here -->
+            <?php 
+            // Get the Biografie und Schaffen page
+            $biografiePage = $site->find('biografie-und-schaffen');
+            if ($biografiePage): 
+            ?>
+                <div class="biografie-content">
+                    <div class="biografie-title button-label"><?= $biografiePage->title() ?></div>
+                    
+                    <?php if ($biografiePage->kurzbiografie()->isNotEmpty()): ?>
+                        <div class="kurzbiografie-section text-large">
+                            <div class="biografie-text"><?= $biografiePage->kurzbiografie()->kirbytext() ?></div>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <?php if ($biografiePage->schaffen()->isNotEmpty()): ?>
+                        <div class="schaffen-section text-small">
+                            <div class="schaffen-text"><?= $biografiePage->schaffen()->kirbytext() ?></div>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
         </div>
         
         <div id="inner-scroller-2" class="inner-scroller">

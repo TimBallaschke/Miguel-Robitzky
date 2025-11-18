@@ -9,7 +9,7 @@ $menuItems = 4;
 
 // Menu item labels
 $menuLabels = [
-    1 => 'Biografie & Schaffen',
+    1 => 'Biografie und Schaffen',
     2 => 'Projekte',
     3 => 'Pressebilder',
     4 => 'Kontakt'

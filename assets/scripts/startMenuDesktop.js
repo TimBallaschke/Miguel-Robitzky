@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     startMenuContainer.classList.add('display-none');
                     console.log('Desktop: Added "display-none" to start-menu-container');
                 }
-            }, 600);
+            }, 900);
         });
     });
 });
