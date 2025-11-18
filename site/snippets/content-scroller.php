@@ -40,7 +40,13 @@ $sections = 4;
                 // Get all project pages (children of the projekte page)
                 $projektePages = $site->find('projekte');
                 if ($projektePages && $projektePages->children()->isNotEmpty()): 
-                    foreach ($projektePages->children() as $projekt): 
+                    $allProjects = $projektePages->children();
+                    $totalProjects = $allProjects->count();
+                    $currentIndex = 0;
+                    foreach ($allProjects as $projekt):
+                        $hasPrev = $currentIndex > 0;
+                        $hasNext = $currentIndex < ($totalProjects - 1);
+                        $currentIndex++; 
                 ?>
                     <div class="project">
                         <div class="projects-images">
@@ -78,10 +84,19 @@ $sections = 4;
                                 </span>
                             </button>
                         </div>
-                        <div class="project-text-container">
+                        <div class="project-text-container text-small">
                             <div class="text-container-white-gradient"></div>
                             <div class="project-text-content">
-                                <div class="project-text"><?= $projekt->text() ?></div>
+                                <div class="project-text"><?= $projekt->text() ?>
+                                    <div class="project-navigation">
+                                        <?php if ($hasPrev): ?>
+                                            <button class="project-nav-button project-nav-prev button-label">vorheriges Projekt ↑</button>
+                                        <?php endif; ?>
+                                        <?php if ($hasNext): ?>
+                                            <button class="project-nav-button project-nav-next button-label">nächstes Projekt ↓</button>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

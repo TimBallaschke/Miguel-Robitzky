@@ -32,4 +32,5 @@
 <script src="/assets/scripts/textPositioning.js"></script>
 <script src="/assets/scripts/imageCarousel.js"></script>
 <script src="/assets/scripts/fullscreenGallery.js"></script>
+<script src="/assets/scripts/projectNavigation.js"></script>
 </html>

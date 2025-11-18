@@ -487,7 +487,36 @@
     width: 100%;
     min-height: var(--project-images-height);
     padding-left: var(--text-padding-1);
+    padding-right: calc(var(--page-padding) * 3);
+    padding-top: var(--page-padding);
+    padding-bottom: var(--page-padding);
     z-index: 2000;
+}
+
+.project-text {
+    position: relative;
+}
+
+.project-nav-prev {
+    position: absolute;
+    top: 0;
+    left: - 10rem;
+    width: 10rem;
+    white-space: wrap;
+    border: none;
+    background-color: transparent;
+    text-align: left;
+}
+
+.project-nav-next {
+    position: absolute;
+    bottom: 0;
+    left: - 10rem;
+    width: 10rem;
+    white-space: wrap;
+    border: none;
+    background-color: transparent;
+    text-align: left;
 }
 
 .text-container-white-gradient {
@@ -542,7 +571,7 @@
 }
 
 .kurzbiografie-section {
-    padding-right: calc(var(--text-padding-1) * 2.75);
+    padding-right: calc(var(--text-padding-1) * 2);
 }
 
 .schaffen-section {

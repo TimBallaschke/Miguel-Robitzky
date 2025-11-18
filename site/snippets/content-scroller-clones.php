@@ -52,12 +52,27 @@
     <?php 
     // Get all project pages again for text clones
     if ($projektePages && $projektePages->children()->isNotEmpty()): 
-        foreach ($projektePages->children() as $projekt): 
+        $allProjects = $projektePages->children();
+        $totalProjects = $allProjects->count();
+        $currentIndex = 0;
+        foreach ($allProjects as $projekt): 
+            $hasPrev = $currentIndex > 0;
+            $hasNext = $currentIndex < ($totalProjects - 1);
+            $currentIndex++;
     ?>
-        <div class="project-text-container project-text-clone">
+        <div class="project-text-container project-text-clone text-small">
             <div class="text-container-white-gradient"></div>
             <div class="project-text-content">
-                <div class="project-text"><?= $projekt->text() ?></div>
+                <div class="project-text"><?= $projekt->text() ?>
+                    <div class="project-navigation">
+                        <?php if ($hasPrev): ?>
+                            <button class="project-nav-button project-nav-prev button-label">vorheriges Projekt ↑</button>
+                        <?php endif; ?>
+                        <?php if ($hasNext): ?>
+                            <button class="project-nav-button project-nav-next button-label">nächstes Projekt ↓</button>
+                        <?php endif; ?>
+                    </div>
+                </div>
             </div>
         </div>
     <?php 
