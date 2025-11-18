@@ -482,7 +482,8 @@
     // Position clones absolutely within the fixed container
     position: absolute;
     top: 0;
-    left: 0;
-    user-select: text; // Allow text selection
+    left: var(--page-padding);
+    user-select: text;
+    width: calc(100vw - 2 * var(--page-padding)); // Match original width
 }
 

@@ -69,9 +69,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const rect = original.getBoundingClientRect();
             
             // Position the clone using viewport coordinates
+            // Only set top and height - left and width are controlled by CSS
             clone.style.top = rect.top + 'px';
-            clone.style.left = rect.left + 'px';
-            clone.style.width = rect.width + 'px';
             clone.style.height = rect.height + 'px';
         });
     }

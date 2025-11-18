@@ -34,6 +34,8 @@
 
     --monospace-font-size: 1rem;
 
+    --text-padding: 4rem;
+
     @include mobile {
         --border-radius: 3rem;
         --container-gap: 2rem;

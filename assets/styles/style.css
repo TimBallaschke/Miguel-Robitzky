@@ -17,6 +17,7 @@
   --page-title-size: 13.5rem;
   --transition-duration-1: 250ms;
   --monospace-font-size: 1rem;
+  --text-padding: 4rem;
 }
 @media (max-width: 768px) {
   :root {
@@ -500,10 +501,11 @@ html {
 .project-text-clone {
   position: absolute;
   top: 0;
-  left: 0;
+  left: var(--page-padding);
   -webkit-user-select: text;
      -moz-user-select: text;
           user-select: text;
+  width: calc(100vw - 2 * var(--page-padding));
 }
 
 .start-menu-container {
