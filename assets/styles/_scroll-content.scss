@@ -49,7 +49,7 @@
     border-bottom-right-radius: var(--border-radius);
     transition: border-radius 75ms ease-in-out;
     position: relative;
-    overflow: hidden;
+    // overflow-x: hidden; // Removed to allow position: sticky to work
 
     &.connected-top {
         border-top-left-radius: 0;
@@ -320,15 +320,18 @@
 }
 
 .projects-images {
-    position: absolute;
-    width: calc(100vw - 2 * var(--page-padding));
-    height: 100%;
-    top: 0;
+    position: sticky;
+    width: 100%;
+    height: 30dvh;
+    top: 0; // Stick below the page title
     right: 0;
+    overflow: hidden;
     
     .project-image {
         position: absolute;
-        width: 100%;
+        width: calc(100vw - 2 * var(--page-padding));
+        right: 0;
+        top: 0;
         height: 100%;
         opacity: 0;
         transition: opacity 0.5s ease-in-out;
@@ -422,6 +425,7 @@
     pointer-events: none !important;
     user-select: none !important;
     z-index: 1000;
+    overflow: visible !important;
 
     * {
         pointer-events: none !important;
