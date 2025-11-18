@@ -1,3 +1,4 @@
+<!-- Clones for images (masked by SVG) -->
 <div class="projects-images-clones-container">
     <?php 
     // Get all project pages (children of the projekte page)
@@ -33,6 +34,24 @@
                     </svg>
                 </button>
             <?php endif; ?>
+        </div>
+    <?php 
+        endforeach;
+    endif; 
+    ?>
+</div>
+
+<!-- Clones for text (unmasked, follow originals) -->
+<div class="project-text-clones-container">
+    <?php 
+    // Get all project pages again for text clones
+    if ($projektePages && $projektePages->children()->isNotEmpty()): 
+        foreach ($projektePages->children() as $projekt): 
+    ?>
+        <div class="project-text-container project-text-clone">
+            <div class="project-text-content">
+                <div class="project-text"><?= $projekt->text() ?></div>
+            </div>
         </div>
     <?php 
         endforeach;

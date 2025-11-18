@@ -449,3 +449,31 @@
     z-index: 2000;
 }
 
+// Container for all cloned text - masked by same SVG mask as images
+.project-text-clones-container {
+    // Fixed position covering viewport (doesn't move)
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 150; // Above images (z-index 100)
+    pointer-events: none;
+    user-select: none;
+    
+    // Hidden by default
+    opacity: 0;
+    
+    // Same mask as images
+    mask: url(#combined-mask-2);
+    -webkit-mask: url(#combined-mask-2);
+}
+
+.project-text-clone {
+    // Position clones absolutely within the fixed container
+    position: absolute;
+    top: 0;
+    left: 0;
+    user-select: text; // Allow text selection
+}
+

@@ -472,6 +472,31 @@ html {
   z-index: 2000;
 }
 
+.project-text-clones-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 150;
+  pointer-events: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  opacity: 0;
+  mask: url(#combined-mask-2);
+  -webkit-mask: url(#combined-mask-2);
+}
+
+.project-text-clone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-user-select: text;
+     -moz-user-select: text;
+          user-select: text;
+}
+
 .start-menu-container {
   position: fixed;
   top: var(--page-title-size);
