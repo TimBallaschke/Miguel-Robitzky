@@ -396,11 +396,8 @@ html {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
   border: none;
   color: white;
-  width: 48px;
-  height: 48px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -408,25 +405,47 @@ html {
   cursor: pointer;
   z-index: 10;
   transition: all 0.3s ease;
-  -webkit-backdrop-filter: blur(4px);
-          backdrop-filter: blur(4px);
+  background-color: transparent;
+  font-family: "FocalMaxi", sans-serif;
+  font-size: 3rem;
+  line-height: 1;
 }
 .projects-images .carousel-arrow:hover {
-  background: rgba(0, 0, 0, 0.7);
   transform: translateY(-50%) scale(1.1);
 }
 .projects-images .carousel-arrow:active {
   transform: translateY(-50%) scale(0.95);
-}
-.projects-images .carousel-arrow svg {
-  width: 24px;
-  height: 24px;
 }
 .projects-images .carousel-arrow.carousel-arrow-left {
   left: 1rem;
 }
 .projects-images .carousel-arrow.carousel-arrow-right {
   right: 1rem;
+}
+.projects-images .carousel-arrow.carousel-fullscreen {
+  bottom: 1rem;
+  right: 1rem;
+  top: auto;
+  transform: none;
+}
+.projects-images .carousel-arrow.carousel-fullscreen .arrow-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.25rem;
+  font-size: 1.5rem;
+}
+.projects-images .carousel-arrow.carousel-fullscreen .arrow-grid span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+.projects-images .carousel-arrow.carousel-fullscreen:hover {
+  transform: scale(1.1);
+}
+.projects-images .carousel-arrow.carousel-fullscreen:active {
+  transform: scale(0.95);
 }
 
 .projects-images-clones-container {

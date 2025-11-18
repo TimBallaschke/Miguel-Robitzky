@@ -359,11 +359,8 @@
         position: absolute;
         top: 50%;
         transform: translateY(-50%);
-        background: rgba(0, 0, 0, 0.5);
         border: none;
         color: white;
-        width: 48px;
-        height: 48px;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -371,20 +368,19 @@
         cursor: pointer;
         z-index: 10;
         transition: all 0.3s ease;
-        backdrop-filter: blur(4px);
+        background-color: transparent;
         
+        // Use FocalMaxi font for arrow glyphs
+        font-family: "FocalMaxi", sans-serif;
+        font-size: 3rem;
+        line-height: 1;
+
         &:hover {
-            background: rgba(0, 0, 0, 0.7);
             transform: translateY(-50%) scale(1.1);
         }
         
         &:active {
             transform: translateY(-50%) scale(0.95);
-        }
-        
-        svg {
-            width: 24px;
-            height: 24px;
         }
         
         &.carousel-arrow-left {
@@ -394,7 +390,39 @@
         &.carousel-arrow-right {
             right: 1rem;
         }
+        
+        &.carousel-fullscreen {
+            bottom: 1rem;
+            right: 1rem;
+            top: auto;
+            transform: none;
+            
+            .arrow-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: 1fr 1fr;
+                gap: 0.25rem;
+                font-size: 1.5rem;
+                
+                span {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    line-height: 1;
+                }
+            }
+            
+            &:hover {
+                transform: scale(1.1);
+            }
+            
+            &:active {
+                transform: scale(0.95);
+            }
+        }
     }
+
+     
 }
 
 // Container for all cloned images - ONE mask applied to entire container

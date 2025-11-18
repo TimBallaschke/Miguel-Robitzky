@@ -23,15 +23,15 @@
             // Only show navigation arrows if there's more than one image
             if ($imageCount > 1):
             ?>
-                <button class="carousel-arrow carousel-arrow-left" aria-label="Previous image">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                </button>
-                <button class="carousel-arrow carousel-arrow-right" aria-label="Next image">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
+                <button class="carousel-arrow carousel-arrow-left" aria-label="Previous image">←</button>
+                <button class="carousel-arrow carousel-arrow-right" aria-label="Next image">→</button>
+                <button class="carousel-arrow carousel-fullscreen" aria-label="Fullscreen">
+                    <span class="arrow-grid">
+                        <span class="arrow-tl">↖</span>
+                        <span class="arrow-tr">↗</span>
+                        <span class="arrow-bl">↙</span>
+                        <span class="arrow-br">↘</span>
+                    </span>
                 </button>
             <?php endif; ?>
         </div>
