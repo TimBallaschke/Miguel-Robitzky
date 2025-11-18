@@ -449,6 +449,15 @@
     z-index: 2000;
 }
 
+.text-container-white-gradient {
+    position: absolute;
+    height: 4rem;
+    width: 100%;
+    top: calc(-1 * 4rem);
+    left: 0;
+    background: linear-gradient(to bottom, transparent, white);
+}
+
 // Container for all cloned text - masked by same SVG mask as images
 .project-text-clones-container {
     // Fixed position covering viewport (doesn't move)

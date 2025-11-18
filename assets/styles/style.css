@@ -472,6 +472,15 @@ html {
   z-index: 2000;
 }
 
+.text-container-white-gradient {
+  position: absolute;
+  height: 4rem;
+  width: 100%;
+  top: -4rem;
+  left: 0;
+  background: linear-gradient(to bottom, transparent, white);
+}
+
 .project-text-clones-container {
   position: fixed;
   top: 0;
