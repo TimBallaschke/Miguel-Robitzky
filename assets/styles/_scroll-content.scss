@@ -627,11 +627,23 @@
     .offset-top & {
         opacity: 0;
     }
-
-
 }
 
+.kontakt-content {
+    padding-top: var(--button-padding);
+    padding-left: var(--text-padding-1);
+    padding-right: calc(var(--page-padding) * 2);
+    padding-bottom: var(--page-padding);
+}
 
+.kontakt-title {
+    transform: translateY(0);
+    transition: transform 0.3s ease-in-out;
+
+    .offset-top & {
+        transform: translateY(calc((var(--menu-item-height) + var(--container-gap)) * 3));
+    }
+}
 
 
 

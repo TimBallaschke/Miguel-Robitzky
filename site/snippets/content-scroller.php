@@ -123,7 +123,16 @@ $sections = 4;
         </div>
         
         <div id="inner-scroller-4" class="inner-scroller">
-            <!-- Add content for section 4 here -->
+            <?php 
+            // Get the Kontakt page
+            $kontaktPage = $site->find('kontakt');
+            if ($kontaktPage): 
+            ?>
+                <div class="kontakt-content offset-element offset-top">
+                    <div class="kontakt-title button-label"><?= $kontaktPage->title() ?></div>
+
+                </div>
+            <?php endif; ?>
         </div>
     </div>
 
