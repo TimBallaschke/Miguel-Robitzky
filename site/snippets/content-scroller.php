@@ -116,7 +116,22 @@ $sections = 4;
                 <div class="pressebilder-content offset-element offset-top">
                     <div class="pressebilder-title button-label"><?= $pressebilderPage->title() ?></div>
                     <?php if ($pressebilderPage->text()->isNotEmpty()): ?>
-                        <div class="pressebilder-text text-large"><?= $pressebilderPage->text()->kirbytext() ?></div>
+                        <div class="pressebilder-text text-large"><?= $pressebilderPage->text() ?>
+                            <span class="pressebilder-download text-small">hier herunterladen</span>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <?php 
+                    $images = $pressebilderPage->images();
+                    if ($images->isNotEmpty()): 
+                    ?>
+                        <div class="pressebilder-images">
+                            <?php foreach ($images as $image): ?>
+                                <div class="pressebild-item">
+                                    <img src="<?= $image->url() ?>" alt="<?= $image->filename() ?>">
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>
