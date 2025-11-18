@@ -4,13 +4,18 @@
     left: calc(var(--page-padding) + var(--menu-item-height) + var(--container-gap));
     width: calc(100vw - 2 * var(--page-padding) - var(--menu-item-height) - var(--container-gap));
     height: calc(100vh - 10rem);
-    transition: opacity 600ms ease-in-out;
+    transition: opacity 200ms ease-in-out;
     opacity: 1;
     pointer-events: auto;
 
     &.hidden {
         opacity: 0;
-        pointer-events: none;
+        pointer-events: none !important;
+        
+        // Ensure all children also don't block pointer events
+        *, *::before, *::after {
+            pointer-events: none !important;
+        }
     }
 
     @include mobile {
@@ -486,6 +491,7 @@
     top: 0;
     left: var(--page-padding);
     user-select: text;
+    pointer-events: none; // Allow text selection even though parent has pointer-events: none
     width: calc(100vw - 2 * var(--page-padding)); // Match original width
     padding-left: calc(var(--menu-item-height) + var(--container-gap) + var(--text-padding));
 }

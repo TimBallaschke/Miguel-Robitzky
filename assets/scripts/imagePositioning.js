@@ -120,6 +120,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Only update if opacity actually changed to prevent flickering
         if (currentOpacity !== targetOpacity) {
             clonesContainer.style.opacity = targetOpacity;
+            // Always keep pointer-events: none for images (no interaction needed)
+            clonesContainer.style.pointerEvents = 'none';
             currentOpacity = targetOpacity;
         }
     }

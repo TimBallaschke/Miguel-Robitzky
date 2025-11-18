@@ -115,6 +115,8 @@ document.addEventListener('DOMContentLoaded', function() {
         // Only update if opacity actually changed
         if (currentOpacity !== targetOpacity) {
             clonesContainer.style.opacity = targetOpacity;
+            // Keep container pointer-events: none (individual clones have pointer-events: auto in CSS)
+            clonesContainer.style.pointerEvents = 'none';
             currentOpacity = targetOpacity;
         }
     }
