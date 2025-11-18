@@ -4,7 +4,7 @@
     left: calc(var(--page-padding) + var(--menu-item-height) + var(--container-gap));
     width: calc(100vw - 2 * var(--page-padding) - var(--menu-item-height) - var(--container-gap));
     height: calc(100vh - 10rem);
-    transition: opacity 100ms ease-in-out;
+    transition: opacity 600ms ease-in-out;
     opacity: 1;
     pointer-events: auto;
 
@@ -408,7 +408,7 @@
     opacity: 0;
     
     // Smooth transition to prevent flickering during class changes
-    transition: opacity 0.15s ease-out;
+    transition: opacity 0.3s ease-out;
     
     // Mask applied directly to container (moves/reshapes with red SVG)
     mask: url(#combined-mask-2);
@@ -470,6 +470,7 @@
     z-index: 150; // Above images (z-index 100)
     pointer-events: none;
     user-select: none;
+    transition: opacity 0.3s ease-in-out;
     
     // Hidden by default
     opacity: 0;

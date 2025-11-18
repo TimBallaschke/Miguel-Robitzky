@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     contentContainer.classList.remove('hidden');
                     console.log('Desktop: Removed "hidden" from content-container');
                 }
-            }, 1000);
+            }, 500);
             
             // Add "display-none" class to start-menu-container after 1100ms total
             menuHideTimeout = setTimeout(() => {
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     startMenuContainer.classList.add('display-none');
                     console.log('Desktop: Added "display-none" to start-menu-container');
                 }
-            }, 1100);
+            }, 600);
         });
     });
 });
