@@ -612,7 +612,7 @@
     transform: translateY(0);
     transition: transform 0.3s ease-in-out;
 
-    &.offset-top {
+    .offset-top & {
         transform: translateY(calc((var(--menu-item-height) + var(--container-gap)) * 2));
     }
 }
@@ -621,6 +621,14 @@
     padding-top: var(--page-padding);
     padding-right: calc(var(--page-padding) * 2);
     padding-bottom: var(--page-padding);
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+
+    .offset-top & {
+        opacity: 0;
+    }
+
+
 }
 
 

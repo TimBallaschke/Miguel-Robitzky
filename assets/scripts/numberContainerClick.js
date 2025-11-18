@@ -107,11 +107,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 scroller.scrollTop = targetScrollTop;
                 
                 // Trigger mask and clone updates by scrolling 1px with very fast animation
-                setTimeout(() => {
-                    const currentScrollTop = scroller.scrollTop;
-                    smoothScrollTo(currentScrollTop + 5, 0.1); // 100px per ms = very fast
-                    console.log('Desktop: Triggered 1px scroll to update mask and clones');
-                }, 100);
+                // Only for "Projekte" (index 1) where mask and clones are used
+                if (index === 1) {
+                    setTimeout(() => {
+                        const currentScrollTop = scroller.scrollTop;
+                        smoothScrollTo(currentScrollTop + 5, 0.1); // 0.1px per ms = very fast
+                        console.log('Desktop: Triggered 5px scroll to update mask and clones for Projekte');
+                    }, 100);
+                }
 
             }, 50);
         });
