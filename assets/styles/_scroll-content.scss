@@ -48,7 +48,6 @@
 
 .inner-scroller {
     width: 100%;
-    min-height: 200vh;
     flex-shrink: 0;
     // background: linear-gradient(to bottom, #ff0000, #66ff00);
     background-color: #FAFAFA;
@@ -396,9 +395,8 @@
         }
         
         &.carousel-fullscreen {
-            bottom: 1rem;
-            right: 1rem;
-            top: auto;
+            top: var(--button-padding);
+            right: var(--page-padding);
             transform: none;
             
             .arrow-grid {
@@ -551,6 +549,29 @@
     padding-left: var(--text-padding-2);
     padding-right: calc(var(--page-padding) * 3);
 }
+
+.project-header {
+    position: absolute;
+    top: 0.93rem;
+    left: var(--text-padding-1);
+    color: var(--grey-color);
+    z-index: 2000;
+    transition: top 0.4s ease-in-out;
+
+    .projects-title {
+        color: var(--grey-color);
+    }
+    
+    .project-title {
+        color: var(--grey-color);
+    }
+
+    &.offset-top {
+        top: calc(0.93rem + var(--menu-item-height) + var(--container-gap));
+    }
+}
+
+
 
 
 

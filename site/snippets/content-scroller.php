@@ -44,6 +44,10 @@ $sections = 4;
                 ?>
                     <div class="project">
                         <div class="projects-images">
+                            <div class="project-header offset-top">
+                                <div class="projects-title button-label"><?= $projektePages->title() ?></div>
+                                <div class="project-title text-large bold"><?= $projekt->title() ?></div>
+                            </div>
                             <?php 
                             $images = $projekt->images();
                             $imageCount = $images->count();
@@ -83,7 +87,7 @@ $sections = 4;
                     </div>
                 <?php 
                     endforeach;
-                endif; 
+                endif;
                 ?>
             </div>
         </div>

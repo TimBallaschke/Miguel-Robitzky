@@ -22,6 +22,9 @@
 .text-large strong {
   font-family: "FocalMaxi";
 }
+.text-large.bold {
+  font-family: "FocalMaxi";
+}
 
 .text-small {
   font-family: "FocalMaxi Medium";
@@ -45,9 +48,10 @@
   --monospace-font-size: 1rem;
   --font-size-large: 2.5rem;
   --font-size-small: 1.7rem;
-  --text-padding-1: 7rem;
+  --text-padding-1: 10rem;
   --text-padding-2: 12rem;
   --project-images-height: calc(100dvh - var(--page-title-size));
+  --button-padding: 0.93rem;
 }
 @media (max-width: 768px) {
   :root {
@@ -162,7 +166,6 @@ body.fullscreen-gallery {
 
 .inner-scroller {
   width: 100%;
-  min-height: 200vh;
   flex-shrink: 0;
   background-color: #FAFAFA;
   border-top-left-radius: var(--border-radius);
@@ -462,9 +465,8 @@ body.fullscreen-gallery {
   right: 1rem;
 }
 .projects-images .carousel-arrow.carousel-fullscreen {
-  bottom: 1rem;
-  right: 1rem;
-  top: auto;
+  top: var(--button-padding);
+  right: var(--page-padding);
   transform: none;
 }
 .projects-images .carousel-arrow.carousel-fullscreen .arrow-grid {
@@ -594,6 +596,24 @@ body.fullscreen-gallery {
 .schaffen-section {
   padding-left: var(--text-padding-2);
   padding-right: calc(var(--page-padding) * 3);
+}
+
+.project-header {
+  position: absolute;
+  top: 0.93rem;
+  left: var(--text-padding-1);
+  color: var(--grey-color);
+  z-index: 2000;
+  transition: top 0.4s ease-in-out;
+}
+.project-header .projects-title {
+  color: var(--grey-color);
+}
+.project-header .project-title {
+  color: var(--grey-color);
+}
+.project-header.offset-top {
+  top: calc(0.93rem + var(--menu-item-height) + var(--container-gap));
 }
 
 .start-menu-container {

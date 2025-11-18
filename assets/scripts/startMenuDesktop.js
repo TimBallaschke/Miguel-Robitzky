@@ -31,6 +31,15 @@ document.addEventListener('DOMContentLoaded', function() {
                     contentContainer.classList.remove('hidden');
                     console.log('Desktop: Removed "hidden" from content-container');
                 }
+
+                setTimeout(() => {
+                    // Remove "offset-top" class from all project headers
+                    const projectHeaders = document.querySelectorAll('.project-header');
+                    projectHeaders.forEach(header => {
+                        header.classList.remove('offset-top');
+                    });
+                }, 0);
+                
             }, 500);
             
             // Add "display-none" class to start-menu-container after 1100ms total

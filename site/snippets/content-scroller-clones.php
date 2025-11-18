@@ -7,6 +7,10 @@
         foreach ($projektePages->children() as $projekt): 
     ?>
         <div class="projects-images projects-images-clone">
+            <div class="project-header offset-top">
+                <div class="projects-title button-label"><?= $projektePages->title() ?></div>
+                <div class="project-title text-large bold"><?= $projekt->title() ?></div>
+            </div>
             <?php 
             $images = $projekt->images();
             $imageCount = $images->count();
