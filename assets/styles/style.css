@@ -60,7 +60,13 @@
     --page-title-size: 40rem;
     --menu-item-height: 12rem;
     --menu-item-spacing: 3rem;
+    --page-padding: 3rem;
     --monospace-font-size: 4rem;
+    --font-size-large: 4rem;
+    --font-size-small: 4rem;
+    --button-padding: 3rem;
+    --text-padding-1: 4rem;
+    --text-padding-2: 0rem;
   }
 }
 
@@ -145,6 +151,11 @@ body.fullscreen-gallery {
   .content-container {
     left: var(--page-padding);
     width: calc(100vw - 2 * var(--page-padding));
+  }
+}
+@media (max-width: 768px) {
+  .content-container .button-content {
+    font-size: 1rem;
   }
 }
 
@@ -560,6 +571,11 @@ body.fullscreen-gallery {
   background-color: transparent;
   text-align: left;
 }
+@media (max-width: 768px) {
+  .project-nav-prev {
+    display: none;
+  }
+}
 
 .project-nav-next {
   position: absolute;
@@ -570,6 +586,11 @@ body.fullscreen-gallery {
   border: none;
   background-color: transparent;
   text-align: left;
+}
+@media (max-width: 768px) {
+  .project-nav-next {
+    display: none;
+  }
 }
 
 .text-container-white-gradient {
@@ -614,18 +635,43 @@ body.fullscreen-gallery {
 }
 
 .biografie-content {
-  padding-top: 0.93rem;
+  position: relative;
+  padding-top: var(--button-padding);
   padding-left: var(--text-padding-1);
   width: 100%;
+}
+@media (max-width: 768px) {
+  .biografie-content {
+    padding-top: 0;
+  }
+}
+
+.mobile-scroll-gradient {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 8rem;
+  background: linear-gradient(to bottom, white 0%, transparent);
 }
 
 .kurzbiografie-section {
   padding-right: calc(var(--text-padding-1) * 2);
 }
+@media (max-width: 768px) {
+  .kurzbiografie-section {
+    padding-right: calc(var(--text-padding-1));
+  }
+}
 
 .schaffen-section {
   padding-left: var(--text-padding-2);
   padding-right: calc(var(--page-padding) * 3);
+}
+@media (max-width: 768px) {
+  .schaffen-section {
+    padding-right: calc(var(--text-padding-1));
+  }
 }
 
 .project-header {
@@ -983,6 +1029,11 @@ body.fullscreen-gallery {
 }
 .folded-mobile .button-content {
   opacity: 0;
+}
+@media (max-width: 768px) {
+  .button-content {
+    padding: 0 var(--page-padding) 0 calc(var(--page-padding) * 3);
+  }
 }
 
 .button-label {

@@ -17,6 +17,7 @@ $sections = 4;
             if ($biografiePage): 
             ?>
                 <div class="biografie-content">
+                    <div class="mobile-scroll-gradient"></div>
                     <div class="biografie-title button-label"><?= $biografiePage->title() ?></div>
                     
                     <?php if ($biografiePage->kurzbiografie()->isNotEmpty()): ?>

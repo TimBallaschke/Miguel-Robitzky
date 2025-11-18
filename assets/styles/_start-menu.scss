@@ -301,6 +301,10 @@
     .folded-mobile & {
         opacity: 0;
     }
+
+    @include mobile {
+        padding: 0 var(--page-padding) 0 calc(var(--page-padding) * 3);
+    }
 }
 
 .button-label {
