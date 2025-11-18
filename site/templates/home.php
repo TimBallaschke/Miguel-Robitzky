@@ -17,6 +17,8 @@
     <?php snippet('content-scroller') ?>
     <!-- Container for cloned images - mask applied via CSS, populated by snippet -->
     <?php snippet('content-scroller-clones') ?>
+    <!-- Fullscreen overlays for images - outside content-container -->
+    <?php snippet('fullscreen-overlays') ?>
     </body>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 <script src="/assets/scripts/helper.js"></script>
@@ -29,4 +31,5 @@
 <script src="/assets/scripts/imagePositioning.js"></script>
 <script src="/assets/scripts/textPositioning.js"></script>
 <script src="/assets/scripts/imageCarousel.js"></script>
+<script src="/assets/scripts/fullscreenGallery.js"></script>
 </html>

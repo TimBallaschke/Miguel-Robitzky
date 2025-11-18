@@ -42,15 +42,17 @@ $sections = 4;
                             ?>
                                 <button class="carousel-arrow carousel-arrow-left" aria-label="Previous image">←</button>
                                 <button class="carousel-arrow carousel-arrow-right" aria-label="Next image">→</button>
-                                <button class="carousel-arrow carousel-fullscreen" aria-label="Fullscreen">
-                                    <span class="arrow-grid">
-                                        <span class="arrow-tl">↖</span>
-                                        <span class="arrow-tr">↗</span>
-                                        <span class="arrow-bl">↙</span>
-                                        <span class="arrow-br">↘</span>
-                                    </span>
-                                </button>
                             <?php endif; ?>
+                            
+                            <!-- Fullscreen button always available -->
+                            <button class="carousel-arrow carousel-fullscreen" aria-label="Fullscreen">
+                                <span class="arrow-grid">
+                                    <span class="arrow-tl">↖</span>
+                                    <span class="arrow-tr">↗</span>
+                                    <span class="arrow-bl">↙</span>
+                                    <span class="arrow-br">↘</span>
+                                </span>
+                            </button>
                         </div>
                         <div class="project-text-container">
                             <div class="text-container-white-gradient"></div>
