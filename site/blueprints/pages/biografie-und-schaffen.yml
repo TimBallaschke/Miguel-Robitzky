@@ -20,6 +20,7 @@ columns:
             type: textarea
             buttons:
               - bold
+              - link
             size: huge
   right:
     width: 1/2
@@ -32,4 +33,13 @@ columns:
             type: textarea
             buttons:
               - bold
+              - link
             size: huge
+      image:
+        type: files
+        headline: Bild
+        template: image
+        layout: cards
+        max: 1
+        size: medium
+        uploads: true

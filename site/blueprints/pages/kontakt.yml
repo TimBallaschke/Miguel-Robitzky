@@ -45,6 +45,7 @@ columns:
             buttons:
               - bold
               - italic
+              - link
             size: small
           impressum_handelsregister:
             label: Handelsregister
@@ -67,4 +68,5 @@ columns:
             buttons:
               - bold
               - italic
+              - link
             size: small

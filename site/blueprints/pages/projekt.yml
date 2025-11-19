@@ -9,6 +9,7 @@ sections:
         type: textarea
         buttons:
           - bold
+          - link
         size: medium
   images:
     type: files
