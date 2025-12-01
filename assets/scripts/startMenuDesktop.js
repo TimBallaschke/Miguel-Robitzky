@@ -134,6 +134,12 @@ document.addEventListener('DOMContentLoaded', function() {
         const menuVisible = isStartMenuVisible();
         const scrollChanged = currentScrollY !== lastScrollY;
         
+        // Check if mobile menu is not visible, scroller is at top, and window scrolled
+        const isMobileMenuNotVisible = !isMobile();
+        const isScrollerAtTop = scroller && scroller.scrollTop === 0;
+        
+
+        
         if (menuVisible && scrollChanged && !scrollTriggered) {
             // Trigger the same behavior as clicking the first menu item
             // This will set activeItem = 1 and remove start-menu-opened from body
