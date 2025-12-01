@@ -140,12 +140,27 @@ document.addEventListener('DOMContentLoaded', function() {
         
 
         
-        if (menuVisible && scrollChanged && !scrollTriggered) {
+        // Check if scrolling down
+        const isScrollingDown = currentScrollY > lastScrollY;
+        
+        if (menuVisible && scrollChanged && isScrollingDown && !scrollTriggered) {
             // Trigger the same behavior as clicking the first menu item
             // This will set activeItem = 1 and remove start-menu-opened from body
             const firstMenuItem = startMenuItems[0];
             if (firstMenuItem) {
                 firstMenuItem.click();
+            }
+        }
+        
+        // Check if scrolling up
+        const isScrollingUp = currentScrollY < lastScrollY;
+        
+        if (isMobileMenuNotVisible && isScrollerAtTop && scrollChanged && isScrollingUp) {
+            console.log('Desktop: Window scrolled up while scroller is at top and mobile menu not visible');
+            // Simulate click on website title element (same as clicking website title)
+            const websiteTitleContainer = document.querySelector('.website-title-container');
+            if (websiteTitleContainer) {
+                websiteTitleContainer.click();
             }
         }
         lastScrollY = currentScrollY;
