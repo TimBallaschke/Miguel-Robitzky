@@ -25,7 +25,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 clearTimeout(menuHideTimeout);
             }
             
-            // Remove "hidden" class from content-container after 1000ms
+            // Remove "hidden" class from content-container after 500ms
+            // This will trigger clone visibility update via MutationObserver
             contentVisibleTimeout = setTimeout(() => {
                 if (contentContainer) {
                     contentContainer.classList.remove('hidden');

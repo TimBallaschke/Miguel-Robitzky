@@ -128,6 +128,7 @@ $sections = 4;
             if ($pressebilderPage): 
             ?>
                 <div class="pressebilder-content offset-element offset-top">
+                    <div class="mobile-scroll-gradient"></div>
                     <div class="pressebilder-title button-label"><?= $pressebilderPage->title() ?></div>
                     <?php if ($pressebilderPage->text()->isNotEmpty()): ?>
                         <div class="pressebilder-text text-large"><?= $pressebilderPage->text() ?>
@@ -170,6 +171,7 @@ $sections = 4;
             if ($kontaktPage): 
             ?>
                 <div class="kontakt-content offset-element offset-top">
+                    <div class="mobile-scroll-gradient"></div>
                     <div class="kontakt-title button-label"><?= $kontaktPage->title() ?></div>
 
                 </div>

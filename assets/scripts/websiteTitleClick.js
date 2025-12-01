@@ -305,7 +305,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     }, 100);
                 } else {
                     // Reverse animation sequence for desktop
-                    // Remove "display-none" from start-menu-container after 100ms
+                    // Wait for content container to fade out (300ms transition) + additional delay
+                    // Remove "display-none" from start-menu-container after delay
                     setTimeout(() => {
                         if (startMenuContainer) {
                             startMenuContainer.classList.remove('display-none');
@@ -358,7 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
                              
                              console.log('Desktop: Reset activeItem and removed all desktop classes');
                         }, 100);
-                    }, 10);
+                    }, 10000); // Increased delay to allow content container to fully fade out (300ms transition + 100ms buffer)
                 }
             }
         });

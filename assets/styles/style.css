@@ -167,7 +167,6 @@ body.fullscreen-gallery {
   height: 100%;
   width: 100%;
   overflow: scroll;
-  overscroll-behavior: none;
   transition: border-radius 75ms ease-in-out;
 }
 @media (max-width: 768px) {
@@ -196,7 +195,12 @@ body.fullscreen-gallery {
   transition: border-radius 0ms ease-in-out;
 }
 .inner-scroller:last-child {
-  margin-bottom: 5rem;
+  margin-bottom: 10rem;
+}
+@media (max-width: 768px) {
+  .inner-scroller:last-child {
+    margin-bottom: 40rem;
+  }
 }
 
 @media (max-width: 768px) {
@@ -435,6 +439,15 @@ body.fullscreen-gallery {
   right: 0;
   overflow: hidden;
 }
+@media (max-width: 768px) {
+  .projects-images {
+    border-radius: 2rem;
+    width: calc(100% - 2 * var(--page-padding));
+    top: var(--page-padding);
+    left: var(--page-padding);
+    margin-top: var(--page-padding);
+  }
+}
 .projects-images .project-image {
   position: absolute;
   width: calc(100vw - 2 * var(--page-padding));
@@ -671,6 +684,12 @@ body.fullscreen-gallery {
   left: 0;
   background: linear-gradient(to bottom, transparent, var(--grey-color));
 }
+@media (max-width: 768px) {
+  .text-container-white-gradient {
+    height: 15rem;
+    top: -15rem;
+  }
+}
 
 .project-text-clones-container {
   position: fixed;
@@ -768,6 +787,11 @@ body.fullscreen-gallery {
 .project-header.offset-top {
   top: calc(0.93rem + var(--menu-item-height) + var(--container-gap));
 }
+@media (max-width: 768px) {
+  .project-header.offset-top {
+    top: 8rem;
+  }
+}
 
 .pressebilder-content {
   display: flex;
@@ -785,6 +809,11 @@ body.fullscreen-gallery {
 }
 .offset-top .pressebilder-title {
   transform: translateY(calc((var(--menu-item-height) + var(--container-gap)) * 2));
+}
+@media (max-width: 768px) {
+  .offset-top .pressebilder-title {
+    transform: translateY(0);
+  }
 }
 
 .pressebilder-text {
@@ -811,6 +840,11 @@ body.fullscreen-gallery {
 }
 .offset-top .kontakt-title {
   transform: translateY(calc((var(--menu-item-height) + var(--container-gap)) * 3));
+}
+@media (max-width: 768px) {
+  .offset-top .kontakt-title {
+    transform: translateY(0);
+  }
 }
 
 .pressebilder-download {
@@ -1100,9 +1134,14 @@ body.fullscreen-gallery {
   padding: 0 var(--page-padding) 0 calc(var(--menu-item-height) + var(--container-gap) + var(--text-padding-1));
   opacity: 1;
   transition: all 200ms ease-in-out;
+  transition-property: all;
+  transition-duration: 200ms;
+  transition-timing-function: ease-in-out;
+  transition-delay: 0ms;
 }
 .no-opacity .button-content {
   opacity: 0;
+  transition-delay: 0ms;
 }
 .folded-mobile .button-content {
   opacity: 0;

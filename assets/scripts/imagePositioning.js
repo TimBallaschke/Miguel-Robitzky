@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const numberContainer2 = document.querySelector('#number-2-container');
     
     // Track current visibility state to avoid unnecessary updates
-    let currentOpacity = '1'; // Clones visible from start
+    let currentOpacity = '0'; // Clones hidden initially, revealed with content container
 
     // Function to control container visibility based on connection state
     // Container (with mask) should only be visible when red SVG is being drawn
@@ -147,8 +147,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Check if fullscreen gallery is open
         const isFullscreenOpen = document.body.classList.contains('fullscreen-gallery');
         
-        // Show clones from the beginning (always visible unless fullscreen is open)
-        const targetOpacity = !isFullscreenOpen ? '1' : '0';
+        // Show clones only when content is visible and not in fullscreen
+        const shouldShowClones = !isContentHidden && !isFullscreenOpen;
+        const targetOpacity = shouldShowClones ? '1' : '0';
         
         // Update clone opacity
         if (currentOpacity !== targetOpacity) {
@@ -189,17 +190,20 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize - clones already in DOM from PHP
     initializeClones();
     
-    // Set clones visible from start
+    // Set clones hidden initially (will be revealed with content container)
     if (clonesContainer) {
-        clonesContainer.style.opacity = '1';
+        clonesContainer.style.opacity = '0';
         clonesContainer.style.pointerEvents = 'none';
+        // Add smooth transition for reveal
+        clonesContainer.style.transition = 'opacity 500ms ease-in-out';
     }
     
-    // Set unmasked clone visible from start (desktop only)
+    // Set unmasked clone hidden initially (desktop only)
     if (unmaskedContainer && !isMobile()) {
         unmaskedContainer.style.display = 'block';
-        unmaskedContainer.style.opacity = '1';
+        unmaskedContainer.style.opacity = '0';
         unmaskedContainer.style.pointerEvents = 'none';
+        unmaskedContainer.style.transition = 'opacity 500ms ease-in-out';
     }
     
     // Hide all originals from the start

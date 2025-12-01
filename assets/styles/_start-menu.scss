@@ -293,11 +293,17 @@
     padding: 0 var(--page-padding) 0 calc(var(--menu-item-height) + var(--container-gap) + var(--text-padding-1));
     opacity: 1;
     transition: all 200ms ease-in-out;
+    transition-property: all;
+    transition-duration: 200ms;
+    transition-timing-function: ease-in-out;
+    // Delay opacity transition to fade in after content container fades out
+    transition-delay: 0ms;
 
     .no-opacity & {
         opacity: 0;
+        transition-delay: 0ms; // No delay when fading out
     }
-
+    
     .folded-mobile & {
         opacity: 0;
     }
