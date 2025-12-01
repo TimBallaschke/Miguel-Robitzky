@@ -483,7 +483,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             maskPath.setAttribute('d', pathDataShifted || pathData);
                             maskPath.setAttribute('fill', 'white');
                             maskPath.setAttribute('stroke', 'white');
-                            maskPath.setAttribute('stroke-width', '0');
+                            maskPath.setAttribute('stroke-width', '2'); // 2px stroke to create overlap with unclipped shapes (fixes Safari gap)
                             maskPath.setAttribute('shape-rendering', 'geometricPrecision'); // Better quality rendering
                             maskPath.setAttribute('stroke-linejoin', 'round'); // Smooth joins
                             maskPath.setAttribute('stroke-linecap', 'round'); // Smooth caps

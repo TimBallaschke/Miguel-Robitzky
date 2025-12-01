@@ -167,6 +167,7 @@ body.fullscreen-gallery {
   height: 100%;
   width: 100%;
   overflow: scroll;
+  overscroll-behavior: none;
   transition: border-radius 75ms ease-in-out;
 }
 @media (max-width: 768px) {
