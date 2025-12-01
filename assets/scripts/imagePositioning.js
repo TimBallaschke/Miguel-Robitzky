@@ -10,9 +10,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Store clones and their original elements
     const imageClones = [];
+    let unmaskedClone = null;
     
     // Get the pre-existing clones container from the DOM (populated by PHP)
     const clonesContainer = document.querySelector('.projects-images-clones-container');
+    const unmaskedContainer = document.querySelector('.projects-images-unmasked-container');
     
     if (!clonesContainer) {
         return;
@@ -26,15 +28,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize clones (they already exist in DOM from PHP)
     function initializeClones() {
         imageClones.length = 0;
+        unmaskedClone = null;
 
         // Skip on mobile
         if (isMobile()) {
             clonesContainer.style.display = 'none';
+            if (unmaskedContainer) {
+                unmaskedContainer.style.display = 'none';
+            }
             return;
         }
         
-        // Show container on desktop
+        // Show containers on desktop
         clonesContainer.style.display = 'block';
+        if (unmaskedContainer) {
+            unmaskedContainer.style.display = 'block';
+        }
 
         // Get the clones that were rendered by PHP
         const clones = clonesContainer.querySelectorAll('.projects-images-clone');
@@ -56,6 +65,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 clone
             });
         });
+        
+        // Get the unmasked clone (only for first project)
+        if (unmaskedContainer && projectsImages.length > 0) {
+            const unmaskedCloneEl = unmaskedContainer.querySelector('.projects-images-unmasked-clone');
+            if (unmaskedCloneEl) {
+                unmaskedClone = {
+                    original: projectsImages[0], // Track first project
+                    clone: unmaskedCloneEl
+                };
+            }
+        }
     }
 
     // Update clone positions to follow originals
@@ -77,6 +97,15 @@ document.addEventListener('DOMContentLoaded', function() {
             clone.style.width = rect.width + 'px';
             clone.style.height = rect.height + 'px';
         });
+        
+        // Also position the unmasked clone (follows first project)
+        if (unmaskedClone) {
+            const rect = unmaskedClone.original.getBoundingClientRect();
+            unmaskedClone.clone.style.top = rect.top + 'px';
+            unmaskedClone.clone.style.left = rect.left + 'px';
+            unmaskedClone.clone.style.width = rect.width + 'px';
+            unmaskedClone.clone.style.height = rect.height + 'px';
+        }
     }
 
     // Handle resize - re-initialize if switching between mobile/desktop
@@ -98,11 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const numberContainer2 = document.querySelector('#number-2-container');
     
     // Track current visibility state to avoid unnecessary updates
-    let currentOpacity = '0';
-    let cloneVisibleScrollPos = null;
-    let hideOriginalsTimeout = null;
-    const HIDE_DELAY_PX = 10; // Hide originals 10px after clones appear
-    const HIDE_DELAY_MS = 50; // Additional 500ms delay after scroll threshold
+    let currentOpacity = '1'; // Clones visible from start
 
     // Function to control container visibility based on connection state
     // Container (with mask) should only be visible when red SVG is being drawn
@@ -122,58 +147,20 @@ document.addEventListener('DOMContentLoaded', function() {
         // Check if fullscreen gallery is open
         const isFullscreenOpen = document.body.classList.contains('fullscreen-gallery');
         
-        // Only show clones when connected AND content is not hidden AND fullscreen is not open
-        const targetOpacity = (isConnected && !isContentHidden && !isFullscreenOpen) ? '1' : '0';
+        // Show clones from the beginning (always visible unless fullscreen is open)
+        const targetOpacity = !isFullscreenOpen ? '1' : '0';
         
-        // Get current scroll position
-        const currentScrollPos = scroller.scrollTop;
-        
-        // Track when clones first become visible
+        // Update clone opacity
         if (currentOpacity !== targetOpacity) {
             clonesContainer.style.opacity = targetOpacity;
             clonesContainer.style.pointerEvents = 'none';
             currentOpacity = targetOpacity;
-            
-            if (targetOpacity === '1') {
-                // Clones just became visible - store scroll position
-                cloneVisibleScrollPos = currentScrollPos;
-            } else {
-                // Clones hidden - reset tracking and clear timeout
-                cloneVisibleScrollPos = null;
-                if (hideOriginalsTimeout) {
-                    clearTimeout(hideOriginalsTimeout);
-                    hideOriginalsTimeout = null;
-                }
-                // Immediately show originals when clones hide
-                imageClones.forEach(({ original }) => {
-                    original.style.opacity = '1';
-                });
-            }
         }
         
-        // Hide originals after: scrolling 10px + 500ms delay
-        if (cloneVisibleScrollPos !== null) {
-            const scrolledDistance = currentScrollPos - cloneVisibleScrollPos;
-            const scrollThresholdReached = scrolledDistance >= HIDE_DELAY_PX;
-            
-            if (scrollThresholdReached && !hideOriginalsTimeout) {
-                // Start 500ms timeout when scroll threshold is reached
-                hideOriginalsTimeout = setTimeout(() => {
-                    imageClones.forEach(({ original }) => {
-                        original.style.opacity = '0';
-                    });
-                }, HIDE_DELAY_MS);
-            } else if (!scrollThresholdReached) {
-                // Still within scroll threshold - keep originals visible
-                if (hideOriginalsTimeout) {
-                    clearTimeout(hideOriginalsTimeout);
-                    hideOriginalsTimeout = null;
-                }
-                imageClones.forEach(({ original }) => {
-                    original.style.opacity = '1';
-                });
-            }
-        }
+        // Always keep originals hidden - clones are always visible now
+        imageClones.forEach(({ original }) => {
+            original.style.opacity = '0';
+        });
     }
     
     // Use requestAnimationFrame to batch updates and reduce flickering
@@ -192,6 +179,25 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize - clones already in DOM from PHP
     initializeClones();
+    
+    // Set clones visible from start
+    if (clonesContainer) {
+        clonesContainer.style.opacity = '1';
+        clonesContainer.style.pointerEvents = 'none';
+    }
+    
+    // Set unmasked clone visible from start (desktop only)
+    if (unmaskedContainer && !isMobile()) {
+        unmaskedContainer.style.display = 'block';
+        unmaskedContainer.style.opacity = '1';
+        unmaskedContainer.style.pointerEvents = 'none';
+    }
+    
+    // Hide all originals from the start
+    imageClones.forEach(({ original }) => {
+        original.style.opacity = '0';
+    });
+    
     updateClonePositions();
     updateCloneVisibility(); // Initial visibility check
 

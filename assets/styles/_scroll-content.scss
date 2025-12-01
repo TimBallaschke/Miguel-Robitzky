@@ -488,6 +488,59 @@
     }
 }
 
+// Unmasked clone container (same as masked but NO mask applied, always visible, desktop only)
+.projects-images-unmasked-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 90; // Below masked clones (z-index 100)
+    pointer-events: none;
+    user-select: none;
+    
+    // Always visible
+    opacity: 1;
+    
+    // NO mask applied - visible everywhere
+    
+    // Hide on mobile
+    @include mobile {
+        display: none !important;
+    }
+    
+    .fullscreen-gallery & {
+        opacity: 0;
+    }
+}
+
+.projects-images-unmasked-clone {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+
+    
+    pointer-events: none !important;
+    user-select: none !important;
+    z-index: 1000;
+    overflow: hidden !important;
+
+    * {
+        pointer-events: none !important;
+        user-select: none !important;
+    }
+
+    // Allow arrow buttons to be clicked
+    .carousel-arrow {
+        pointer-events: auto !important;
+
+        * {
+            pointer-events: auto !important;
+        }
+    }
+}
+
 .project-text-container {
     background-color: var(--grey-color);
     position: relative;

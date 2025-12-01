@@ -94,3 +94,42 @@
     ?>
 </div>
 
+<!-- Unmasked clone for FIRST image of FIRST project only (always visible, desktop only) -->
+<div class="projects-images-unmasked-container hidden desktop-only">
+    <?php 
+    // Clone only the first project
+    if ($projektePages && $projektePages->children()->isNotEmpty()): 
+        $firstProject = $projektePages->children()->first();
+        if ($firstProject):
+            $firstImage = $firstProject->images()->first();
+            if ($firstImage):
+    ?>
+        <div class="projects-images projects-images-unmasked-clone">
+            <div class="project-header offset-element offset-top">
+                <div class="projects-title button-label"><?= $projektePages->title() ?></div>
+                <div class="project-title text-large bold"><?= $firstProject->title() ?></div>
+            </div>
+            <!-- Only the first image -->
+            <div class="project-image active">
+                <img 
+                    src="<?= $firstImage->resize(20, 20)->url() ?>"
+                    srcset="<?= 
+                        $firstImage->srcset([
+                            '400w' => ['width' => 400, 'format' => 'webp'],
+                            '600w' => ['width' => 600, 'format' => 'webp'],
+                            '800w' => ['width' => 800, 'format' => 'webp'],
+                            '1200w' => ['width' => 1200, 'format' => 'webp']
+                        ])
+                    ?>"
+                    loading="lazy"
+                    alt="<?= $firstProject->title() ?>"
+                >
+            </div>
+        </div>
+    <?php 
+            endif;
+        endif;
+    endif; 
+    ?>
+</div>
+
