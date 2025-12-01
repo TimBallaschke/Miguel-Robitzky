@@ -359,7 +359,7 @@ document.addEventListener('DOMContentLoaded', function() {
                              
                              console.log('Desktop: Reset activeItem and removed all desktop classes');
                         }, 100);
-                    }, 10000); // Increased delay to allow content container to fully fade out (300ms transition + 100ms buffer)
+                    }, 10); // Increased delay to allow content container to fully fade out (300ms transition + 100ms buffer)
                 }
             }
         });
