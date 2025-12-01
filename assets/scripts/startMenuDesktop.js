@@ -129,7 +129,20 @@ document.addEventListener('DOMContentLoaded', function() {
     let lastScrollY = window.scrollY || window.pageYOffset;
     
     window.addEventListener('scroll', function() {
+        // Only trigger if start menu is visible and scroll actually happened
+        const currentScrollY = window.scrollY || window.pageYOffset;
+        const menuVisible = isStartMenuVisible();
+        const scrollChanged = currentScrollY !== lastScrollY;
         
+        if (menuVisible && scrollChanged && !scrollTriggered) {
+            // Trigger the same behavior as clicking the first menu item
+            // This will set activeItem = 1 and remove start-menu-opened from body
+            const firstMenuItem = startMenuItems[0];
+            if (firstMenuItem) {
+                firstMenuItem.click();
+            }
+        }
+        lastScrollY = currentScrollY;
     }, { passive: true });
 });
 
