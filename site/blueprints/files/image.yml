@@ -12,10 +12,7 @@ options:
   delete: true
 
 fields:
-  alt:
-    label: Alt Text
+  credit:
+    label: Credit
     type: text
-  caption:
-    label: Caption
-    type: textarea
 

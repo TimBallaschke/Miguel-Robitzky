@@ -99,7 +99,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Track current visibility state to avoid unnecessary updates
     let currentOpacity = '0';
-    
+    let cloneVisibleScrollPos = null;
+    let hideOriginalsTimeout = null;
+    const HIDE_DELAY_PX = 10; // Hide originals 10px after clones appear
+    const HIDE_DELAY_MS = 50; // Additional 500ms delay after scroll threshold
+
     // Function to control container visibility based on connection state
     // Container (with mask) should only be visible when red SVG is being drawn
     // AND when content-container is not hidden
@@ -121,12 +125,54 @@ document.addEventListener('DOMContentLoaded', function() {
         // Only show clones when connected AND content is not hidden AND fullscreen is not open
         const targetOpacity = (isConnected && !isContentHidden && !isFullscreenOpen) ? '1' : '0';
         
-        // Only update if opacity actually changed to prevent flickering
+        // Get current scroll position
+        const currentScrollPos = scroller.scrollTop;
+        
+        // Track when clones first become visible
         if (currentOpacity !== targetOpacity) {
             clonesContainer.style.opacity = targetOpacity;
-            // Always keep pointer-events: none for images (no interaction needed)
             clonesContainer.style.pointerEvents = 'none';
             currentOpacity = targetOpacity;
+            
+            if (targetOpacity === '1') {
+                // Clones just became visible - store scroll position
+                cloneVisibleScrollPos = currentScrollPos;
+            } else {
+                // Clones hidden - reset tracking and clear timeout
+                cloneVisibleScrollPos = null;
+                if (hideOriginalsTimeout) {
+                    clearTimeout(hideOriginalsTimeout);
+                    hideOriginalsTimeout = null;
+                }
+                // Immediately show originals when clones hide
+                imageClones.forEach(({ original }) => {
+                    original.style.opacity = '1';
+                });
+            }
+        }
+        
+        // Hide originals after: scrolling 10px + 500ms delay
+        if (cloneVisibleScrollPos !== null) {
+            const scrolledDistance = currentScrollPos - cloneVisibleScrollPos;
+            const scrollThresholdReached = scrolledDistance >= HIDE_DELAY_PX;
+            
+            if (scrollThresholdReached && !hideOriginalsTimeout) {
+                // Start 500ms timeout when scroll threshold is reached
+                hideOriginalsTimeout = setTimeout(() => {
+                    imageClones.forEach(({ original }) => {
+                        original.style.opacity = '0';
+                    });
+                }, HIDE_DELAY_MS);
+            } else if (!scrollThresholdReached) {
+                // Still within scroll threshold - keep originals visible
+                if (hideOriginalsTimeout) {
+                    clearTimeout(hideOriginalsTimeout);
+                    hideOriginalsTimeout = null;
+                }
+                imageClones.forEach(({ original }) => {
+                    original.style.opacity = '1';
+                });
+            }
         }
     }
     

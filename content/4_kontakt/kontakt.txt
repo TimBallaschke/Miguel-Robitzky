@@ -2,12 +2,51 @@ Title: Kontakt
 
 ----
 
+Management-name: Jochen Voß
+
+----
+
+Management-company: ArizonaBlau GmbH
+
+----
+
+Management-email: kontakt@miguel-robitzky.de
+
+----
+
+Impressum-company: ArizonaBlau GmbH
+
+----
+
+Impressum-address:
+
+Oskar-Jäger-Str. 127
+50825 Köln
+
+----
+
+Impressum-handelsregister: HRB 116082
+
+----
+
+Impressum-registergericht: Amtsgericht Köln
+
+----
+
+Impressum-vertreter: Jochen Voß
+
+----
+
+Impressum-email: kontakt@arizonablau.de
+
+----
+
+Impressum-umsatzsteuer: DE364957025
+
+----
+
+Impressum-datenschutz: Datenschutzangaben folgen
+
+----
+
 Uuid: tIAkZaxNzVeTfw5R
-
-----
-
-Impressum-address: 
-
-----
-
-Impressum-datenschutz: 

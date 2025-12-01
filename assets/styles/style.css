@@ -732,7 +732,7 @@ body.fullscreen-gallery {
   padding-right: calc(var(--page-padding) * 2);
   padding-bottom: var(--page-padding);
   opacity: 1;
-  transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.3s ease-in-out;
 }
 .offset-top .pressebilder-text {
   opacity: 0;
