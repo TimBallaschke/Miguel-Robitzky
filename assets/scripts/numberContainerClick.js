@@ -7,8 +7,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (!scroller || innerScrollers.length === 0) return;
 
+    // Flag to choose scrolling approach
+    // true = use native scrollTo with smooth behavior
+    // false = use custom smooth scroll with consistent speed
+    const USE_NATIVE_SCROLL = true;
+
     // Scroll speed in pixels per millisecond (adjust this to control speed)
-    const SCROLL_SPEED = 4; // 3px per ms = 3000px per second
+    // Only used when USE_NATIVE_SCROLL is false
+    const SCROLL_SPEED = 4; // 4px per ms = 4000px per second
     
     let scrollAnimation = null; // Track current animation
     
@@ -61,6 +67,25 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log(`Scrolling ${Math.abs(distance).toFixed(0)}px over ${duration.toFixed(0)}ms`);
     }
 
+    /**
+     * Native scrollTo with smooth behavior
+     * @param {number} targetPosition - Target scroll position
+     */
+    function nativeScrollTo(targetPosition) {
+        // Cancel any existing scroll animation
+        if (scrollAnimation) {
+            cancelAnimationFrame(scrollAnimation);
+            scrollAnimation = null;
+        }
+        
+        scroller.scrollTo({
+            top: targetPosition,
+            behavior: 'smooth'
+        });
+        
+        console.log(`Native scrollTo to position: ${targetPosition}`);
+    }
+
     // Add click event to each number container
     numberContainers.forEach((numberContainer, index) => {
         numberContainer.addEventListener('click', function() {
@@ -77,8 +102,12 @@ document.addEventListener('DOMContentLoaded', function() {
             // Current scroll position + (inner-scroller top - scroller top) + 1px extra
             const targetScrollTop = scroller.scrollTop + (innerScrollerRect.top - scrollerRect.top) + 1;
 
-            // Smooth scroll to the target position with consistent speed
-            smoothScrollTo(targetScrollTop);
+            // Use selected scrolling approach
+            if (USE_NATIVE_SCROLL) {
+                nativeScrollTo(targetScrollTop);
+            } else {
+                smoothScrollTo(targetScrollTop);
+            }
         });
 
         // Add cursor pointer style
@@ -103,15 +132,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Current scroll position + (inner-scroller top - scroller top) + 1px extra
                 const targetScrollTop = scroller.scrollTop + (innerScrollerRect.top - scrollerRect.top) + 1;
 
-                // Instant scroll for start menu items (no animation)
-                scroller.scrollTop = targetScrollTop;
+                // Use selected scrolling approach
+                if (USE_NATIVE_SCROLL) {
+                    nativeScrollTo(targetScrollTop);
+                } else {
+                    // Instant scroll for start menu items (no animation) when using custom approach
+                    scroller.scrollTop = targetScrollTop;
+                }
                 
                 // Trigger mask and clone updates by scrolling 1px with very fast animation
                 // Only for "Projekte" (index 1) where mask and clones are used
                 if (index === 1) {
                     setTimeout(() => {
                         const currentScrollTop = scroller.scrollTop;
-                        smoothScrollTo(currentScrollTop + 5, 0.1); // 0.1px per ms = very fast
+                        if (USE_NATIVE_SCROLL) {
+                            // For native scroll, use a small smooth scroll
+                            nativeScrollTo(currentScrollTop + 5);
+                        } else {
+                            smoothScrollTo(currentScrollTop + 5, 0.1); // 0.1px per ms = very fast
+                        }
                         console.log('Desktop: Triggered 5px scroll to update mask and clones for Projekte');
                     }, 100);
                 }
