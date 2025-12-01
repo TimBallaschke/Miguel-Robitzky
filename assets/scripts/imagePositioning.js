@@ -157,6 +157,15 @@ document.addEventListener('DOMContentLoaded', function() {
             currentOpacity = targetOpacity;
         }
         
+        // Hide unmasked clone when connected-middle is active
+        if (unmaskedContainer) {
+            if (hasConnectedMiddle) {
+                unmaskedContainer.style.display = 'none';
+            } else {
+                unmaskedContainer.style.display = 'block';
+            }
+        }
+        
         // Always keep originals hidden - clones are always visible now
         imageClones.forEach(({ original }) => {
             original.style.opacity = '0';
