@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const innerScrollers = document.querySelectorAll('.inner-scroller');
     const numberContainers = document.querySelectorAll('.number-container');
     const projectTextClonesContainer = document.querySelector('.project-text-clones-container');
+    let activeButton = null;
     
     if (!websiteTitleContainer || !scroller || innerScrollers.length === 0 || numberContainers.length === 0) return;
     
@@ -204,6 +205,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (index === connectedIndex) {
                         item.classList.add('clicked-menu-item');
                         item.classList.add('connected');
+
+                        activeButton = item.querySelector('.button-content');
+
+                        if (activeButton) {
+                            activeButton.classList.add('display-none');
+                        }
+
                         console.log(`Item ${index + 1}: Added clicked-menu-item and connected`);
                     } else {
                         item.classList.remove('clicked-menu-item');
@@ -219,6 +227,12 @@ document.addEventListener('DOMContentLoaded', function() {
             if (startMenuContainer) {
                 startMenuContainer.style.transition = '';
                 startMenuContainer.classList.remove('display-none');
+
+                if (activeButton) {
+                    setTimeout(() => {
+                        activeButton.classList.remove('display-none');
+                    }, 200);
+                }
             }
             if (startMenu) {
                 startMenu.style.transition = '';
@@ -234,7 +248,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const contentContainer = document.querySelector('.content-container');
             if (contentContainer) {
                 contentContainer.classList.add('hidden');
-                
+
+                const contentElements = document.querySelectorAll('.content-element');
+                contentElements.forEach(element => {
+                    element.classList.add('hidden');
+                });
+
                 // Reverse animation sequence for mobile
                 if (isMobileView) {
                     // Remove "display-none" from start-menu-container after 100ms
@@ -366,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function() {
                              
                              console.log('Desktop: Reset activeItem and removed all desktop classes');
                         }, 100);
-                    }, 10); // Increased delay to allow content container to fully fade out (300ms transition + 100ms buffer)
+                    }, 200); // Increased delay to allow content container to fully fade out (300ms transition + 100ms buffer)
                 }
             }
         });

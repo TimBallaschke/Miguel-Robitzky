@@ -245,6 +245,21 @@ body.fullscreen-gallery {
   }
 }
 
+.content-element {
+  transition: opacity 300ms ease-in-out;
+  transition-delay: 300ms;
+  opacity: 1;
+}
+.content-element.hidden {
+  opacity: 0;
+  transition-delay: 0ms;
+}
+@media (max-width: 768px) {
+  .content-element.hidden {
+    opacity: 1;
+  }
+}
+
 .number-container {
   position: fixed;
   left: var(--page-padding);
@@ -1176,6 +1191,9 @@ body.fullscreen-gallery {
   transition-delay: 0ms;
 }
 .folded-mobile .button-content {
+  opacity: 0;
+}
+.button-content.display-none {
   opacity: 0;
 }
 @media (max-width: 768px) {

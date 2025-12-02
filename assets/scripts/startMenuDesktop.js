@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const startMenuItems = document.querySelectorAll('.start-menu-item');
     const contentContainer = document.querySelector('.content-container');
+    const contentElements = document.querySelectorAll('.content-element');
     const startMenuContainer = document.querySelector('.start-menu-container');
     const scroller = document.querySelector('.scroller');
     
@@ -40,6 +41,9 @@ document.addEventListener('DOMContentLoaded', function() {
             contentVisibleTimeout = setTimeout(() => {
                 if (contentContainer) {
                     contentContainer.classList.remove('hidden');
+                    contentElements.forEach(element => {
+                        element.classList.remove('hidden');
+                    });
                     console.log('Desktop: Removed "hidden" from content-container');
                 }
 

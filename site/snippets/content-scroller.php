@@ -21,13 +21,13 @@ $sections = 4;
                     <div class="biografie-title button-label"><?= $biografiePage->title() ?></div>
                     
                     <?php if ($biografiePage->kurzbiografie()->isNotEmpty()): ?>
-                        <div class="kurzbiografie-section text-large">
+                        <div class="kurzbiografie-section text-large  content-element hidden">
                             <div class="biografie-text"><?= $biografiePage->kurzbiografie()->kirbytext() ?></div>
                         </div>
                     <?php endif; ?>
                     
                     <?php if ($biografiePage->schaffen()->isNotEmpty()): ?>
-                        <div class="schaffen-section text-small">
+                        <div class="schaffen-section text-small content-element hidden">
                             <div class="schaffen-text"><?= $biografiePage->schaffen()->kirbytext() ?></div>
                         </div>
                     <?php endif; ?>
@@ -131,7 +131,7 @@ $sections = 4;
                     <div class="mobile-scroll-gradient"></div>
                     <div class="pressebilder-title button-label"><?= $pressebilderPage->title() ?></div>
                     <?php if ($pressebilderPage->text()->isNotEmpty()): ?>
-                        <div class="pressebilder-text text-large"><?= $pressebilderPage->text() ?>
+                        <div class="pressebilder-text text-large content-element hidden"><?= $pressebilderPage->text() ?>
                             <a href="/download-pressebilder.php" class="pressebilder-download text-small" download>hier herunterladen</a>
                         </div>
                     <?php endif; ?>
@@ -140,7 +140,7 @@ $sections = 4;
                     $images = $pressebilderPage->images();
                     if ($images->isNotEmpty()): 
                     ?>
-                        <div class="pressebilder-images">
+                        <div class="pressebilder-images content-element hidden">
                             <?php foreach ($images as $image): ?>
                                 <div class="pressebild-item">
                                     <img 
@@ -174,7 +174,7 @@ $sections = 4;
                     <div class="mobile-scroll-gradient"></div>
                     <div class="kontakt-title button-label"><?= $kontaktPage->title() ?></div>
                     
-                    <div class="kontakt-sections">
+                    <div class="kontakt-sections content-element hidden">
                         <div class="kontakt-section kontakt-management">
                             <div class="kontakt-heading text-large bold">Management & Presse</div>
                             <?php if ($kontaktPage->management_name()->isNotEmpty()): ?>
