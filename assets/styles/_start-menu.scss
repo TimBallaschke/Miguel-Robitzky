@@ -331,6 +331,11 @@
     opacity: 1;
     transition-delay: 400ms;
 
+    @include mobile {
+        height: 5rem;
+        width: 5rem;
+    }
+
     .unfolded & {
         opacity: 0;
         transition-delay: 0ms;
