@@ -155,14 +155,14 @@ document.addEventListener('DOMContentLoaded', function() {
         // Check if scrolling up
         const isScrollingUp = currentScrollY < lastScrollY;
         
-        if (isMobileMenuNotVisible && isScrollerAtTop && scrollChanged && isScrollingUp) {
-            console.log('Desktop: Window scrolled up while scroller is at top and mobile menu not visible');
-            // Simulate click on website title element (same as clicking website title)
-            const websiteTitleContainer = document.querySelector('.website-title-container');
-            if (websiteTitleContainer) {
-                websiteTitleContainer.click();
-            }
-        }
+        // if (isMobileMenuNotVisible && isScrollerAtTop && scrollChanged && isScrollingUp) {
+        //     console.log('Desktop: Window scrolled up while scroller is at top and mobile menu not visible');
+        //     // Simulate click on website title element (same as clicking website title)
+        //     const websiteTitleContainer = document.querySelector('.website-title-container');
+        //     if (websiteTitleContainer) {
+        //         websiteTitleContainer.click();
+        //     }
+        // }
         lastScrollY = currentScrollY;
     }, { passive: true });
 });

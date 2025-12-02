@@ -35,6 +35,10 @@
   font-family: "FocalMaxi";
 }
 
+a {
+  color: black;
+}
+
 :root {
   --background-color: #B5FF87;
   --grey-color: #FAFAFA;
