@@ -707,6 +707,20 @@ document.addEventListener('DOMContentLoaded', function() {
         captureInitialPositions();
         updateNumberPositions();
         updateSVGShapes();
+
+        scheduleUpdate();
+
+        setTimeout(() => {
+            scheduleUpdate();
+        }, 100);
+
+        setTimeout(() => {
+            scheduleUpdate();
+        }, 200);
+
+        setTimeout(() => {
+            scheduleUpdate();
+        }, 300);
         
         // Trigger a scroll event to ensure mask updates properly
         // This ensures all scroll-based updates run after resize
