@@ -997,13 +997,21 @@ body.start-animation-2 {
 }
 
 .pressebilder-download {
-  font-family: "FocalMaxi Medium Italic";
-  text-decoration: underline;
+  font-family: "FocalMaxi";
   color: inherit;
   cursor: pointer;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  transition: opacity 0.2s ease-in-out;
+}
+@media (max-width: 768px) {
+  .pressebilder-download {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
 }
 .pressebilder-download:hover {
-  opacity: 0.7;
+  opacity: 0.2;
 }
 
 .pressebilder-images {

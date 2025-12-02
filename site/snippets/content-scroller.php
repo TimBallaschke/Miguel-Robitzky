@@ -132,9 +132,9 @@ $sections = 4;
                     <div class="pressebilder-title button-label"><?= $pressebilderPage->title() ?></div>
                     <?php if ($pressebilderPage->text()->isNotEmpty()): ?>
                         <div class="pressebilder-text text-large content-element hidden"><?= $pressebilderPage->text() ?>
-                            <a href="/download-pressebilder.php" class="pressebilder-download text-small" download>hier herunterladen</a>
                         </div>
                     <?php endif; ?>
+                    <a href="/download-pressebilder.php" class="pressebilder-download text-small content-element hidden" download>hier herunterladen</a>
                     
                     <?php 
                     $images = $pressebilderPage->images();

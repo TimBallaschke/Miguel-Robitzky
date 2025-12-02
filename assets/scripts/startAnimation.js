@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         body.classList.remove('start-animation-2');
         body.classList.add('start-animation-3');
-    }, 400);
+    }, 700);
 
     setTimeout(() => {
         body.classList.remove('start-animation-3');
