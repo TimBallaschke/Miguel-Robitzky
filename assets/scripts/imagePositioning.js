@@ -158,12 +158,15 @@ document.addEventListener('DOMContentLoaded', function() {
             currentOpacity = targetOpacity;
         }
         
-        // Hide unmasked clone when connected-middle is active
-        if (unmaskedContainer) {
-            if (hasConnectedMiddle) {
+        // Hide unmasked clone when inner-scroller-2 has connected-middle class
+        if (unmaskedContainer && innerScroller2) {
+            const hasInnerScrollerConnectedMiddle = innerScroller2.classList.contains('connected-middle');
+            if (hasInnerScrollerConnectedMiddle) {
                 unmaskedContainer.style.display = 'none';
             } else {
                 unmaskedContainer.style.display = 'block';
+                // Also set opacity based on content visibility (same as regular clones)
+                unmaskedContainer.style.opacity = shouldShowClones ? '1' : '0';
             }
         }
         
