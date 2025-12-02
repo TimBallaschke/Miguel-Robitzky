@@ -870,9 +870,15 @@ body.fullscreen-gallery {
 }
 
 .kontakt-content {
+  padding-top: var(--button-padding);
   padding-left: var(--text-padding-1);
   padding-right: calc(var(--page-padding) * 2);
   padding-bottom: var(--page-padding);
+}
+@media (max-width: 768px) {
+  .kontakt-content {
+    padding-top: 0;
+  }
 }
 
 .kontakt-title {
@@ -1211,6 +1217,35 @@ body.fullscreen-gallery {
   font-family: "GeistMono";
   font-size: var(--monospace-font-size);
   color: black;
+}
+
+.button-plus {
+  position: relative;
+  height: 1.8rem;
+  width: 1.8rem;
+  transition: opacity 200ms ease-in-out;
+  opacity: 1;
+  transition-delay: 400ms;
+}
+.unfolded .button-plus {
+  opacity: 0;
+  transition-delay: 0ms;
+}
+
+.button-plus-line {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: black;
+}
+.button-plus-line.horizontal {
+  width: 100%;
+  height: 1px;
+}
+.button-plus-line.vertical {
+  width: 1px;
+  height: 100%;
 }
 
 #start-menu-item-1 {

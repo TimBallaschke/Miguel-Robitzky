@@ -793,9 +793,14 @@
 }
 
 .kontakt-content {
+    padding-top: var(--button-padding);
     padding-left: var(--text-padding-1);
     padding-right: calc(var(--page-padding) * 2);
     padding-bottom: var(--page-padding);
+
+    @include mobile {
+        padding-top: 0;
+    }
 }
 
 .kontakt-title {

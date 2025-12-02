@@ -49,7 +49,10 @@ $menuLabels = [
                     <?php endif; ?>
                     <div class="button-content">
                         <div class="button-label"><?= $menuLabels[$i] ?></div>
-                        <div class="button-plus"></div>
+                        <div class="button-plus">
+                            <div class="button-plus-line horizontal"></div>
+                            <div class="button-plus-line vertical"></div>
+                        </div>
                     </div>
                     <div class="start-menu-item-button-inner-after"></div>
                     <div class="start-menu-item-button-inner-after-cut-out"></div>
