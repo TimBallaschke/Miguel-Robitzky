@@ -80,7 +80,7 @@
         margin-bottom: 10rem;
 
         @include mobile {
-            margin-bottom: 40rem;
+            margin-bottom: 70rem;
         }
     }
 }
@@ -478,7 +478,7 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     z-index: 100;
     pointer-events: none;
     user-select: none;
@@ -495,7 +495,7 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     z-index: 100;
     pointer-events: none;
     user-select: none;
@@ -561,7 +561,7 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     z-index: 90; // Below masked clones (z-index 100)
     pointer-events: none;
     user-select: none;
@@ -577,6 +577,10 @@
     }
     
     .fullscreen-gallery & {
+        opacity: 0;
+    }
+
+    .start-animation-1 & {
         opacity: 0;
     }
 }
@@ -690,7 +694,7 @@
     top: 0;
     left: 0;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     z-index: 150; // Above images (z-index 100)
     pointer-events: none;
     user-select: none;

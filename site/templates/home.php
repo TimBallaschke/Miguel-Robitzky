@@ -6,9 +6,31 @@
     <title>Miguel Robitzky</title>
     <link rel="stylesheet" href="/assets/styles/style.css">
 </head>
-<body class="start-menu-opened">
+<body class="start-menu-opened start-animation-1">
     <div class="background-image">
-        <img src="/assets/images/TooManyTabs.png" alt="Background Image">
+        <?php 
+        // Try to get the image as a Kirby file object
+        $bgImage = image('assets/images/TooManyTabs.png') ?? image('TooManyTabs.png');
+        
+        if ($bgImage && $bgImage->exists()):
+        ?>
+            <img 
+                src="<?= $bgImage->resize(20, 20)->url() ?>"
+                srcset="<?= 
+                    $bgImage->srcset([
+                        '800w' => ['width' => 800, 'format' => 'webp'],
+                        '1200w' => ['width' => 1200, 'format' => 'webp'],
+                        '1600w' => ['width' => 1600, 'format' => 'webp'],
+                        '2000w' => ['width' => 2000, 'format' => 'webp']
+                    ])
+                ?>"
+                sizes="100vw"
+                loading="eager"
+                alt="Background Image"
+            >
+        <?php else: ?>
+            <img src="/assets/images/TooManyTabs.png" alt="Background Image">
+        <?php endif; ?>
     </div>
     <div class="website-title-container">
         <div class="title-element">Miguel Robitzky</div>
@@ -24,6 +46,7 @@
     <?php snippet('fullscreen-overlays') ?>
     </body>
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+<script src="/assets/scripts/startAnimation.js"></script>
 <script src="/assets/scripts/helper.js"></script>
 <script src="/assets/scripts/contentScrollerDesktop.js"></script>
 <script src="/assets/scripts/startMenuMobile.js"></script>

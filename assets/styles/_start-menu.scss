@@ -17,6 +17,49 @@
 .start-menu {
     .start-menu-item {
         height: calc(4 * var(--menu-item-height) + 3 * var(--container-gap) + var(--page-padding));
+        opacity: 1;
+        transform: translateY(0%);
+
+
+
+        .start-animation-1 & {
+            opacity: 0;
+            transform: translateY(25%);
+        }
+
+        .start-animation-2 & {
+            opacity: 0;
+            transform: translateY(25%);
+
+        }
+
+        .start-animation-3 & {
+            opacity: 1;
+        }
+    }
+}
+
+#start-menu-item-1 {
+    .start-animation-3 & {
+        transition-delay: 0ms;
+    }
+}
+
+#start-menu-item-2 {
+    .start-animation-3 & {
+        transition-delay: 100ms;
+    }
+}
+
+#start-menu-item-3 {
+    .start-animation-3 & {
+        transition-delay: 200ms;
+    }
+}
+
+#start-menu-item-4 {
+    .start-animation-3 & {
+        transition-delay: 300ms;
     }
 }
 
