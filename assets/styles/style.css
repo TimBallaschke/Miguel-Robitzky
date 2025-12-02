@@ -156,8 +156,8 @@ body.fullscreen-gallery {
 .content-container {
   position: fixed;
   top: var(--page-title-size);
-  left: calc(var(--page-padding) + var(--menu-item-height) + var(--container-gap));
-  width: calc(100vw - 2 * var(--page-padding) - var(--menu-item-height) - var(--container-gap));
+  left: calc(var(--page-padding) + var(--menu-item-height) + var(--container-gap) - 0.5px);
+  width: calc(100vw - 2 * var(--page-padding) - var(--menu-item-height) - var(--container-gap) + 0.5px);
   height: calc(100vh - 10rem);
   transition: opacity 300ms ease-in-out;
   opacity: 1;
