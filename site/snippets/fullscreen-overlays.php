@@ -27,6 +27,11 @@ if ($projektePages && $projektePages->children()->isNotEmpty()):
                         loading="lazy"
                         alt="<?= $projekt->title() ?>"
                     >
+                    <?php if ($image->credit()->isNotEmpty()): ?>
+                        <div class="fullscreen-image-caption">
+                            <?= $image->credit() ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             <?php 
             $index++;

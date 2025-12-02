@@ -1325,4 +1325,13 @@ body.fullscreen-gallery {
 }
 .fullscreen-close:active {
   transform: scale(0.95);
+}
+
+.fullscreen-image-caption {
+  position: absolute;
+  font-family: "GeistMono";
+  font-size: 1rem;
+  line-height: 1;
+  color: black;
+  white-space: nowrap;
 }/*# sourceMappingURL=style.css.map */

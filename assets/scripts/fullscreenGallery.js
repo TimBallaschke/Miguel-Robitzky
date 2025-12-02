@@ -51,11 +51,58 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
         
+        // Function to position caption at bottom right of image
+        function positionCaption(fullscreenImage) {
+            const img = fullscreenImage.querySelector('img');
+            const caption = fullscreenImage.querySelector('.fullscreen-image-caption');
+            
+            if (!img || !caption) return;
+            
+            // Wait for image to load and render
+            if (img.complete) {
+                updateCaptionPosition(img, caption, fullscreenImage);
+            } else {
+                img.addEventListener('load', () => {
+                    updateCaptionPosition(img, caption, fullscreenImage);
+                }, { once: true });
+            }
+        }
+        
+        function updateCaptionPosition(img, caption, container) {
+            // Get the actual rendered image dimensions and position
+            const imgRect = img.getBoundingClientRect();
+            const containerRect = container.getBoundingClientRect();
+            
+            // Calculate position relative to container
+            const relativeLeft = imgRect.left - containerRect.left;
+            const relativeTop = imgRect.top - containerRect.top;
+            const imgWidth = imgRect.width;
+            const imgHeight = imgRect.height;
+            
+            // Get root font size for rem to px conversion
+            const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize);
+            const padding = 1 * rootFontSize; // 1rem in pixels
+            
+            // Position caption underneath the image, aligned to the left edge
+            const captionLeft = relativeLeft;
+            const captionTop = relativeTop + imgHeight + padding;
+            
+            caption.style.left = captionLeft + 'px';
+            caption.style.top = captionTop + 'px';
+            caption.style.right = 'auto';
+            caption.style.bottom = 'auto';
+            caption.style.transform = 'none'; // No transform needed for left alignment
+        }
+        
         // Function to show image at index
         function showImage(index) {
             fullscreenImages.forEach((img, i) => {
                 if (i === index) {
                     img.classList.add('active');
+                    // Position caption after image becomes active
+                    setTimeout(() => {
+                        positionCaption(img);
+                    }, 50); // Small delay to ensure image is rendered
                 } else {
                     img.classList.remove('active');
                 }
@@ -75,6 +122,15 @@ document.addEventListener('DOMContentLoaded', function() {
             // Add class to body and prevent scroll
             document.body.classList.add('fullscreen-gallery');
             document.body.style.overflow = 'hidden';
+            
+            // Update caption positions after overlay becomes visible
+            setTimeout(() => {
+                fullscreenImages.forEach(img => {
+                    if (img.classList.contains('active')) {
+                        positionCaption(img);
+                    }
+                });
+            }, 100);
         }
         
         // Attach to original button
@@ -140,6 +196,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 const newIndex = (currentIndex + 1) % fullscreenImages.length;
                 showImage(newIndex);
             }
+        });
+        
+        // Update caption positions on window resize
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            if (!fullscreenOverlay.classList.contains('active')) return;
+            
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                fullscreenImages.forEach(img => {
+                    if (img.classList.contains('active')) {
+                        positionCaption(img);
+                    }
+                });
+            }, 100);
         });
     });
 });
