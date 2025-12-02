@@ -173,7 +173,30 @@ $sections = 4;
                 <div class="kontakt-content offset-element offset-top">
                     <div class="mobile-scroll-gradient"></div>
                     <div class="kontakt-title button-label"><?= $kontaktPage->title() ?></div>
-
+                    
+                    <div class="kontakt-sections">
+                        <div class="kontakt-section kontakt-management">
+                            <div class="kontakt-heading text-large bold">Management & Presse</div>
+                            <?php if ($kontaktPage->management_name()->isNotEmpty()): ?>
+                                <div class="kontakt-field text-small">
+                                    <span class="kontakt-value"><?= $kontaktPage->management_name() ?></span>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <?php if ($kontaktPage->management_company()->isNotEmpty()): ?>
+                                <div class="kontakt-field text-small">
+                                    <span class="kontakt-value"><?= $kontaktPage->management_company() ?></span>
+                                </div>
+                            <?php endif; ?>
+                            
+                            <?php if ($kontaktPage->management_email()->isNotEmpty()): ?>
+                                <div class="kontakt-field text-small">
+                                    <a href="mailto:<?= $kontaktPage->management_email() ?>" class="kontakt-value"><?= $kontaktPage->management_email() ?></a>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                        
+                    </div>
                 </div>
             <?php endif; ?>
         </div>

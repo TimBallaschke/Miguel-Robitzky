@@ -34,6 +34,9 @@
 .text-small strong {
   font-family: "FocalMaxi";
 }
+.text-small.bold {
+  font-family: "FocalMaxi";
+}
 
 a {
   color: black;
@@ -908,6 +911,11 @@ body.fullscreen-gallery {
   display: block;
   -o-object-fit: cover;
      object-fit: cover;
+}
+
+.kontakt-heading {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
 }
 
 .start-menu-container {
