@@ -131,8 +131,7 @@ $sections = 4;
                     <div class="mobile-scroll-gradient"></div>
                     <div class="pressebilder-title button-label"><?= $pressebilderPage->title() ?></div>
                     <?php if ($pressebilderPage->text()->isNotEmpty()): ?>
-                        <div class="pressebilder-text text-large content-element hidden"><?= $pressebilderPage->text() ?>
-                        </div>
+
                     <?php endif; ?>
                     <a href="/download-pressebilder.php" class="pressebilder-download text-small content-element hidden" download>hier herunterladen</a>
                     
