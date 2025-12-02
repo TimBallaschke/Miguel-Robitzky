@@ -80,17 +80,32 @@ html {
   -moz-osx-font-smoothing: grayscale;
   font-smooth: never; /* Note: font-smooth is not widely supported */
   box-sizing: border-box;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+html::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 *, *:before, *:after {
   box-sizing: inherit;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+*::-webkit-scrollbar, *:before::-webkit-scrollbar, *:after::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 body {
   background-color: var(--background-color);
   transition: background-color 400ms ease-in-out;
-  height: calc(100dvh + 1px);
+  height: 200dvh;
   overflow: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 body.fullscreen-gallery {
   background-color: white;

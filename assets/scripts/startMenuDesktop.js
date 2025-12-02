@@ -113,6 +113,8 @@ document.addEventListener('DOMContentLoaded', function() {
             const firstMenuItem = startMenuItems[0];
             if (firstMenuItem) {
                 firstMenuItem.click();
+                // Scroll window back to top
+                window.scrollTo({ top: 0, behavior: 'auto' });
             }
         }
         

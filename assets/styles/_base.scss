@@ -4,17 +4,38 @@ html {
     -moz-osx-font-smoothing: grayscale;
     font-smooth: never; /* Note: font-smooth is not widely supported */
     box-sizing: border-box;
+    // Hide scrollbars
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    
+    &::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
 }
 
 *, *:before, *:after {
     box-sizing: inherit;
+    // Hide scrollbars on all elements
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    
+    &::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
 }
 
 body {
     background-color: var(--background-color);
     transition: background-color 400ms ease-in-out;
-    height: calc(100dvh + 1px);
+    height: calc(200dvh);
     overflow: scroll;
+    // Hide scrollbars
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    
+    &::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
 
     &.fullscreen-gallery {
         background-color: white;

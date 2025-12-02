@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const scroller = document.querySelector('.scroller');
     const innerScrollers = document.querySelectorAll('.inner-scroller');
     const numberContainers = document.querySelectorAll('.number-container');
+    const projectTextClonesContainer = document.querySelector('.project-text-clones-container');
     
     if (!websiteTitleContainer || !scroller || innerScrollers.length === 0 || numberContainers.length === 0) return;
     
@@ -445,10 +446,17 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Click handler
     websiteTitleContainer.addEventListener('click', function() {
+
+
+
         // On mobile, skip in-between checks and go straight to connected state
         if (isMobile()) {
             checkConnectedState();
             return;
+        }
+
+        if (projectTextClonesContainer) {
+            projectTextClonesContainer.style.transition = 'opacity 0.3s ease-in-out';
         }
         
         // Desktop only: Check for in-between states
