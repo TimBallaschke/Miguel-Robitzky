@@ -296,6 +296,9 @@ document.addEventListener('DOMContentLoaded', function() {
                                     setTimeout(() => {
                                         console.log('Mobile: 800ms timeout fired - dispatching reset-menu event');
                                         window.dispatchEvent(new CustomEvent('reset-menu'));
+
+                                        useNativeScroll = false;
+                                        console.log('Mobile: Set useNativeScroll to false', useNativeScroll);
                                     }, 800);
                                     
                                     console.log('Reset all items to initial position');
@@ -355,6 +358,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             setTimeout(() => {
                                 console.log('1500ms timeout fired - dispatching reset-menu event');
                                 window.dispatchEvent(new CustomEvent('reset-menu'));
+
+                                useNativeScroll = false;
+                                console.log('Desktop: Set useNativeScroll to false', useNativeScroll);
                             }, 1000);
                              
                              console.log('Desktop: Reset activeItem and removed all desktop classes');

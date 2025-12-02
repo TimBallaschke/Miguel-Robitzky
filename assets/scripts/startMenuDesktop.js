@@ -21,49 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return isContentHidden && !isMenuHidden;
     }
     
-    // Function to trigger first menu item behavior
-    function triggerFirstMenuItem() {
-        // Prevent multiple triggers during the same transition
-        if (scrollTriggered) return;
-        scrollTriggered = true;
-        
-        console.log('Desktop: Scroll detected, triggering first menu item behavior');
-        
-        // Clear any existing timeouts
-        if (contentVisibleTimeout) {
-            clearTimeout(contentVisibleTimeout);
-        }
-        if (menuHideTimeout) {
-            clearTimeout(menuHideTimeout);
-        }
-        
-        // Remove "hidden" class from content-container after 500ms
-        // This will trigger clone visibility update via MutationObserver
-        contentVisibleTimeout = setTimeout(() => {
-            if (contentContainer) {
-                contentContainer.classList.remove('hidden');
-                console.log('Desktop: Removed "hidden" from content-container');
-            }
-
-            setTimeout(() => {
-                // Remove "offset-top" class from all offset elements
-                const offsetElements = document.querySelectorAll('.offset-element');
-                offsetElements.forEach(element => {
-                    element.classList.remove('offset-top');
-                });
-                
-            }, 200);
-            
-        }, 500);
-        
-        // Add "display-none" class to start-menu-container after 800ms
-        menuHideTimeout = setTimeout(() => {
-            if (startMenuContainer) {
-                startMenuContainer.classList.add('display-none');
-                console.log('Desktop: Added "display-none" to start-menu-container');
-            }
-        }, 800);
-    }
     
     // Listen for click events on menu items
     startMenuItems.forEach((item, index) => {
@@ -94,6 +51,13 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                     
                 }, 200);
+
+                setTimeout(() => {
+                    useNativeScroll = true;
+                    console.log('Desktop: Set useNativeScroll to true', useNativeScroll);
+                }, 800);
+
+                
                 
             }, 500);
             

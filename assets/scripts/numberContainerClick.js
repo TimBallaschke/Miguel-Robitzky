@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Flag to choose scrolling approach
     // true = use native scrollTo with smooth behavior
     // false = use custom smooth scroll with consistent speed
-    const USE_NATIVE_SCROLL = true;
 
     // Scroll speed in pixels per millisecond (adjust this to control speed)
     // Only used when USE_NATIVE_SCROLL is false
@@ -103,9 +102,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const targetScrollTop = scroller.scrollTop + (innerScrollerRect.top - scrollerRect.top) + 1;
 
             // Use selected scrolling approach
-            if (USE_NATIVE_SCROLL) {
+            if (useNativeScroll) {
                 nativeScrollTo(targetScrollTop);
-            } else {
+            } else if (!useNativeScroll) {
                 smoothScrollTo(targetScrollTop);
             }
         });
@@ -133,11 +132,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 const targetScrollTop = scroller.scrollTop + (innerScrollerRect.top - scrollerRect.top) + 1;
 
                 // Use selected scrolling approach
-                if (USE_NATIVE_SCROLL) {
+                if (useNativeScroll) {
                     nativeScrollTo(targetScrollTop);
-                } else {
-                    // Instant scroll for start menu items (no animation) when using custom approach
-                    scroller.scrollTop = targetScrollTop;
+                } else if (!useNativeScroll) {
+                    smoothScrollTo(targetScrollTop);
                 }
                 
                 // Trigger mask and clone updates by scrolling 1px with very fast animation
@@ -145,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (index === 1) {
                     setTimeout(() => {
                         const currentScrollTop = scroller.scrollTop;
-                        if (USE_NATIVE_SCROLL) {
+                        if (useNativeScroll) {
                             // For native scroll, use a small smooth scroll
                             nativeScrollTo(currentScrollTop + 5);
                         } else {

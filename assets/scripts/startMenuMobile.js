@@ -144,6 +144,8 @@ document.addEventListener('DOMContentLoaded', function() {
             contentVisibleTimeout = setTimeout(() => {
                 if (contentContainer) {
                     contentContainer.classList.remove('hidden');
+                    useNativeScroll = true;
+                    console.log('Mobile: Set useNativeScroll to true', useNativeScroll);
                     console.log('Removed "hidden" from content-container');
                 }
             }, 1000);
