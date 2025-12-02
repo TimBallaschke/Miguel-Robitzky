@@ -707,12 +707,20 @@ document.addEventListener('DOMContentLoaded', function() {
         captureInitialPositions();
         updateNumberPositions();
         updateSVGShapes();
+        
+        // Trigger a scroll event to ensure mask updates properly
+        // This ensures all scroll-based updates run after resize
+        if (scroller) {
+            const scrollEvent = new Event('scroll', { bubbles: true });
+            scroller.dispatchEvent(scrollEvent);
+        }
     }
     
     // Use requestAnimationFrame to batch updates and reduce layout thrashing
     let rafScheduled = false;
     
     function scheduleUpdate() {
+        console.log('Desktop: Schedule update');
         if (!rafScheduled) {
             rafScheduled = true;
             requestAnimationFrame(() => {

@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Use selected scrolling approach
             if (useNativeScroll) {
                 nativeScrollTo(targetScrollTop);
-            } else if (!useNativeScroll) {
+            } else {
                 smoothScrollTo(targetScrollTop);
             }
         });
@@ -133,9 +133,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 // Use selected scrolling approach
                 if (useNativeScroll) {
+                    console.log('Native scrollTo to position: ', targetScrollTop);
                     nativeScrollTo(targetScrollTop);
-                } else if (!useNativeScroll) {
-                    smoothScrollTo(targetScrollTop);
+                } else {
+                    console.log('Custom smooth scroll to position: ', targetScrollTop);
+                    // Instant scroll for start menu items (no animation) when using custom approach
+                    scroller.scrollTop = targetScrollTop;
                 }
                 
                 // Trigger mask and clone updates by scrolling 1px with very fast animation
