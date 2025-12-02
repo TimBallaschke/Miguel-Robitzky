@@ -3,6 +3,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const scroller = document.querySelector('.scroller');
     const projectsImages = document.querySelectorAll('.projects-images');
+    const projectTextContainers = document.querySelectorAll('.project-text-container:not(.project-text-clone)');
     
     if (!scroller || !projectsImages.length) {
         return;
@@ -10,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Store clones and their original elements
     const imageClones = [];
+    const textBackgroundClones = []; // Text background clones (inside images container)
     let unmaskedClone = null;
     
     // Get the pre-existing clones container from the DOM (populated by PHP)
@@ -76,6 +78,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 };
             }
         }
+        
+        // Get text background clones (inside images container, share same mask)
+        textBackgroundClones.length = 0;
+        const textBgClones = clonesContainer.querySelectorAll('.project-text-background-clone');
+        projectTextContainers.forEach((original, index) => {
+            const clone = textBgClones[index];
+            if (clone) {
+                textBackgroundClones.push({
+                    original,
+                    clone
+                });
+            }
+        });
     }
 
     // Update clone positions to follow originals
@@ -106,6 +121,13 @@ document.addEventListener('DOMContentLoaded', function() {
             unmaskedClone.clone.style.width = rect.width + 'px';
             unmaskedClone.clone.style.height = rect.height + 'px';
         }
+        
+        // Position text background clones (follow original text containers)
+        textBackgroundClones.forEach(({ original, clone }) => {
+            const rect = original.getBoundingClientRect();
+            clone.style.top = rect.top + 'px';
+            clone.style.height = rect.height + 'px';
+        });
     }
 
     // Handle resize - re-initialize if switching between mobile/desktop
@@ -232,6 +254,10 @@ document.addEventListener('DOMContentLoaded', function() {
         handleResize();
         updateCloneVisibility();
     });
+
+    setInterval(() => {
+        updateCloneVisibility();
+    }, 500);
     
     // Watch for changes to content-container class (when "hidden" is removed)
     const contentContainer = document.querySelector('.content-container');

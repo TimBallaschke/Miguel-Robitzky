@@ -471,7 +471,24 @@
 
 
 
-// Container for all cloned images - ONE mask applied to entire container
+// Wrapper container (no mask - children have their own masks)
+.projects-clones-mask-container {
+    // Fixed position covering viewport
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 100;
+    pointer-events: none;
+    user-select: none;
+
+    .fullscreen-gallery & {
+        // Children will handle their own opacity
+    }
+}
+
+// Container for image clones (mask applied here)
 .projects-images-clones-container {
     // Fixed position covering viewport (doesn't move)
     position: fixed;
@@ -483,15 +500,15 @@
     pointer-events: none;
     user-select: none;
     
+    // Mask applied to this container
+    mask: url(#combined-mask-2);
+    -webkit-mask: url(#combined-mask-2);
+    
     // Hidden by default
     opacity: 0;
     
     // Smooth transition to prevent flickering during class changes
     transition: opacity 0.3s ease-out;
-    
-    // Mask applied directly to container (moves/reshapes with red SVG)
-    mask: url(#combined-mask-2);
-    -webkit-mask: url(#combined-mask-2);
 
     .fullscreen-gallery & {
         opacity: 0;
@@ -522,6 +539,20 @@
             pointer-events: auto !important;
         }
     }
+}
+
+// Text background clones (solid background, positioned to match text containers)
+// These are inside the images clone container so they share the same mask
+.project-text-background-clone {
+    position: absolute;
+    top: 0;
+    left: var(--page-padding);
+    width: calc(100vw - 2 * var(--page-padding));
+    padding-left: calc(var(--menu-item-height) + var(--container-gap));
+    pointer-events: none;
+    user-select: none;
+    z-index: 1001; // Above images (z-index 1000)
+    background-color: rgba(250, 250, 250, 1);
 }
 
 // Unmasked clone container (same as masked but NO mask applied, always visible, desktop only)
@@ -652,7 +683,7 @@
     }
 }
 
-// Container for all cloned text - masked by same SVG mask as images
+// Container for text clones (mask applied here)
 .project-text-clones-container {
     // Fixed position covering viewport (doesn't move)
     position: fixed;
@@ -664,14 +695,13 @@
     pointer-events: none;
     user-select: none;
     transition: opacity 0.3s ease-in-out;
-
+    
+    // Mask applied to this container
+    mask: url(#combined-mask-2);
+    -webkit-mask: url(#combined-mask-2);
     
     // Hidden by default
     opacity: 0;
-    
-    // Same mask as images
-    mask: url(#combined-mask-2);
-    -webkit-mask: url(#combined-mask-2);
 
     .fullscreen-gallery & {
         opacity: 0;

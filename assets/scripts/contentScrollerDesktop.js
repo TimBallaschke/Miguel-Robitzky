@@ -697,12 +697,84 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
     
+    // Function to apply mask to wrapper container via JavaScript
+    // Toggles mask off/on to force Safari to repaint (like toggling in dev tools)
+    function applyMaskToContainer() {
+        // console.log('Desktop: Applying mask');
+        // const maskContainer = document.querySelector('.projects-clones-mask-container');
+        // if (maskContainer && svgMask) {
+        //     // Remove mask first
+        //     maskContainer.style.webkitMask = 'none';
+        //     maskContainer.style.mask = 'none';
+            
+        //     // Force a reflow by reading a layout property
+        //     void maskContainer.offsetHeight;
+            
+        //     // Reapply mask - this forces Safari to repaint
+        //     maskContainer.style.webkitMask = 'url(#combined-mask-2)';
+        //     maskContainer.style.mask = 'url(#combined-mask-2)';
+        // }
+    }
+
+    const buttons = document.querySelectorAll('.start-menu-item-button');
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            console.log('Desktop: Button clicked / Mask applied');
+            applyMaskToContainer();
+
+            setTimeout(() => {
+                applyMaskToContainer();
+            }, 500);
+        });
+    });
+    
+    // Apply mask when inner-scroller-2 is scrolled into view
+    const innerScroller2 = document.querySelector('#inner-scroller-2');
+    if (innerScroller2) {
+        // Intersection Observer to detect when element is in view
+        const intersectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    console.log('Desktop: inner-scroller-2 in view - applying mask');
+                    applyMaskToContainer();
+                    setTimeout(applyMaskToContainer, 100);
+                    // Disconnect after first trigger
+                    intersectionObserver.disconnect();
+                }
+            });
+        }, { threshold: 0.1 });
+        intersectionObserver.observe(innerScroller2);
+        
+        // Mutation Observer to detect when connected-top class is added
+        const mutationObserver = new MutationObserver((mutations) => {
+            mutations.forEach(mutation => {
+                if (mutation.attributeName === 'class') {
+                    if (innerScroller2.classList.contains('connected-top')) {
+                        console.log('Desktop: inner-scroller-2 has connected-top - applying mask');
+                        applyMaskToContainer();
+                        setTimeout(applyMaskToContainer, 100);
+                        // Disconnect after first trigger
+                        mutationObserver.disconnect();
+                    }
+                }
+            });
+        });
+        mutationObserver.observe(innerScroller2, { 
+            attributes: true, 
+            attributeFilter: ['class'] 
+        });
+    }
+
+
     function handleResize() {
         // Update mask dimensions on resize
         if (svgMask) {
             svgMask.setAttribute('width', window.innerWidth);
             svgMask.setAttribute('height', window.innerHeight);
         }
+        
+        // Reapply mask to wrapper container via JavaScript
+        applyMaskToContainer();
         
         captureInitialPositions();
         updateNumberPositions();
@@ -756,6 +828,9 @@ document.addEventListener('DOMContentLoaded', function() {
     updateNumberPositions();
     updateSVGShapes();
     
+    // Apply mask immediately and also with delays to ensure DOM is ready
+
+
     // Expose update functions globally for manual triggering
     window.forceScrollerUpdate = function() {
         updateNumberPositions();

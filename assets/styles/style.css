@@ -566,6 +566,18 @@ body.fullscreen-gallery {
   transform: scale(0.95);
 }
 
+.projects-clones-mask-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 100;
+  pointer-events: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
 .projects-images-clones-container {
   position: fixed;
   top: 0;
@@ -577,10 +589,10 @@ body.fullscreen-gallery {
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
-  opacity: 0;
-  transition: opacity 0.3s ease-out;
   mask: url(#combined-mask-2);
   -webkit-mask: url(#combined-mask-2);
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
 }
 .fullscreen-gallery .projects-images-clones-container {
   opacity: 0;
@@ -608,6 +620,20 @@ body.fullscreen-gallery {
 }
 .projects-images-clone .carousel-arrow * {
   pointer-events: auto !important;
+}
+
+.project-text-background-clone {
+  position: absolute;
+  top: 0;
+  left: var(--page-padding);
+  width: calc(100vw - 2 * var(--page-padding));
+  padding-left: calc(var(--menu-item-height) + var(--container-gap));
+  pointer-events: none;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+  z-index: 1001;
+  background-color: rgb(250, 250, 250);
 }
 
 .projects-images-unmasked-container {
@@ -745,9 +771,9 @@ body.fullscreen-gallery {
      -moz-user-select: none;
           user-select: none;
   transition: opacity 0.3s ease-in-out;
-  opacity: 0;
   mask: url(#combined-mask-2);
   -webkit-mask: url(#combined-mask-2);
+  opacity: 0;
 }
 .fullscreen-gallery .project-text-clones-container {
   opacity: 0;
